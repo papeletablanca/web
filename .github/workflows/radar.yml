@@ -72,7 +72,7 @@ jobs:
       - name: Construir la web
         working-directory: web
         env:
-          SITE_URL: ${{ steps.pages.outputs.origin }}
+          SITE_URL: https://papeletablanca.es   # fija: no depende de cómo esté Settings → Pages al construir
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: |

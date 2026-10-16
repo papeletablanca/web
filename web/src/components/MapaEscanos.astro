@@ -45,7 +45,7 @@ for (const c of [...lista].sort((a, b) => a.data.mapa.columna - b.data.mapa.colu
         })
       }
     </ul>
-    <p class="mapinfo" aria-live="polite" data-info>Pasa por encima de una provincia o tócala.</p>
+    <p class="mapinfo" aria-live="polite" data-mapinfo>Pasa por encima de una provincia o tócala.</p>
   </div>
   <div class="hemi">
     <svg viewBox="-1.06 -1.06 2.12 1.1" role="img" aria-label="Los 350 escaños del Congreso">
@@ -58,7 +58,7 @@ for (const c of [...lista].sort((a, b) => a.data.mapa.columna - b.data.mapa.colu
 <script>
   function iniciar() {
     document.querySelectorAll<HTMLElement>('[data-mapa]').forEach((mapa) => {
-      const info = mapa.querySelector<HTMLElement>('[data-info]')!;
+      const info = mapa.querySelector<HTMLElement>('[data-mapinfo]')!;
       const textoInicial = info.textContent;
       const enfocar = (t: HTMLElement | null) => {
         const id = t?.dataset.id ?? null;

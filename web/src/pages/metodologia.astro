@@ -31,8 +31,7 @@ const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
     <div class="rule">
       <h3>Si ves un error</h3>
       <p>
-        {repo ? <>Abre una incidencia en el <a href={`${repo}/issues`}>repositorio público</a></> : 'Abre una incidencia en el repositorio público del proyecto'}
-        con el enlace a la fuente correcta. Las correcciones quedan a la vista de todos.
+        Abre una incidencia en el {repo ? <a href={`${repo}/issues`}>repositorio público</a> : 'repositorio público'} del proyecto con el enlace a la fuente correcta. Las correcciones quedan a la vista de todos.
       </p>
     </div>
   </div>
@@ -45,7 +44,7 @@ const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
       <li><strong>Escaños por provincia y calendario:</strong> del <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a> y de la <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">LOREG</a>.</li>
       <li><strong>Fichas de las formaciones:</strong> se rellenan a mano, dato a dato, siempre con su enlace. La ficha de una candidatura del BOE se encuentra por sus siglas.</li>
     </ul>
-    <p>El código y los textos generales de la web se han escrito con ayuda de inteligencia artificial (Claude, de Anthropic) y se revisan a mano. Papeleta Blanca no está afiliado al BOE ni a ningún organismo público. <a href={ruta('como-votar')}>Guía práctica para votar</a>.</p>
+    <p>El código y los textos generales de la web se han escrito con ayuda de inteligencia artificial (Claude, de Anthropic) y se revisan a mano. Papeleta Blanca no está afiliada al BOE ni a ningún organismo público. <a href={ruta('como-votar')}>Guía práctica para votar</a>.</p>
   </section>
 </Base>
 
@@ -53,6 +52,6 @@ const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
   .rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px 32px; }
   .rule { display: grid; gap: 8px; align-content: start; max-width: 60ch; }
   .rule p { color: var(--muted); }
-  .estados { list-style: none; padding: 0; display: grid; gap: 8px; font-size: 0.9rem; color: var(--muted); }
-  .estados .chip { margin-right: 6px; }
+  .estados { list-style: none; padding: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: baseline; font-size: 0.9rem; color: var(--muted); }
+  .estados li { display: contents; }
 </style>

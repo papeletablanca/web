@@ -20,19 +20,21 @@ const eventos = (await getCollection('calendario')).sort((a, b) => a.data.fecha.
 </div>
 
 <script>
-  // Marca lo ya pasado y pone la etiqueta "hoy" antes del siguiente evento (hora peninsular).
+  // Marca lo ya pasado y coloca "hoy" en la línea, entre el último evento pasado y el siguiente (hora peninsular).
+  const dia = (f: string) => Date.parse(`${f}T00:00:00Z`) / 864e5;
   function marcar() {
     const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
-    document.querySelectorAll<HTMLElement>('[data-calendario] li').forEach((li) => li.classList.remove('past', 'today-mark'));
-    let marcado = false;
-    document.querySelectorAll<HTMLElement>('[data-calendario] li').forEach((li) => {
-      const f = li.dataset.fecha!;
-      if (f < hoy) li.classList.add('past');
-      else if (!marcado) {
-        li.classList.add('today-mark');
-        marcado = true;
-      }
-    });
+    const items = [...document.querySelectorAll<HTMLElement>('[data-calendario] li')];
+    items.forEach((li) => { li.classList.remove('past', 'today-mark'); li.style.removeProperty('--hoy'); });
+    items.forEach((li) => li.dataset.fecha! < hoy && li.classList.add('past'));
+    const sig = items.findIndex((li) => li.dataset.fecha! >= hoy);
+    if (sig === -1) return; // ya pasó todo
+    if (sig === 0 || items[sig].dataset.fecha === hoy) { items[sig].classList.add('today-mark'); return; }
+    // Las columnas miden lo mismo: "hoy" se desplaza dentro de la del evento anterior según los días transcurridos.
+    const ant = items[sig - 1];
+    const parte = (dia(hoy) - dia(ant.dataset.fecha!)) / (dia(items[sig].dataset.fecha!) - dia(ant.dataset.fecha!));
+    ant.classList.add('today-mark');
+    ant.style.setProperty('--hoy', `${(parte * 100).toFixed(1)}%`);
   }
   document.addEventListener('astro:page-load', marcar);
 </script>
@@ -43,7 +45,7 @@ const eventos = (await getCollection('calendario')).sort((a, b) => a.data.fecha.
   li { position: relative; padding: 14px 10px 4px 0; display: grid; gap: 4px; align-content: start; }
   li::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); }
   li.past::before { background: var(--ink); }
-  li.today-mark::after { content: "hoy"; position: absolute; top: -30px; left: -6px; font: 600 0.7rem var(--f-mono); background: var(--accent); color: var(--paper); padding: 2px 6px; border-radius: 4px; }
+  li.today-mark::after { content: "hoy"; position: absolute; top: -30px; left: calc(var(--hoy, 0%) + 6px); transform: translateX(-50%); font: 600 0.7rem var(--f-mono); background: var(--accent); color: var(--paper); padding: 2px 6px; border-radius: 4px; }
   .date { font: 700 1rem var(--f-display); }
   .key .date { font-size: 1.25rem; }
   .what { font-size: 0.85rem; line-height: 1.35; }
