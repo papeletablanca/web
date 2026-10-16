@@ -1,0 +1,124 @@
+---
+// Panel de accesibilidad: tamaño del texto, tema, contraste, enlaces, espaciado, tipografía y animaciones.
+// Cada opción es un atributo data-* en <html> (los estilos están en global.css). Se guardan en este navegador;
+// Base.astro las aplica antes de pintar la página para que no haya parpadeo.
+const tamanos = [['', '100 %'], ['1', '115 %'], ['2', '130 %'], ['3', '150 %']];
+const temas = [['', 'Automático'], ['claro', 'Claro'], ['oscuro', 'Oscuro']];
+const ajustes = [
+  ['contraste', 'Más contraste'],
+  ['subrayado', 'Subrayar los enlaces'],
+  ['espaciado', 'Más espacio entre letras y líneas'],
+  ['fuente', 'Tipografía sencilla'],
+  ['movimiento', 'Reducir las animaciones'],
+];
+---
+
+<div class="a11y" data-a11y>
+  <button type="button" class="a11y-boton" aria-expanded="false" aria-controls="a11y-panel" title="Accesibilidad" data-a11y-boton>
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none" />
+      <path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v5M12 14.5l-3 6M12 14.5l3 6" />
+    </svg>
+    <span class="sr-only">Accesibilidad</span>
+  </button>
+
+  <div id="a11y-panel" class="a11y-panel" role="region" aria-label="Opciones de accesibilidad" hidden data-a11y-panel>
+    <fieldset>
+      <legend>Tamaño del texto</legend>
+      <div class="opciones">
+        {tamanos.map(([v, t]) => <label><input type="radio" name="texto" value={v} />{t}</label>)}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Tema</legend>
+      <div class="opciones">
+        {temas.map(([v, t]) => <label><input type="radio" name="tema" value={v} />{t}</label>)}
+      </div>
+    </fieldset>
+    <fieldset class="ajustes">
+      <legend>Lectura</legend>
+      {ajustes.map(([k, t]) => <label><input type="checkbox" name={k} value="1" />{t}</label>)}
+    </fieldset>
+    <div class="pie">
+      <button type="button" class="restablecer" data-a11y-restablecer>Restablecer</button>
+      <span>Se guarda en este navegador.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CLAVE = 'pb-accesibilidad';
+  const CAMPOS = ['texto', 'tema', 'contraste', 'subrayado', 'espaciado', 'fuente', 'movimiento'];
+  const raizHtml = document.documentElement;
+  let escuchas: AbortController | undefined;
+
+  // El estado vive en <html data-*>; el almacenamiento solo lo recuerda (si el navegador lo bloquea, la opción dura hasta cerrar).
+  function guardar() {
+    const p = Object.fromEntries(CAMPOS.filter((k) => raizHtml.dataset[k]).map((k) => [k, raizHtml.dataset[k]]));
+    try { localStorage.setItem(CLAVE, JSON.stringify(p)); } catch { /* almacenamiento no disponible */ }
+  }
+
+  function iniciar() {
+    const raiz = document.querySelector<HTMLElement>('[data-a11y]');
+    if (!raiz) return;
+    const boton = raiz.querySelector<HTMLButtonElement>('[data-a11y-boton]')!;
+    const panel = raiz.querySelector<HTMLElement>('[data-a11y-panel]')!;
+    const inputs = [...raiz.querySelectorAll<HTMLInputElement>('input')];
+
+    const reflejar = () =>
+      inputs.forEach((i) => (i.checked = i.type === 'radio' ? (raizHtml.dataset[i.name] ?? '') === i.value : !!raizHtml.dataset[i.name]));
+    const abrir = (si: boolean) => {
+      panel.hidden = !si;
+      boton.setAttribute('aria-expanded', String(si));
+    };
+    reflejar();
+
+    escuchas?.abort();
+    escuchas = new AbortController();
+    const { signal } = escuchas;
+
+    boton.addEventListener('click', () => abrir(panel.hidden), { signal });
+    raiz.addEventListener('change', (e) => {
+      const i = e.target as HTMLInputElement;
+      const valor = i.type === 'radio' ? i.value : i.checked ? '1' : '';
+      if (valor) raizHtml.dataset[i.name] = valor;
+      else delete raizHtml.dataset[i.name];
+      guardar();
+    }, { signal });
+    raiz.querySelector('[data-a11y-restablecer]')!.addEventListener('click', () => {
+      CAMPOS.forEach((k) => delete raizHtml.dataset[k]);
+      guardar();
+      reflejar();
+    }, { signal });
+    // Escape cierra y devuelve el foco al botón; un clic fuera también cierra.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) { abrir(false); boton.focus(); }
+    }, { signal });
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !raiz.contains(e.target as Node)) abrir(false);
+    }, { signal });
+  }
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  /* El panel se coloca respecto a la cabecera (.barra), no al botón: así no se sale de la pantalla aunque el botón cambie de línea. */
+  .a11y-boton { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; padding: 0; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; }
+  .a11y-boton svg { width: 1.15rem; height: 1.15rem; }
+  .a11y-boton:hover { border-color: var(--ink); }
+  .a11y-boton[aria-expanded="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .a11y-panel { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(100% + 6px); z-index: 10; width: min(340px, calc(100vw - 32px)); max-height: calc(100dvh - 7rem); overflow-y: auto; overscroll-behavior: contain; display: grid; gap: 16px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 12px 32px rgb(0 0 0 / 0.18); }
+  .a11y-panel[hidden] { display: none; }
+  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+  legend { font: 500 0.72rem/1.2 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0; margin-bottom: 8px; }
+  .opciones { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opciones label { position: relative; font-size: 0.88rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+  .opciones input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .opciones label:has(input:checked) { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .opciones label:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .ajustes label { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; cursor: pointer; }
+  .ajustes input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--ink); }
+  .pie { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 0.78rem; color: var(--muted); }
+  .restablecer { font: 600 0.85rem var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .restablecer:hover { border-color: var(--ink); }
+</style>

@@ -27,11 +27,12 @@ for (const c of [...lista].sort((a, b) => a.data.mapa.columna - b.data.mapa.colu
     <ul class="tilemap" style={`grid-template-rows: repeat(${filas}, auto)`}>
       {
         lista.map((c) => {
-          const w = Math.round(8 + 72 * Math.sqrt(c.data.diputados / maxDip));
+          // Intensidad entre --tile-0 y --tile-1 (los dos colores garantizan contraste 4,5:1 con el texto en todos los temas)
+          const w = Math.round(100 * Math.sqrt(c.data.diputados / maxDip));
           return (
             <li>
               <a
-                class:list={['tile', { heavy: w > 50 }]}
+                class="tile"
                 style={`--w:${w}%;grid-column:${c.data.mapa.columna + 1};grid-row:${c.data.mapa.fila + 1}`}
                 href={ruta(`provincia/${c.id}`)}
                 data-id={c.id}
@@ -86,11 +87,9 @@ for (const c of [...lista].sort((a, b) => a.data.mapa.columna - b.data.mapa.colu
   .seats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
   .tilemap { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; max-width: 520px; }
   .tilemap li { display: contents; }
-  .tile { aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; align-content: center; text-decoration: none; font: 600 0.62rem/1 var(--f-mono); color: var(--ink); background: color-mix(in srgb, var(--accent) var(--w), var(--tile-0)); transition: transform 0.12s, box-shadow 0.12s; }
+  .tile { aspect-ratio: 1; border-radius: 6px; display: grid; place-items: center; align-content: center; text-decoration: none; font: 600 0.62rem/1 var(--f-mono); color: var(--ink); background: color-mix(in srgb, var(--tile-1) var(--w), var(--tile-0)); transition: transform 0.12s, box-shadow 0.12s; }
   .tile b { display: block; font: 700 0.82rem/1 var(--f-display); margin-top: 2px; }
-  .tile.heavy { color: var(--paper); }
-  .tile:hover, .tile:focus-visible, .tile.on { transform: scale(1.12); box-shadow: 0 0 0 2px var(--ink); position: relative; z-index: 1; color: var(--ink); }
-  .tile.heavy:hover, .tile.heavy.on { color: var(--paper); }
+  .tile:hover, .tile:focus-visible, .tile.on { transform: scale(1.12); box-shadow: 0 0 0 2px var(--ink); position: relative; z-index: 1; }
   .mapinfo { min-height: 3.2em; margin-top: 12px; font-size: 0.95rem; }
   .mapinfo :global(strong) { font-family: var(--f-display); font-size: 1.15rem; }
   .hemi svg { width: 100%; height: auto; display: block; }

@@ -5,6 +5,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Accesibilidad from '../components/Accesibilidad.astro';
 import { ruta } from '../lib/datos';
 
 interface Props {
@@ -53,6 +54,19 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary" />
     <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      // Opciones del panel de accesibilidad: se aplican antes de pintar y de nuevo tras cada cambio de página.
+      (() => {
+        const aplicar = () => {
+          let p = {};
+          try { p = JSON.parse(localStorage.getItem('pb-accesibilidad') || '{}') || {}; } catch {}
+          for (const k of ['texto', 'tema', 'contraste', 'subrayado', 'espaciado', 'fuente', 'movimiento'])
+            if (typeof p[k] === 'string' && p[k]) document.documentElement.dataset[k] = p[k];
+        };
+        aplicar();
+        if (!window.__pbAccesibilidad) { window.__pbAccesibilidad = true; document.addEventListener('astro:after-swap', aplicar); }
+      })();
+    </script>
     <ClientRouter />
   </head>
   <body>
@@ -63,6 +77,7 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
         <nav aria-label="Secciones">
           {menu.map(([p, texto]) => <a href={ruta(p)} aria-current={activo(p) ? 'page' : undefined}>{texto}</a>)}
         </nav>
+        <Accesibilidad />
       </div>
     </header>
     <main id="contenido" class="wrap" data-pagefind-body={buscable ? '' : undefined}>
@@ -82,16 +97,20 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
   .saltar:focus { left: 16px; top: 16px; z-index: 20; background: var(--ink); color: var(--paper); padding: 8px 12px; border-radius: 6px; }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
   header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .barra { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; padding-block: 12px; flex-wrap: wrap; }
+  .barra { position: relative; display: flex; align-items: center; gap: 8px 16px; padding-block: 12px; flex-wrap: wrap; }
   .brand { display: flex; align-items: baseline; gap: 8px; text-decoration: none; }
   .brand b { font: 800 1.35rem/1 var(--f-display); letter-spacing: -0.02em; }
   .brand span { font: 500 0.75rem var(--f-mono); color: var(--muted); }
-  nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; max-width: 100%; margin-left: auto; }
   nav::-webkit-scrollbar { display: none; }
   nav a { text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 6px 12px; border-radius: 999px; color: var(--muted); white-space: nowrap; }
   nav a:hover { color: var(--ink); }
   nav a[aria-current="page"] { background: var(--ink); color: var(--paper); }
   footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
   footer .wrap { padding-block: 24px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  @media (max-width: 720px) { .barra { flex-direction: column; align-items: stretch; } nav { margin-inline: -12px; } }
+  /* Móvil: marca y botón de accesibilidad arriba; el menú, debajo y a todo el ancho */
+  @media (max-width: 720px) {
+    .brand { flex: 1 1 0; min-width: 0; flex-wrap: wrap; row-gap: 2px; }
+    nav { order: 3; flex-basis: 100%; margin-inline: -12px; }
+  }
 </style>

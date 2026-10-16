@@ -30,6 +30,49 @@ Todo se ejecuta en GitHub Actions y se publica en GitHub Pages, sin servidor ni 
 
 [Abre una incidencia](https://github.com/papeletablanca/web/issues) con el enlace a la fuente correcta. Las correcciones se hacen a la vista de todos.
 
+## Accesibilidad
+
+La información electoral es de todo el mundo. Una web que cuenta qué se vota, quién se presenta y cómo votar no es neutral si una parte del electorado no puede usarla. Por eso la accesibilidad sigue la misma regla que los datos: lo que se afirma aquí se puede comprobar, y lo que falta se dice.
+
+**Objetivo:** cumplir el nivel AA de las [Pautas de Accesibilidad WCAG 2.2](https://www.w3.org/TR/WCAG22/). No hay una auditoría externa: las comprobaciones de esta sección las hace el propio proyecto y se repiten cuando cambia el diseño.
+
+### Lo que hace la web
+
+- **Contraste medido, no estimado.** El texto principal tiene un contraste de 15:1 o más con el fondo, y el secundario, de 6:1 o más. El texto de las casillas del mapa nunca baja de 4,8:1, en ningún tema. Los colores están en [web/src/styles/global.css](web/src/styles/global.css).
+- **Nada depende solo del color.** El mapa lleva escrito el número de diputados de cada provincia. Los estados de las fichas (confirmado, anunciado, pendiente) se distinguen por el texto y la forma del borde. Las fechas pasadas del calendario tienen un círculo relleno y las futuras, hueco. Los enlaces del texto están subrayados; las tarjetas, las casillas del mapa y el menú se reconocen por su forma. Se ha comprobado con simulaciones de protanopia, deuteranopia, tritanopia y visión sin color.
+- **Sin colores de partido.** Todas las formaciones tienen el mismo aspecto. Es una regla de neutralidad, y además evita las combinaciones de colores que más confunden (rojo y verde, azul y morado).
+- **Se puede usar solo con teclado.** Hay un enlace «Saltar al contenido», el foco siempre está visible y el mapa de provincias responde igual al tabulador que al ratón.
+- **Pensada para lectores de pantalla.** La página está marcada en español, el mapa y los gráficos tienen descripciones de texto, y la información que aparece al recorrer el mapa se anuncia en voz alta.
+- **Respeta las preferencias del sistema:** tema claro u oscuro y «reducir movimiento».
+- **Se adapta al móvil.** La página nunca se desplaza en horizontal; solo el menú y el calendario se deslizan dentro de su espacio.
+
+### Panel de accesibilidad
+
+El botón con el símbolo de accesibilidad, a la derecha del menú, abre un panel con estas opciones:
+
+- tamaño del texto (100 %, 115 %, 130 % o 150 %);
+- tema (automático, claro u oscuro);
+- más contraste;
+- subrayar los enlaces;
+- más espacio entre letras y líneas, con los valores del criterio WCAG 1.4.12;
+- tipografía sencilla;
+- reducir las animaciones.
+
+Las opciones se guardan solo en el navegador de cada persona. No se envían a ningún sitio. El panel complementa a la web, pero no la sustituye: todo lo anterior funciona sin tocarlo.
+
+No incluye un «filtro para daltónicos». Esos filtros recolorean la página, pero no ayudan a quien ya distingue la información por algo más que el color, que es lo que esta web garantiza.
+
+### Lo que falta o no depende de nosotros
+
+- **Lectores de pantalla.** La web aún no se ha probado con NVDA, JAWS, VoiceOver o TalkBack. Está previsto antes del lanzamiento.
+- **Documentos del BOE.** Las disposiciones y los PDF que se enlazan son del BOE, y su accesibilidad depende del BOE.
+- **Nombres de las listas.** Los nombres de candidaturas y candidatos se copian tal y como los publica el BOE, sin corregirlos.
+- **Calendario.** En el móvil, y en el ordenador con el texto ampliado, el calendario se desliza en horizontal para que las fechas no se monten unas sobre otras. Hay que desplazarlo para ver las últimas.
+
+### Si algo no te funciona
+
+[Abre una incidencia](https://github.com/papeletablanca/web/issues) contando qué página es, qué intentabas hacer y con qué lo usas: navegador, lector de pantalla, ampliador… Una barrera de accesibilidad se trata como un error en los datos: se corrige con prioridad y a la vista de todos.
+
 ## Estructura del repositorio
 
 ```

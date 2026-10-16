@@ -4,25 +4,58 @@
 :root {
   --paper: #fbfaf8; --surface: #ffffff; --ink: #1c1a17; --muted: #655f56; --line: #e6e1d8;
   --sepia: #efe3cc; --sepia-ink: #5e4520; --accent: #7a5a2e; --accent-soft: #f4ecdd;
-  --tile-0: #f6f1e8; --focus: #7a5a2e;
+  --tile-0: #f6f1e8; --tile-1: #9b8360; --focus: #7a5a2e;
   --f-display: "Bricolage Grotesque Variable", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Public Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
   --r: 10px;
   color-scheme: light;
 }
+/* Tema oscuro: el del sistema, salvo que se elija otro en el panel de accesibilidad (html[data-tema]) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-tema="claro"]) {
     --paper: #131210; --surface: #1b1916; --ink: #ede8df; --muted: #a69e91; --line: #2f2b26;
     --sepia: #3a2f20; --sepia-ink: #e9d3ad; --accent: #d4b07a; --accent-soft: #2a2319;
-    --tile-0: #221f1a; --focus: #d4b07a;
+    --tile-0: #221f1a; --tile-1: #746246; --focus: #d4b07a;
     color-scheme: dark;
   }
 }
+:root[data-tema="oscuro"] {
+  --paper: #131210; --surface: #1b1916; --ink: #ede8df; --muted: #a69e91; --line: #2f2b26;
+  --sepia: #3a2f20; --sepia-ink: #e9d3ad; --accent: #d4b07a; --accent-soft: #2a2319;
+  --tile-0: #221f1a; --tile-1: #746246; --focus: #d4b07a;
+  color-scheme: dark;
+}
+
+/* Panel de accesibilidad (components/Accesibilidad.astro). Cada opción es un atributo en <html>. */
+:root[data-contraste] {
+  --paper: #ffffff; --surface: #ffffff; --ink: #000000; --muted: #2e2a25; --line: #6b655c;
+  --sepia: #f3e6cc; --sepia-ink: #3b2a10; --accent: #5c3d0e; --accent-soft: #f1e6d2; --tile-0: #f1ece3; --tile-1: #8d7754; --focus: #000000;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-contraste]:not([data-tema="claro"]) {
+    --paper: #000000; --surface: #0b0b0a; --ink: #ffffff; --muted: #ddd6cb; --line: #8f877b;
+    --sepia: #2c2416; --sepia-ink: #fbe7c4; --accent: #f2d199; --accent-soft: #2a2114; --tile-0: #1d1a16; --tile-1: #7f6e52; --focus: #ffffff;
+  }
+}
+:root[data-tema="oscuro"][data-contraste] {
+  --paper: #000000; --surface: #0b0b0a; --ink: #ffffff; --muted: #ddd6cb; --line: #8f877b;
+  --sepia: #2c2416; --sepia-ink: #fbe7c4; --accent: #f2d199; --accent-soft: #2a2114; --tile-0: #1d1a16; --tile-1: #7f6e52; --focus: #ffffff;
+}
+:root[data-texto="1"] { font-size: 115%; }
+:root[data-texto="2"] { font-size: 130%; }
+:root[data-texto="3"] { font-size: 150%; }
+:root[data-fuente] { --f-display: Verdana, Tahoma, "Segoe UI", system-ui, sans-serif; --f-body: Verdana, Tahoma, "Segoe UI", system-ui, sans-serif; --f-mono: Verdana, Tahoma, "Segoe UI", system-ui, sans-serif; }
+:root[data-subrayado] a:not(.tile) { text-decoration: underline !important; text-decoration-thickness: 2px !important; }
+/* Valores del criterio WCAG 1.4.12 (espaciado del texto) */
+:root[data-espaciado] :is(p, li, dd, td, label, .what) { line-height: 1.8 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+:root[data-espaciado] :is(p, li) + :is(p, li) { margin-top: 0.5em; }
+:root[data-movimiento] *, :root[data-movimiento] *::before, :root[data-movimiento] *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+:root[data-movimiento]::view-transition-group(*), :root[data-movimiento]::view-transition-old(*), :root[data-movimiento]::view-transition-new(*) { animation: none !important; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
 img { max-width: 100%; }
 a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:hover { color: var(--accent); }
