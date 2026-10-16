@@ -18,8 +18,7 @@ const sinFichaOrden = [...sinFicha.entries()].sort((a, b) => a[0].localeCompare(
     <p class="label">Formaciones</p>
     <h1>Quién se presenta</h1>
     <p>
-      Por orden alfabético y con el mismo formato para todas.
-      {cand
+      Por orden alfabético y con el mismo formato para todas. {cand
         ? `Las listas salen de las candidaturas ${cand.fase} publicadas en el BOE.`
         : 'Hasta que el BOE publique las candidaturas, aparecen las formaciones con escaño en la legislatura saliente y las que anuncien que se presentan.'}
       {' '}<a href={ruta('metodologia')}>Reglas de neutralidad</a>.
