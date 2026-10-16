@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base titulo="Cómo votar" descripcion="Guía práctica para votar el 29N: dónde votas, qué llevar, voto por correo y voto desde el extranjero, con enlaces oficiales." buscable>
+  <div class="page-head">
+    <p class="label">Guía práctica</p>
+    <h1>Cómo votar el 29 de noviembre</h1>
+    <p>Lo básico, con el enlace a la fuente oficial de cada cosa. Si algo no coincide con lo que dice el organismo oficial, manda lo oficial.</p>
+  </div>
+
+  <div class="pasos">
+    <section class="paso">
+      <h2>En persona</h2>
+      <ul>
+        <li>El domingo 29 de noviembre, de <strong>9:00 a 20:00</strong>, en tu colegio electoral.</li>
+        <li>Lleva el <strong>DNI, el pasaporte o el carné de conducir</strong> originales, con foto. No sirven fotocopias.</li>
+        <li>Hay dos papeletas: la <strong>blanca</strong> para el Congreso (eliges una lista cerrada) y la <strong>sepia</strong> para el Senado (marcas personas: hasta 3 en la mayoría de provincias).</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">LOREG</a> · <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a></p>
+    </section>
+
+    <section class="paso">
+      <h2>Dónde te toca</h2>
+      <ul>
+        <li>Tu colegio y tu mesa salen del censo electoral, que gestiona el Instituto Nacional de Estadística.</li>
+        <li>Puedes consultarlo en la sede electrónica del INE y en tu ayuntamiento.</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://sede.ine.gob.es">sede electrónica del INE</a></p>
+    </section>
+
+    <section class="paso">
+      <h2>Por correo</h2>
+      <ul>
+        <li>Se pide en cualquier oficina de Correos o en su web, con certificado digital. <strong>Último día para pedirlo: 19 de noviembre</strong>.</li>
+        <li>Correos te envía a casa las papeletas y los sobres. Tienes que devolver el voto por correo certificado <strong>hasta tres días antes de la votación</strong>; Correos publica el último día exacto.</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#a72">LOREG, artículos 72 y 73</a> · <a href="https://www.correos.es">Correos</a></p>
+    </section>
+
+    <section class="paso">
+      <h2>Desde el extranjero</h2>
+      <ul>
+        <li>Si vives fuera y estás inscrito en el censo de residentes ausentes (CERA), recibes la documentación sin pedirla.</li>
+        <li>Puedes votar por correo o depositar el voto en urna en tu consulado o en los centros habilitados.</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21140">relación de centros habilitados en el extranjero (BOE, 10 oct 2026)</a></p>
+    </section>
+
+    <section class="paso">
+      <h2>Si te toca estar en una mesa</h2>
+      <ul>
+        <li>Los miembros de las mesas se eligen por sorteo entre los vecinos y te lo notifican en casa.</li>
+        <li>Es obligatorio. Si tienes una causa justificada, se alega ante la Junta Electoral de Zona en el plazo que indica la notificación.</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://www.juntaelectoralcentral.es">Junta Electoral Central</a></p>
+    </section>
+
+    <section class="paso">
+      <h2>Resultados</h2>
+      <ul>
+        <li>La noche del 29 de noviembre, el Ministerio del Interior publica el escrutinio provisional. Papeleta Blanca no hace recuento propio: enlazará a la web oficial.</li>
+      </ul>
+      <p class="fuente">Fuente: <a href="https://www.interior.gob.es">Ministerio del Interior</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .pasos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 40px 48px; }
+  .paso { display: grid; gap: 12px; align-content: start; border-top: 2px solid var(--ink); padding-top: 16px; }
+  .paso ul { padding-left: 1.2em; display: grid; gap: 8px; }
+  .fuente { font: 400 0.76rem var(--f-mono); color: var(--muted); }
+</style>

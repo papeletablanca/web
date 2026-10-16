@@ -1,0 +1,35 @@
+# Calendario electoral del 29N. Fuente principal: Real Decreto 806/2026 (BOE-A-2026-20742) y LOREG.
+# Campos: fecha (AAAA-MM-DD), texto, aproximada (true si depende de que el BOE lo publique ese día),
+# destacada (true para las fechas grandes), fuente (enlace).
+- fecha: 2026-10-06
+  texto: Convocatoria publicada en el BOE
+  destacada: false
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-10-28
+  texto: El BOE publica las candidaturas presentadas
+  aproximada: true
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672
+- fecha: 2026-11-03
+  texto: El BOE publica las candidaturas proclamadas
+  aproximada: true
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672
+- fecha: 2026-11-13
+  texto: Empieza la campaña electoral
+  destacada: true
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-11-19
+  texto: Último día para pedir el voto por correo
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#a72
+- fecha: 2026-11-24
+  texto: Ya no se pueden publicar encuestas
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#a69
+- fecha: 2026-11-28
+  texto: Jornada de reflexión
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-11-29
+  texto: Votación, de 9:00 a 20:00
+  destacada: true
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-12-23
+  texto: Se constituyen las nuevas Cortes
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742

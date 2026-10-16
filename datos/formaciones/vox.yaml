@@ -1,0 +1,29 @@
+# Ficha de Vox. Instrucciones en _plantilla.yaml.
+nombre: "Vox"
+corto: "Vox"
+siglas: ["VOX"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+inclusion:
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
+  valor: 33
+
+integrantes: []
+marcas_territoriales: []
+
+candidatura_presidencia:
+  valor: ""
+  estado: pendiente
+
+web:
+  valor: https://voxespana.es
+  estado: confirmado
+  fuente: https://voxespana.es
+  fecha: 2026-10-16
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

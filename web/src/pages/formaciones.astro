@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import TarjetaFormacion from '../components/TarjetaFormacion.astro';
+import { candidaturasBoe, fichaDe, formaciones, ruta } from '../lib/datos';
+
+const fichas = await formaciones();
+const cand = await candidaturasBoe();
+// Candidaturas del BOE que todavía no tienen ficha (por siglas), para que nadie quede fuera.
+const sinFicha = new Map<string, string>();
+for (const c of cand?.candidaturas ?? []) {
+  if (c.camara === 'congreso' && c.proclamada && !fichaDe(c, fichas)) sinFicha.set(c.siglas || c.nombre, c.nombre);
+}
+const sinFichaOrden = [...sinFicha.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es', { sensitivity: 'base' }));
+---
+
+<Base titulo="Formaciones">
+  <div class="page-head">
+    <p class="label">Formaciones</p>
+    <h1>Quién se presenta</h1>
+    <p>
+      Por orden alfabético y con el mismo formato para todas.
+      {cand
+        ? `Las listas salen de las candidaturas ${cand.fase} publicadas en el BOE.`
+        : 'Hasta que el BOE publique las candidaturas, aparecen las formaciones con escaño en la legislatura saliente y las que anuncien que se presentan.'}
+      {' '}<a href={ruta('metodologia')}>Reglas de neutralidad</a>.
+    </p>
+  </div>
+  <div class="parties">{fichas.map((f) => <TarjetaFormacion f={f} />)}</div>
+  {
+    sinFichaOrden.length > 0 && (
+      <section>
+        <div class="sec-head"><h2>Otras candidaturas del BOE</h2><p>Sin ficha todavía. Sus listas completas están en la página de cada provincia.</p></div>
+        <ul class="otras">{sinFichaOrden.map(([s, n]) => <li><strong>{s}</strong> <span class="muted">{n}</span></li>)}</ul>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .parties { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 12px; }
+  .otras { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px 24px; font-size: 0.9rem; }
+  .otras li { border-bottom: 1px solid var(--line); padding-block: 6px; }
+</style>

@@ -1,0 +1,31 @@
+# Ficha de Junts per Catalunya. Instrucciones en _plantilla.yaml.
+nombre: "Junts per Catalunya"
+corto: "Junts"
+siglas: ["JxCAT-JUNTS", "J x CAT-JUNTS", "JUNTS"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+inclusion:
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
+  valor: 7
+
+integrantes: []
+marcas_territoriales: []
+
+candidatura_presidencia:
+  valor: "Miriam Nogueras (Barcelona)"
+  estado: anunciado
+  fuente: https://www.infobae.com/espana/agencias/2026/10/08/junts-confirma-a-miriam-nogueras-como-candidata-para-el-29n/
+  fecha: 2026-10-08
+
+web:
+  valor: https://junts.cat
+  estado: confirmado
+  fuente: https://junts.cat
+  fecha: 2026-10-16
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

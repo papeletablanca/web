@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import Dato from '../../components/Dato.astro';
+import { getCollection } from 'astro:content';
+import { candidaturasBoe, circunscripciones, corto, fichaDe, ruta, type Formacion } from '../../lib/datos';
+
+export async function getStaticPaths() {
+  return (await getCollection('formaciones')).map((f) => ({ params: { id: f.id }, props: { f } }));
+}
+const { f } = Astro.props as { f: Formacion };
+const d = f.data;
+
+const todas = await getCollection('formaciones');
+const cand = await candidaturasBoe();
+const provincias = await circunscripciones();
+const suyas = (cand?.candidaturas ?? []).filter((c) => c.camara === 'congreso' && c.proclamada && fichaDe(c, todas)?.id === f.id);
+const donde = provincias.filter((p) => suyas.some((c) => c.provincia === p.id));
+const RESULTADOS_23J = 'https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907';
+const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formación política';
+---
+
+<Base titulo={d.nombre} descripcion={`Ficha de ${d.nombre} (${corto(f)}) para las elecciones generales del 29N: candidatura, programa y dónde se presenta, con fuentes.`} buscable>
+  <div class="page-head">
+    <p class="label">Ficha de formación</p>
+    <h1>{d.nombre}</h1>
+    <p>
+      {d.siglas.join(' · ')} · {tipo}
+      {cand && <> · Se presenta en {donde.length} {donde.length === 1 ? 'circunscripción' : 'circunscripciones'}</>}
+    </p>
+  </div>
+
+  <section>
+    <div class="sec-head"><h2>Datos</h2><p>Cada dato lleva su estado y su fuente. Si no hay fuente, el dato no aparece.</p></div>
+    <div class="facts">
+      <Dato etiqueta="Encabeza la candidatura" d={d.candidatura_presidencia} />
+      <Dato etiqueta="Programa electoral" d={d.programa} enlace vacio="Sin publicar" />
+      <Dato etiqueta="Web oficial" d={d.web} enlace />
+      {d.escanos_23j && (
+        <Dato
+          etiqueta="Escaños en el Congreso el 23J de 2023"
+          d={{ valor: `${d.escanos_23j.valor}${d.escanos_23j.nota ? ` (${d.escanos_23j.nota})` : ''}`, estado: 'confirmado', fuente: RESULTADOS_23J, fecha: new Date('2023-09-01') }}
+        />
+      )}
+    </div>
+  </section>
+
+  {
+    (d.integrantes.length > 0 || d.marcas_territoriales.length > 0) && (
+      <section>
+        <div class="sec-head"><h2>Composición</h2></div>
+        {d.integrantes.length > 0 && <p>Integran la coalición: {d.integrantes.join(', ')}.</p>}
+        {d.marcas_territoriales.length > 0 && (
+          <ul class="marcas">
+            {d.marcas_territoriales.map((m) => (
+              <li><strong>{m.nombre}</strong> <span class="muted">· {m.ambito}{m.siglas.length > 0 && ` · ${m.siglas.join(', ')}`}</span></li>
+            ))}
+          </ul>
+        )}
+      </section>
+    )
+  }
+
+  <section>
+    <div class="sec-head"><h2>Dónde se presenta</h2></div>
+    {
+      cand ? (
+        donde.length ? (
+          <div class="provlist">{donde.map((p) => <a href={ruta(`provincia/${p.id}`)}>{p.data.nombre}</a>)}</div>
+        ) : (
+          <div class="empty">No aparece con estas siglas ({d.siglas.join(', ')}) en las candidaturas {cand.fase} del BOE.</div>
+        )
+      ) : (
+        <div class="empty"><strong>Todavía no hay candidaturas oficiales.</strong><span>Llegarán del BOE con la publicación de las candidaturas (hacia el 28 de octubre).</span></div>
+      )
+    }
+  </section>
+
+  {
+    d.redes.length > 0 && (
+      <section>
+        <div class="sec-head"><h2>Redes oficiales</h2></div>
+        <div class="provlist">{d.redes.map((r) => <a href={r.url} rel="noopener">{r.red}</a>)}</div>
+      </section>
+    )
+  }
+
+  <section>
+    <p class="muted por-que">Por qué tiene ficha: {d.inclusion.motivo} (<a href={d.inclusion.fuente}>fuente</a>). <a href={ruta('metodologia')}>Reglas de neutralidad</a>.</p>
+  </section>
+</Base>
+
+<style>
+  .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 0 32px; }
+  .provlist { display: flex; flex-wrap: wrap; gap: 6px; }
+  .provlist a { font-size: 0.85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; background: var(--surface); }
+  .provlist a:hover { border-color: var(--accent); }
+  .marcas { padding-left: 1.2em; display: grid; gap: 6px; }
+  .por-que { font-size: 0.88rem; }
+</style>

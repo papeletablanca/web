@@ -1,0 +1,21 @@
+{
+  "name": "papeleta-blanca-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/public-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "astro": "^7.4.0",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
+  }
+}

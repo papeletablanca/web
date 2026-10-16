@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import TarjetaBoe from '../components/TarjetaBoe.astro';
+import { getCollection } from 'astro:content';
+import { fecha, hallazgosBoe, plural, ruta } from '../lib/datos';
+
+const hallazgos = await hallazgosBoe();
+const dias = [...new Set(hallazgos.map((h) => h.fecha))];
+const revisadas = (await getCollection('boe')).reduce((a, d) => a + d.data.disposiciones_revisadas, 0);
+---
+
+<Base titulo="Novedades del BOE">
+  <div class="page-head">
+    <p class="label">Radar del BOE</p>
+    <h1>Novedades electorales del BOE</h1>
+    <p>
+      Cada mañana se revisa el sumario del BOE y se apartan las disposiciones relacionadas con las elecciones.
+      Llevamos {revisadas.toLocaleString('es-ES')} disposiciones revisadas y {plural(hallazgos.length, 'novedad', 'novedades')}.
+      Síguelas por <a href={ruta('feed.xml')}>RSS</a>.
+    </p>
+  </div>
+  {
+    dias.map((d) => (
+      <section>
+        <h2 class="dia">{fecha(d, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
+        <div class="cards">{hallazgos.filter((h) => h.fecha === d).map((h) => <TarjetaBoe h={h} />)}</div>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .dia { font-size: 1.2rem; }
+  .dia::first-letter { text-transform: uppercase; }
+</style>

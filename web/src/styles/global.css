@@ -1,0 +1,73 @@
+/* Papeleta Blanca · sistema de diseño
+   Papel de papeleta: blanco = Congreso, sepia = Senado. Sin colores de partido.
+   Una columna de lectura; las rejillas se pliegan a una columna en el móvil. */
+:root {
+  --paper: #fbfaf8; --surface: #ffffff; --ink: #1c1a17; --muted: #655f56; --line: #e6e1d8;
+  --sepia: #efe3cc; --sepia-ink: #5e4520; --accent: #7a5a2e; --accent-soft: #f4ecdd;
+  --tile-0: #f6f1e8; --focus: #7a5a2e;
+  --f-display: "Bricolage Grotesque Variable", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Public Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --r: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #131210; --surface: #1b1916; --ink: #ede8df; --muted: #a69e91; --line: #2f2b26;
+    --sepia: #3a2f20; --sepia-ink: #e9d3ad; --accent: #d4b07a; --accent-soft: #2a2319;
+    --tile-0: #221f1a; --focus: #d4b07a;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--f-body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.1; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0; }
+ul, ol { margin: 0; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.label { font: 500 0.72rem/1.2 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+main { padding-block: 32px 64px; display: grid; gap: 56px; }
+section { display: grid; gap: 20px; min-width: 0; }
+.sec-head { display: flex; justify-content: space-between; align-items: end; gap: 8px 24px; flex-wrap: wrap; }
+.sec-head p { color: var(--muted); max-width: 60ch; }
+.sec-head a.mas { font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+
+/* Cabecera de página interior */
+.page-head { display: grid; gap: 10px; border-bottom: 2px solid var(--ink); padding-bottom: 20px; }
+.page-head h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800; letter-spacing: -0.03em; }
+.page-head p { color: var(--muted); max-width: 62ch; }
+
+/* Etiquetas */
+.tag { font: 600 0.7rem/1 var(--f-body); padding: 5px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.chip { justify-self: start; font: 500 0.72rem/1 var(--f-mono); padding: 5px 8px; border-radius: 4px; white-space: nowrap; }
+.chip.confirmado { background: var(--ink); color: var(--paper); }
+.chip.anunciado { border: 1px solid var(--accent); color: var(--accent); }
+.chip.pendiente { border: 1px dashed var(--muted); color: var(--muted); }
+
+/* Aviso / estado vacío */
+.empty { border: 1px dashed var(--muted); border-radius: var(--r); padding: 20px; display: grid; gap: 6px; color: var(--muted); }
+.empty strong { color: var(--ink); }
+.aviso { background: var(--sepia); color: var(--sepia-ink); border-radius: var(--r); padding: 14px 16px; font-size: 0.92rem; }
+
+/* Rejillas comunes */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.prose { display: grid; gap: 14px; max-width: 65ch; }
+.prose h2 { margin-top: 12px; }
+.prose ul { padding-left: 1.2em; display: grid; gap: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

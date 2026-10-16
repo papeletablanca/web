@@ -1,0 +1,37 @@
+# Ficha de Partido Socialista Obrero Español. Instrucciones en _plantilla.yaml.
+nombre: "Partido Socialista Obrero Español"
+corto: "PSOE"
+siglas: ["PSOE"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+inclusion:
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
+  valor: 121
+  nota: "102 como PSOE y 19 como PSC-PSOE en Cataluña"
+
+integrantes: []
+marcas_territoriales:  # en 2023 concurrieron con estos nombres; revisar para 2026
+  - { nombre: "Partit dels Socialistes de Catalunya", ambito: "Cataluña", siglas: ["PSC", "PSC-PSOE"] }
+  - { nombre: "Partido dos Socialistas de Galicia", ambito: "Galicia", siglas: ["PSdeG-PSOE"] }
+  - { nombre: "Partido Socialista de Euskadi-Euskadiko Ezkerra", ambito: "País Vasco", siglas: ["PSE-EE (PSOE)"] }
+  - { nombre: "Partido Socialista de Navarra", ambito: "Navarra", siglas: ["PSN-PSOE"] }
+  - { nombre: "Partido Socialista de las Illes Balears", ambito: "Illes Balears", siglas: ["PSIB-PSOE"] }
+
+candidatura_presidencia:
+  valor: "Pedro Sánchez (Madrid)"
+  estado: anunciado
+  fuente: https://www.infobae.com/espana/agencias/2026/10/14/sanchez-situa-a-robles-numero-2-del-psoe-por-madrid-y-a-sus-ministros-en-puestos-de-salida/
+  fecha: 2026-10-14
+
+web:
+  valor: https://psoe.es
+  estado: confirmado
+  fuente: https://psoe.es
+  fecha: 2026-10-16
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

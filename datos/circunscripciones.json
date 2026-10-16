@@ -1,0 +1,676 @@
+{
+ "fuente": {
+  "id": "BOE-A-2026-20742",
+  "titulo": "Real Decreto 806/2026, anexo y artículo 3",
+  "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742"
+ },
+ "circunscripciones": [
+  {
+   "id": "coruna",
+   "nombre": "A Coruña",
+   "abreviatura": "COR",
+   "diputados": 8,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 1,
+    "fila": 0
+   }
+  },
+  {
+   "id": "lugo",
+   "nombre": "Lugo",
+   "abreviatura": "LUG",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 0
+   }
+  },
+  {
+   "id": "asturias",
+   "nombre": "Asturias",
+   "abreviatura": "AST",
+   "diputados": 7,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 0
+   }
+  },
+  {
+   "id": "cantabria",
+   "nombre": "Cantabria",
+   "abreviatura": "CAN",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 0
+   }
+  },
+  {
+   "id": "bizkaia",
+   "nombre": "Bizkaia",
+   "abreviatura": "BIZ",
+   "diputados": 8,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 0
+   }
+  },
+  {
+   "id": "gipuzkoa",
+   "nombre": "Gipuzkoa",
+   "abreviatura": "GIP",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 6,
+    "fila": 0
+   }
+  },
+  {
+   "id": "pontevedra",
+   "nombre": "Pontevedra",
+   "abreviatura": "PON",
+   "diputados": 7,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 1,
+    "fila": 1
+   }
+  },
+  {
+   "id": "ourense",
+   "nombre": "Ourense",
+   "abreviatura": "OUR",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 1
+   }
+  },
+  {
+   "id": "leon",
+   "nombre": "León",
+   "abreviatura": "LEO",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 1
+   }
+  },
+  {
+   "id": "palencia",
+   "nombre": "Palencia",
+   "abreviatura": "PAL",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 1
+   }
+  },
+  {
+   "id": "burgos",
+   "nombre": "Burgos",
+   "abreviatura": "BUR",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 1
+   }
+  },
+  {
+   "id": "araba",
+   "nombre": "Araba/Álava",
+   "abreviatura": "ALA",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 6,
+    "fila": 1
+   }
+  },
+  {
+   "id": "navarra",
+   "nombre": "Navarra",
+   "abreviatura": "NAV",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 7,
+    "fila": 1
+   }
+  },
+  {
+   "id": "huesca",
+   "nombre": "Huesca",
+   "abreviatura": "HUE",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 8,
+    "fila": 1
+   }
+  },
+  {
+   "id": "lleida",
+   "nombre": "Lleida",
+   "abreviatura": "LLE",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 9,
+    "fila": 1
+   }
+  },
+  {
+   "id": "girona",
+   "nombre": "Girona",
+   "abreviatura": "GIR",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 10,
+    "fila": 1
+   }
+  },
+  {
+   "id": "zamora",
+   "nombre": "Zamora",
+   "abreviatura": "ZAM",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 2
+   }
+  },
+  {
+   "id": "valladolid",
+   "nombre": "Valladolid",
+   "abreviatura": "VLL",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 2
+   }
+  },
+  {
+   "id": "segovia",
+   "nombre": "Segovia",
+   "abreviatura": "SEG",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 2
+   }
+  },
+  {
+   "id": "soria",
+   "nombre": "Soria",
+   "abreviatura": "SOR",
+   "diputados": 2,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 2
+   }
+  },
+  {
+   "id": "rioja",
+   "nombre": "La Rioja",
+   "abreviatura": "RIO",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 6,
+    "fila": 2
+   }
+  },
+  {
+   "id": "zaragoza",
+   "nombre": "Zaragoza",
+   "abreviatura": "ZAR",
+   "diputados": 7,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 7,
+    "fila": 2
+   }
+  },
+  {
+   "id": "tarragona",
+   "nombre": "Tarragona",
+   "abreviatura": "TAR",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 9,
+    "fila": 2
+   }
+  },
+  {
+   "id": "barcelona",
+   "nombre": "Barcelona",
+   "abreviatura": "BCN",
+   "diputados": 32,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 10,
+    "fila": 2
+   }
+  },
+  {
+   "id": "salamanca",
+   "nombre": "Salamanca",
+   "abreviatura": "SAL",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 3
+   }
+  },
+  {
+   "id": "avila",
+   "nombre": "Ávila",
+   "abreviatura": "AVI",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 3
+   }
+  },
+  {
+   "id": "madrid",
+   "nombre": "Madrid",
+   "abreviatura": "MAD",
+   "diputados": 38,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 3
+   }
+  },
+  {
+   "id": "guadalajara",
+   "nombre": "Guadalajara",
+   "abreviatura": "GUA",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 3
+   }
+  },
+  {
+   "id": "teruel",
+   "nombre": "Teruel",
+   "abreviatura": "TER",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 6,
+    "fila": 3
+   }
+  },
+  {
+   "id": "castellon",
+   "nombre": "Castellón/Castelló",
+   "abreviatura": "CAS",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 7,
+    "fila": 3
+   }
+  },
+  {
+   "id": "baleares",
+   "nombre": "Illes Balears",
+   "abreviatura": "BAL",
+   "diputados": 8,
+   "senadores": 5,
+   "senado_islas": [
+    {
+     "isla": "Mallorca",
+     "senadores": 3
+    },
+    {
+     "isla": "Menorca",
+     "senadores": 1
+    },
+    {
+     "isla": "Ibiza-Formentera",
+     "senadores": 1
+    }
+   ],
+   "mapa": {
+    "columna": 10,
+    "fila": 3
+   }
+  },
+  {
+   "id": "caceres",
+   "nombre": "Cáceres",
+   "abreviatura": "CAC",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 4
+   }
+  },
+  {
+   "id": "toledo",
+   "nombre": "Toledo",
+   "abreviatura": "TOL",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 4
+   }
+  },
+  {
+   "id": "cuenca",
+   "nombre": "Cuenca",
+   "abreviatura": "CUE",
+   "diputados": 3,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 4
+   }
+  },
+  {
+   "id": "valencia",
+   "nombre": "Valencia/València",
+   "abreviatura": "VAL",
+   "diputados": 16,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 4
+   }
+  },
+  {
+   "id": "badajoz",
+   "nombre": "Badajoz",
+   "abreviatura": "BAD",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 5
+   }
+  },
+  {
+   "id": "ciudadreal",
+   "nombre": "Ciudad Real",
+   "abreviatura": "CRE",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 5
+   }
+  },
+  {
+   "id": "albacete",
+   "nombre": "Albacete",
+   "abreviatura": "ALB",
+   "diputados": 4,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 5
+   }
+  },
+  {
+   "id": "alicante",
+   "nombre": "Alicante/Alacant",
+   "abreviatura": "ALI",
+   "diputados": 12,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 5
+   }
+  },
+  {
+   "id": "huelva",
+   "nombre": "Huelva",
+   "abreviatura": "HUV",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 1,
+    "fila": 6
+   }
+  },
+  {
+   "id": "sevilla",
+   "nombre": "Sevilla",
+   "abreviatura": "SEV",
+   "diputados": 12,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 6
+   }
+  },
+  {
+   "id": "cordoba",
+   "nombre": "Córdoba",
+   "abreviatura": "CÓR",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 6
+   }
+  },
+  {
+   "id": "jaen",
+   "nombre": "Jaén",
+   "abreviatura": "JAE",
+   "diputados": 5,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 6
+   }
+  },
+  {
+   "id": "murcia",
+   "nombre": "Región de Murcia",
+   "abreviatura": "MUR",
+   "diputados": 10,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 6
+   }
+  },
+  {
+   "id": "cadiz",
+   "nombre": "Cádiz",
+   "abreviatura": "CAD",
+   "diputados": 8,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 2,
+    "fila": 7
+   }
+  },
+  {
+   "id": "malaga",
+   "nombre": "Málaga",
+   "abreviatura": "MAL",
+   "diputados": 11,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 7
+   }
+  },
+  {
+   "id": "granada",
+   "nombre": "Granada",
+   "abreviatura": "GRA",
+   "diputados": 7,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 7
+   }
+  },
+  {
+   "id": "almeria",
+   "nombre": "Almería",
+   "abreviatura": "ALM",
+   "diputados": 6,
+   "senadores": 4,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 5,
+    "fila": 7
+   }
+  },
+  {
+   "id": "tenerife",
+   "nombre": "Santa Cruz de Tenerife",
+   "abreviatura": "SCT",
+   "diputados": 7,
+   "senadores": 6,
+   "senado_islas": [
+    {
+     "isla": "Tenerife",
+     "senadores": 3
+    },
+    {
+     "isla": "La Palma",
+     "senadores": 1
+    },
+    {
+     "isla": "La Gomera",
+     "senadores": 1
+    },
+    {
+     "isla": "El Hierro",
+     "senadores": 1
+    }
+   ],
+   "mapa": {
+    "columna": 0,
+    "fila": 8
+   }
+  },
+  {
+   "id": "laspalmas",
+   "nombre": "Las Palmas",
+   "abreviatura": "LPA",
+   "diputados": 8,
+   "senadores": 5,
+   "senado_islas": [
+    {
+     "isla": "Gran Canaria",
+     "senadores": 3
+    },
+    {
+     "isla": "Lanzarote",
+     "senadores": 1
+    },
+    {
+     "isla": "Fuerteventura",
+     "senadores": 1
+    }
+   ],
+   "mapa": {
+    "columna": 1,
+    "fila": 8
+   }
+  },
+  {
+   "id": "ceuta",
+   "nombre": "Ceuta",
+   "abreviatura": "CEU",
+   "diputados": 1,
+   "senadores": 2,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 3,
+    "fila": 8
+   }
+  },
+  {
+   "id": "melilla",
+   "nombre": "Melilla",
+   "abreviatura": "MEL",
+   "diputados": 1,
+   "senadores": 2,
+   "senado_islas": [],
+   "mapa": {
+    "columna": 4,
+    "fila": 8
+   }
+  }
+ ]
+}

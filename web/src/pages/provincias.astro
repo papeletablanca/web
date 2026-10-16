@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import MapaEscanos from '../components/MapaEscanos.astro';
+import { circunscripciones, ruta } from '../lib/datos';
+
+const lista = await circunscripciones();
+---
+
+<Base titulo="Provincias">
+  <div class="page-head">
+    <p class="label">52 circunscripciones</p>
+    <h1>Qué se vota en tu provincia</h1>
+    <p>Escaños según el anexo del <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a>. Elige la tuya para ver sus candidaturas.</p>
+  </div>
+  <MapaEscanos />
+  <section>
+    <div class="sec-head"><h2>Por orden alfabético</h2></div>
+    <ul class="tabla">
+      {
+        lista.map((p) => (
+          <li>
+            <a href={ruta(`provincia/${p.id}`)}>{p.data.nombre}</a>
+            <span class="num">{p.data.diputados}</span>
+            <span class="num muted">{p.data.senadores}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="label">Columnas: diputados · senadores</p>
+  </section>
+</Base>
+
+<style>
+  .tabla { list-style: none; padding: 0; columns: 3 240px; column-gap: 32px; }
+  .tabla li { display: grid; grid-template-columns: minmax(0, 1fr) 3ch 3ch; gap: 8px; padding-block: 6px; border-bottom: 1px solid var(--line); break-inside: avoid; text-align: right; }
+  .tabla a { text-align: left; text-decoration: none; font-weight: 500; }
+  .tabla a:hover { text-decoration: underline; }
+</style>

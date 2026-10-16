@@ -1,0 +1,9 @@
+node_modules/
+web/dist/
+web/.astro/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

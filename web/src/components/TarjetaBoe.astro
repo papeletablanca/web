@@ -1,0 +1,21 @@
+---
+import { departamento, fecha, type Hallazgo } from '../lib/datos';
+
+interface Props { h: Hallazgo }
+const { h } = Astro.props;
+---
+
+<a class="card" href={h.url_html} rel="noopener">
+  <div class="top"><span class="label num">{fecha(h.fecha)}</span><span class="tags">{h.etiquetas.map((e) => <span class="tag">{e}</span>)}</span></div>
+  <p class="title">{h.titulo}</p>
+  <div class="meta"><span>{departamento(h.departamento)}</span><span>{h.id}</span></div>
+</a>
+
+<style>
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; text-decoration: none; transition: border-color 0.15s; }
+  .card:hover { border-color: var(--accent); color: inherit; }
+  .top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: end; }
+  .title { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.93rem; line-height: 1.45; }
+  .meta { font: 400 0.72rem var(--f-mono); color: var(--muted); display: flex; gap: 4px 10px; flex-wrap: wrap; }
+</style>

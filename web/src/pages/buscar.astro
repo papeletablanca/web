@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { ruta } from '../lib/datos';
+---
+
+<Base titulo="Buscar">
+  <div class="page-head">
+    <p class="label">Buscar</p>
+    <h1>Busca una provincia, una formación o una persona</h1>
+    <p>Incluye los nombres de todas las personas candidatas en cuanto el BOE publique las listas.</p>
+  </div>
+  <div id="buscador" data-pagefind={ruta('pagefind/')}></div>
+  <noscript><p class="empty">El buscador necesita JavaScript.</p></noscript>
+  <link rel="stylesheet" href={ruta('pagefind/pagefind-ui.css')} />
+</Base>
+
+<script>
+  // Pagefind se genera al compilar (npm run build). En `npm run dev` no existe y se avisa.
+  async function iniciar() {
+    const caja = document.getElementById('buscador');
+    if (!caja || caja.dataset.listo) return;
+    caja.dataset.listo = '1';
+    const base = caja.dataset.pagefind!;
+    try {
+      await new Promise<void>((ok, mal) => {
+        const s = document.createElement('script');
+        s.src = `${base}pagefind-ui.js`;
+        s.onload = () => ok();
+        s.onerror = () => mal();
+        document.head.append(s);
+      });
+      // @ts-expect-error PagefindUI lo define el script anterior
+      new PagefindUI({ element: '#buscador', showSubResults: true, showImages: false, translations: { placeholder: 'Madrid, PP, un nombre…' } });
+      caja.querySelector('input')?.focus();
+    } catch {
+      caja.innerHTML = '<p class="empty">El índice de búsqueda se crea al compilar la web (npm run build).</p>';
+    }
+  }
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style is:global>
+  #buscador {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--ink);
+    --pagefind-ui-background: var(--surface);
+    --pagefind-ui-border: var(--line);
+    --pagefind-ui-tag: var(--accent-soft);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 10px;
+    --pagefind-ui-font: var(--f-body);
+  }
+  #buscador mark { background: var(--sepia); color: var(--sepia-ink); }
+</style>

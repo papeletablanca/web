@@ -1,0 +1,29 @@
+# Ficha de Bloque Nacionalista Galego. Instrucciones en _plantilla.yaml.
+nombre: "Bloque Nacionalista Galego"
+corto: "BNG"
+siglas: ["BNG"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+inclusion:
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
+  valor: 1
+
+integrantes: []
+marcas_territoriales: []
+
+candidatura_presidencia:
+  valor: ""
+  estado: pendiente
+
+web:
+  valor: https://www.bng.gal
+  estado: confirmado
+  fuente: https://www.bng.gal
+  fecha: 2026-10-16
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

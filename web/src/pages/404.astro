@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { ruta } from '../lib/datos';
+---
+
+<Base titulo="Página no encontrada">
+  <div class="page-head">
+    <p class="label">Error 404</p>
+    <h1>Esta página no existe</h1>
+    <p>Puede que el enlace esté mal escrito. Prueba con la <a href={ruta()}>portada</a>, las <a href={ruta('provincias')}>provincias</a> o el <a href={ruta('buscar')}>buscador</a>.</p>
+  </div>
+</Base>

@@ -1,0 +1,90 @@
+name: Papeleta Blanca
+
+on:
+  schedule:
+    - cron: "15 7 * * *"    # cada mañana: 8:15 en Madrid (hora de invierno)
+    - cron: "15 17 * * *"   # y por la tarde, por si el BOE publica algo fuera de hora
+  push:
+    branches: [main]        # cada vez que subes un cambio (p. ej. una ficha), se regenera la web
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: "Primer día del BOE a revisar (AAAA-MM-DD). Vacío = solo hoy"
+        required: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: papeleta-blanca
+  cancel-in-progress: false
+
+jobs:
+  datos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pruebas
+        run: python -m unittest discover tests
+      - name: Revisar el BOE y las candidaturas
+        env:
+          DESDE: ${{ github.event.inputs.desde }}
+        run: |
+          if [ -n "$DESDE" ]; then
+            python radar.py --desde "$DESDE"
+            python candidaturas.py --desde "$DESDE"
+          else
+            python radar.py
+            python candidaturas.py
+          fi
+      - name: Guardar datos nuevos
+        run: |
+          git config user.name "Papeleta Blanca"
+          git config user.email "hola@papeletablanca.es"
+          git add datos
+          git diff --cached --quiet || git commit -m "Datos BOE $(date -u +%F)"
+          git push
+
+  web:
+    needs: datos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # incluye los datos que acaba de guardar el paso anterior
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Construir la web
+        working-directory: web
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PUBLIC_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  publicar:
+    needs: web
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - id: despliegue
+        uses: actions/deploy-pages@v4

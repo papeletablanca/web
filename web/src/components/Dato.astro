@@ -1,0 +1,30 @@
+---
+// Una fila de ficha: qué es, el valor, su estado y de dónde sale.
+import { fecha } from '../lib/datos';
+
+interface Props {
+  etiqueta: string;
+  d: { valor: string; estado: 'confirmado' | 'anunciado' | 'pendiente'; fuente?: string; fecha?: Date };
+  enlace?: boolean;
+  vacio?: string;
+}
+const { etiqueta, d, enlace = false, vacio = 'Todavía no se sabe' } = Astro.props;
+const dominio = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+---
+
+<div class="fact">
+  <span class="label k">{etiqueta}</span>
+  <span class="v">
+    {d.estado === 'pendiente' ? <span class="muted">{vacio}</span> : enlace ? <a href={d.valor} rel="noopener">{dominio(d.valor)}</a> : d.valor}
+  </span>
+  <span class={`chip ${d.estado}`}>{d.estado}</span>
+  {d.fuente && <span class="src">Fuente: <a href={d.fuente} rel="noopener">{dominio(d.fuente)}</a>{d.fecha && <> · {fecha(d.fecha, { day: 'numeric', month: 'short', year: 'numeric' })}</>}</span>}
+</div>
+
+<style>
+  .fact { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .k { grid-column: 1 / -1; }
+  .v { font-size: 1.05rem; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+  .v .muted { font-weight: 400; }
+  .src { grid-column: 1 / -1; font: 400 0.74rem var(--f-mono); color: var(--muted); overflow-wrap: anywhere; }
+</style>

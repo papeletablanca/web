@@ -1,0 +1,31 @@
+# Ficha de Coalición Canaria. Instrucciones en _plantilla.yaml.
+nombre: "Coalición Canaria"
+corto: "CCa"
+siglas: ["CCa"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+inclusion:
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
+  valor: 1
+
+integrantes: []
+marcas_territoriales: []
+
+candidatura_presidencia:
+  valor: "Cristina Valido (Santa Cruz de Tenerife), propuesta pendiente de ratificar"
+  estado: anunciado
+  fuente: https://www.infobae.com/espana/agencias/2026/10/05/coalicion-canaria-cc-propone-a-cristina-valido-como-candidata-al-congreso/
+  fecha: 2026-10-05
+
+web:
+  valor: https://coalicioncanaria.org
+  estado: confirmado
+  fuente: https://coalicioncanaria.org
+  fecha: 2026-10-16
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

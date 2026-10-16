@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { ruta } from '../lib/datos';
+
+const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
+---
+
+<Base titulo="Cómo funciona" descripcion="Reglas de neutralidad y fuentes de Papeleta Blanca: quién aparece, en qué orden y de dónde sale cada dato." buscable>
+  <div class="page-head">
+    <p class="label">Cómo funciona</p>
+    <h1>Reglas de neutralidad</h1>
+    <p>Papeleta Blanca es un proyecto ciudadano. No pertenece a ningún partido ni recibe dinero de ninguno. Estas reglas se aplican igual a todas las formaciones y cualquier cambio queda registrado en público.</p>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><h3>Quién aparece</h3><p>Hasta la proclamación, las formaciones con escaño en la legislatura saliente y las que anuncien públicamente que se presentan. Después, todas las candidaturas que proclame el BOE, sin excepción.</p></div>
+    <div class="rule"><h3>En qué orden</h3><p>Alfabético en las listas generales. En cada provincia, el orden en que las publica el BOE. Nunca por votos ni por encuestas.</p></div>
+    <div class="rule"><h3>Con qué aspecto</h3><p>El mismo para todas: sin logos y sin colores de partido. Las formaciones se distinguen por su nombre.</p></div>
+    <div class="rule">
+      <h3>Qué entra</h3>
+      <p>Solo datos con fuente y fecha. Cada uno lleva una etiqueta:</p>
+      <ul class="estados">
+        <li><span class="chip confirmado">confirmado</span> lo dice la propia formación o el BOE</li>
+        <li><span class="chip anunciado">anunciado</span> lo ha publicado la prensa, con enlace</li>
+        <li><span class="chip pendiente">pendiente</span> todavía no se sabe</li>
+      </ul>
+      <p>Los rumores no entran.</p>
+    </div>
+    <div class="rule"><h3>Qué no hacemos</h3><p>No resumimos programas: los enlazamos. No publicamos encuestas (la ley prohíbe difundirlas del 24 al 28 de noviembre). Ningún dato sobre las formaciones lo redacta una inteligencia artificial: todos salen de su fuente.</p></div>
+    <div class="rule" id="nombre"><h3>Por qué «Papeleta Blanca»</h3><p>Papeleta Blanca no está vinculada a ningún partido, coalición, candidatura ni organización política, ni a ninguna ideología u orientación política. El nombre se refiere solo al color de la papeleta del Congreso: no tiene relación con el voto en blanco ni con ninguna formación que use esa palabra en su nombre. La del Senado es sepia. El nombre no es una recomendación: no promovemos ninguna opción de voto.</p></div>
+    <div class="rule">
+      <h3>Si ves un error</h3>
+      <p>
+        {repo ? <>Abre una incidencia en el <a href={`${repo}/issues`}>repositorio público</a></> : 'Abre una incidencia en el repositorio público del proyecto'}
+        con el enlace a la fuente correcta. Las correcciones quedan a la vista de todos.
+      </p>
+    </div>
+  </div>
+
+  <section class="prose">
+    <h2>De dónde salen los datos</h2>
+    <ul>
+      <li><strong>Novedades del BOE:</strong> cada mañana un programa lee el sumario del BOE a través de su <a href="https://www.boe.es/datosabiertos/">API de datos abiertos</a> y aparta lo electoral según unas reglas escritas y públicas. Puede equivocarse: solo lee los títulos.</li>
+      <li><strong>Candidaturas y listas:</strong> se copian automáticamente de la disposición del BOE en la que las Juntas Electorales Provinciales publican las candidaturas presentadas y, después, las proclamadas. Cada provincia enlaza al documento original.</li>
+      <li><strong>Escaños por provincia y calendario:</strong> del <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a> y de la <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">LOREG</a>.</li>
+      <li><strong>Fichas de las formaciones:</strong> se rellenan a mano, dato a dato, siempre con su enlace. La ficha de una candidatura del BOE se encuentra por sus siglas.</li>
+    </ul>
+    <p>El código y los textos generales de la web se han escrito con ayuda de inteligencia artificial (Claude, de Anthropic) y se revisan a mano. Papeleta Blanca no está afiliado al BOE ni a ningún organismo público. <a href={ruta('como-votar')}>Guía práctica para votar</a>.</p>
+  </section>
+</Base>
+
+<style>
+  .rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px 32px; }
+  .rule { display: grid; gap: 8px; align-content: start; max-width: 60ch; }
+  .rule p { color: var(--muted); }
+  .estados { list-style: none; padding: 0; display: grid; gap: 8px; font-size: 0.9rem; color: var(--muted); }
+  .estados .chip { margin-right: 6px; }
+</style>

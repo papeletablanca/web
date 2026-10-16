@@ -1,0 +1,39 @@
+# PLANTILLA DE FICHA. Copia este fichero con el nombre de la formación en minúsculas y sin
+# espacios (p. ej. "mi-partido.yaml"). Los ficheros que empiezan por "_" no salen en la web.
+#
+# Regla de oro: cada dato lleva "estado" y, si no está pendiente, "fuente" (un enlace) y "fecha".
+#   confirmado -> lo dice la propia formación o el BOE
+#   anunciado  -> lo ha publicado la prensa (enlaza la noticia)
+#   pendiente  -> todavía no se sabe (deja "valor" vacío)
+# Los rumores ("parece que...", "podría...") NO se apuntan.
+
+nombre: Nombre completo de la formación
+corto: SIGLAS              # cómo se muestra en grande; si lo quitas, se usa la primera sigla
+siglas: [SIGLAS]           # todas las siglas con las que aparece en el BOE, para enlazar sus listas
+tipo: partido              # partido | coalición | federación | agrupación
+inclusion:                 # por qué tiene ficha (ver "Cómo funciona" en la web)
+  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
+
+escanos_23j:               # escaños obtenidos el 23J de 2023, del BOE-A-2023-18907 (quítalo si no tuvo)
+  valor: 0
+  # nota: "desglose si concurrió con varias marcas"
+
+integrantes: []            # solo coaliciones: partidos que la forman
+marcas_territoriales: []   # p. ej. - { nombre: Partit dels Socialistes de Catalunya, ambito: Cataluña, siglas: [PSC] }
+
+candidatura_presidencia:   # quién encabeza la candidatura (y su provincia). Fuentes: la propia formación o agencias (EFE, Europa Press)
+  valor: ""
+  estado: pendiente
+  # fuente: https://...
+  # fecha: 2026-10-16
+
+web:
+  valor: ""                # la dirección de su web oficial
+  estado: pendiente
+
+programa:
+  valor: ""                # enlace al PDF o página del programa electoral para el 29N
+  estado: pendiente
+
+redes: []                  # p. ej. - { red: Instagram, url: https://... } (solo cuentas enlazadas desde su web)

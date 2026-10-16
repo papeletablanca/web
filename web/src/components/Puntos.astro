@@ -1,0 +1,14 @@
+---
+interface Props { n: number; senado?: boolean; etiqueta: string }
+const { n, senado = false, etiqueta } = Astro.props;
+---
+
+<div class:list={['dots', { sen: senado }]} role="img" aria-label={etiqueta}>
+  {[...Array(n)].map(() => <i />)}
+</div>
+
+<style>
+  .dots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 560px; }
+  i { width: 18px; height: 18px; border-radius: 50%; background: var(--ink); }
+  .sen i { background: var(--sepia); border: 1.5px solid var(--sepia-ink); }
+</style>

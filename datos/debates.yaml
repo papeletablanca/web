@@ -1,0 +1,10 @@
+# Agenda de debates electorales. Copia un bloque, quita las almohadillas (#) y rellénalo.
+# Solo debates anunciados por el medio que los organiza, con enlace a ese anuncio.
+#
+# - fecha: 2026-11-16
+#   hora: "22:00"
+#   titulo: Debate a cuatro
+#   medio: Nombre de la cadena
+#   participantes: [PP, PSOE, Vox, Sumar]   # siglas tal como aparecen en las fichas
+#   fuente: https://enlace-al-anuncio-oficial
+[]

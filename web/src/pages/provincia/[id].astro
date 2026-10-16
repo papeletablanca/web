@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import ListaCandidatura from '../../components/ListaCandidatura.astro';
+import Puntos from '../../components/Puntos.astro';
+import { getCollection } from 'astro:content';
+import { candidaturasBoe, fecha, fichaDe, plural, type Candidatura, type Circunscripcion } from '../../lib/datos';
+
+export async function getStaticPaths() {
+  return (await getCollection('circunscripciones')).map((p) => ({ params: { id: p.id }, props: { p } }));
+}
+const { p } = Astro.props as { p: Circunscripcion };
+const d = p.data;
+
+const fichas = await getCollection('formaciones');
+const cand = await candidaturasBoe();
+const aqui = (cand?.candidaturas ?? []).filter((c) => c.provincia === p.id);
+const congreso = aqui.filter((c) => c.camara === 'congreso');
+const senado = aqui.filter((c) => c.camara === 'senado');
+const islas = [...new Set(senado.map((c) => c.isla))];
+const proclamadas = (l: Candidatura[]) => l.filter((c) => c.proclamada);
+const fuera = (l: Candidatura[]) => l.filter((c) => !c.proclamada);
+
+const senadoTexto = d.senado_islas.length
+  ? `Se votan por islas: ${d.senado_islas.map((i) => `${i.isla} ${i.senadores}`).join(' · ')}.`
+  : d.senadores === 4
+    ? 'Cada votante puede marcar hasta 3 de los 4 senadores.'
+    : `Cada votante puede marcar hasta ${d.senadores - 1} de los ${d.senadores} senadores.`;
+---
+
+<Base titulo={d.nombre} descripcion={`${d.nombre} elige ${plural(d.diputados, 'diputado', 'diputados')} y ${plural(d.senadores, 'senador', 'senadores')} el 29N. Candidaturas oficiales del BOE.`} buscable>
+  <div class="page-head">
+    <p class="label">Circunscripción</p>
+    <h1>{d.nombre}</h1>
+    <p>{plural(d.diputados, 'diputado', 'diputados')} y {plural(d.senadores, 'senador', 'senadores')} en juego</p>
+  </div>
+
+  <div class="grid2">
+    <section>
+      <h2>Congreso</h2>
+      <Puntos n={d.diputados} etiqueta={plural(d.diputados, 'diputado', 'diputados')} />
+      <p class="num">{d.diputados} de 350 escaños. Se reparten por la regla D'Hondt entre las listas que superen el 3 % de los votos válidos de la provincia.</p>
+    </section>
+    <section>
+      <h2>Senado</h2>
+      <Puntos n={d.senadores} senado etiqueta={plural(d.senadores, 'senador', 'senadores')} />
+      <p>{senadoTexto}</p>
+    </section>
+  </div>
+
+  {
+    !cand ? (
+      <section>
+        <div class="sec-head"><h2>Candidaturas</h2></div>
+        <div class="empty">
+          <strong>Todavía no hay candidaturas oficiales.</strong>
+          <span>El BOE publicará las presentadas hacia el 28 de octubre y las proclamadas hacia el 3 de noviembre. Esta página se rellenará sola ese día.</span>
+        </div>
+      </section>
+    ) : (
+      <>
+        {cand.fase === 'presentadas' && (
+          <p class="aviso">
+            Son las candidaturas <strong>presentadas</strong>: todavía pueden cambiar. La proclamación definitiva se publica hacia el 3 de noviembre.
+          </p>
+        )}
+        <section>
+          <div class="sec-head">
+            <h2>Candidaturas al Congreso</h2>
+            <p>En el orden del BOE ({plural(proclamadas(congreso).length, 'candidatura', 'candidaturas')}). Fuente: <a href={cand.fuente.url}>{cand.fuente.id}</a>, {fecha(cand.fuente.fecha_publicacion, { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
+          </div>
+          <div>{proclamadas(congreso).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+          {fuera(congreso).length > 0 && (
+            <details class="fuera-lista">
+              <summary class="label">No proclamadas ({fuera(congreso).length})</summary>
+              <div>{fuera(congreso).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+            </details>
+          )}
+        </section>
+        <section>
+          <div class="sec-head"><h2>Candidaturas al Senado</h2></div>
+          {islas.map((isla) => (
+            <div class="isla">
+              {isla && <h3>{isla}</h3>}
+              <div>{proclamadas(senado.filter((c) => c.isla === isla)).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+            </div>
+          ))}
+        </section>
+      </>
+    )
+  }
+</Base>
+
+<style>
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+  .isla { display: grid; gap: 8px; }
+  .isla + .isla { margin-top: 16px; }
+  .fuera-lista summary { cursor: pointer; padding-block: 12px; }
+  @media (max-width: 820px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+</style>
