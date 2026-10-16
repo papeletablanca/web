@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Termino from '../../components/Termino.astro';
 import Dato from '../../components/Dato.astro';
 import { getCollection } from 'astro:content';
 import { candidaturasBoe, circunscripciones, corto, fichaDe, ruta, type Formacion } from '../../lib/datos';
@@ -67,7 +68,7 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
         donde.length ? (
           <div class="provlist">{donde.map((p) => <a href={ruta(`provincia/${p.id}`)}>{p.data.nombre}</a>)}</div>
         ) : (
-          <div class="empty">No aparece con estas siglas ({d.siglas.join(', ')}) en las candidaturas {cand.fase} del BOE.</div>
+          <div class="empty">No aparece con estas siglas ({d.siglas.join(', ')}) en las candidaturas {cand.fase} del <Termino id="boe" />.</div>
         )
       ) : (
         <div class="empty"><strong>Todavía no hay candidaturas oficiales.</strong><span>Llegarán del BOE con la publicación de las candidaturas (hacia el 28 de octubre).</span></div>

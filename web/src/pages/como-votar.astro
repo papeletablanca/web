@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import { ruta } from '../lib/datos';
 ---
 
-<Base titulo="Cómo votar" descripcion="Guía práctica para votar el 29N: dónde votas, qué llevar, voto por correo y voto desde el extranjero, con enlaces oficiales." buscable>
+<Base titulo="Cómo votar" descripcion="Guía práctica para votar el 29 de noviembre: dónde votas, qué llevar, voto por correo y voto desde el extranjero, con enlaces oficiales." buscable>
   <div class="page-head">
     <p class="label">Guía práctica</p>
     <h1>Cómo votar el 29 de noviembre</h1>
@@ -15,7 +16,7 @@ import Base from '../layouts/Base.astro';
       <ul>
         <li>El domingo 29 de noviembre, de <strong>9:00 a 20:00</strong>, en tu colegio electoral.</li>
         <li>Lleva el <strong>DNI, el pasaporte o el carné de conducir</strong> originales, con foto. No sirven fotocopias.</li>
-        <li>Hay dos papeletas: la <strong>blanca</strong> para el Congreso (eliges una lista cerrada) y la <strong>sepia</strong> para el Senado (marcas personas: hasta 3 en la mayoría de provincias).</li>
+        <li>Hay dos papeletas: la <strong>blanca</strong> para el Congreso (eliges una lista cerrada) y la <strong>sepia</strong> para el Senado (marcas personas: hasta 3 en la mayoría de provincias). <a href={ruta('papeleta')}>Practica con las papeletas de tu provincia</a>.</li>
       </ul>
       <p class="fuente">Fuente: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">LOREG</a> · <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a></p>
     </section>

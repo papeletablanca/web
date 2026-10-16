@@ -2,8 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import ListaCandidatura from '../../components/ListaCandidatura.astro';
 import Puntos from '../../components/Puntos.astro';
+import Papeleta from '../../components/Papeleta.astro';
+import Termino from '../../components/Termino.astro';
 import { getCollection } from 'astro:content';
-import { candidaturasBoe, correccionesDe, fecha, fichaDe, plural, type Candidatura, type Circunscripcion } from '../../lib/datos';
+import { candidaturasBoe, correccionesDe, fecha, fichaDe, marcasSenado, plural, ruta, type Candidatura, type Circunscripcion } from '../../lib/datos';
 
 export async function getStaticPaths() {
   return (await getCollection('circunscripciones')).map((p) => ({ params: { id: p.id }, props: { p } }));
@@ -22,10 +24,8 @@ const proclamadas = (l: Candidatura[]) => l.filter((c) => c.proclamada);
 const fuera = (l: Candidatura[]) => l.filter((c) => !c.proclamada);
 
 const senadoTexto = d.senado_islas.length
-  ? `Se votan por islas: ${d.senado_islas.map((i) => `${i.isla} ${i.senadores}`).join(' · ')}.`
-  : d.senadores === 4
-    ? 'Cada votante puede marcar hasta 3 de los 4 senadores.'
-    : `Cada votante puede marcar hasta ${d.senadores - 1} de los ${d.senadores} senadores.`;
+  ? `Se votan por islas: ${d.senado_islas.map((i) => `${i.isla} elige ${i.senadores} y se marcan hasta ${marcasSenado(i.senadores)}`).join(' · ')}.`
+  : `Cada votante puede marcar hasta ${marcasSenado(d.senadores)} de los ${d.senadores} senadores.`;
 ---
 
 <Base titulo={d.nombre} descripcion={`${d.nombre} elige ${plural(d.diputados, 'diputado', 'diputados')} y ${plural(d.senadores, 'senador', 'senadores')} el 29N. Candidaturas oficiales del BOE.`} buscable>
@@ -39,7 +39,7 @@ const senadoTexto = d.senado_islas.length
     <section>
       <h2>Congreso</h2>
       <Puntos n={d.diputados} etiqueta={plural(d.diputados, 'diputado', 'diputados')} />
-      <p class="num">{d.diputados} de 350 escaños. Se reparten por la regla D'Hondt entre las listas que superen el 3 % de los votos válidos de la provincia.</p>
+      <p class="num">{d.diputados} de 350 escaños. Se reparten por la <Termino id="dhondt">regla D'Hondt</Termino> entre las listas que superen la <Termino id="barrera">barrera del 3 %</Termino> de los votos válidos. <a href={ruta('como-se-reparten')}>Prueba cómo funciona</a>.</p>
     </section>
     <section>
       <h2>Senado</h2>
@@ -47,6 +47,8 @@ const senadoTexto = d.senado_islas.length
       <p>{senadoTexto}</p>
     </section>
   </div>
+
+  <Papeleta p={p} candidaturas={aqui.length ? aqui : null} fase={cand?.fase} />
 
   {
     !cand ? (

@@ -140,4 +140,10 @@ const debates = defineCollection({
   }),
 });
 
-export const collections = { formaciones, boe, candidaturas, correcciones, circunscripciones, calendario, debates };
+// Glosario: cada término con su id fijo (para /glosario#id y <Termino id="..."/>) y su fuente.
+const glosario = defineCollection({
+  loader: file(`${DATOS}/glosario.yaml`, { parser: (texto: string) => (parse(texto) as Record<string, unknown>[] | null) ?? [] }),
+  schema: z.object({ termino: z.string().min(1), definicion: z.string().min(1), fuente: enlace }),
+});
+
+export const collections = { formaciones, boe, candidaturas, correcciones, circunscripciones, calendario, debates, glosario };

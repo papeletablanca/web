@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { ruta } from '../lib/datos';
+import Termino from '../components/Termino.astro';
 
 const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
 ---
@@ -13,7 +14,7 @@ const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
   </div>
 
   <div class="rules">
-    <div class="rule"><h3>Quién aparece</h3><p>Hasta la proclamación, las formaciones que obtuvieron diputado en el Congreso el 23 de julio de 2023 y las que anuncien públicamente que se presentan. Después, todas las candidaturas que proclame el BOE, sin excepción.</p></div>
+    <div class="rule"><h3>Quién aparece</h3><p>Hasta la <Termino id="proclamada">proclamación</Termino>, las formaciones que obtuvieron diputado en el Congreso el 23 de julio de 2023 y las que anuncien públicamente que se presentan. Después, todas las candidaturas que proclame el BOE, sin excepción.</p></div>
     <div class="rule"><h3>En qué orden</h3><p>Alfabético en las listas generales. En cada provincia, el orden en que las publica el BOE. Nunca por votos ni por encuestas.</p></div>
     <div class="rule"><h3>Con qué aspecto</h3><p>El mismo para todas: sin logos y sin colores de partido. Las formaciones se distinguen por su nombre.</p></div>
     <div class="rule">
@@ -40,7 +41,7 @@ const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
     <h2>De dónde salen los datos</h2>
     <ul>
       <li><strong>Novedades del BOE:</strong> cada mañana un programa lee el sumario del BOE a través de su <a href="https://www.boe.es/datosabiertos/">API de datos abiertos</a> y aparta lo electoral según unas reglas escritas y públicas. Puede equivocarse: solo lee los títulos.</li>
-      <li><strong>Candidaturas y listas:</strong> se copian automáticamente de la disposición del BOE en la que las Juntas Electorales Provinciales publican las candidaturas presentadas y, después, las proclamadas. Cada provincia enlaza al documento original.</li>
+      <li><strong>Candidaturas y listas:</strong> se copian automáticamente de la disposición del BOE en la que las <Termino id="junta-electoral">Juntas Electorales</Termino> Provinciales publican las candidaturas presentadas y, después, las proclamadas. Cada provincia enlaza al documento original.</li>
       <li><strong>Escaños por provincia y calendario:</strong> del <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">Real Decreto 806/2026</a> y de la <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">LOREG</a>.</li>
       <li><strong>Fichas de las formaciones:</strong> se rellenan a mano, dato a dato, siempre con su enlace. La ficha de una candidatura del BOE se encuentra por sus siglas.</li>
     </ul>

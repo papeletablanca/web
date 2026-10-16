@@ -4,34 +4,88 @@ import Calendario from '../components/Calendario.astro';
 import MapaEscanos from '../components/MapaEscanos.astro';
 import TarjetaBoe from '../components/TarjetaBoe.astro';
 import TarjetaFormacion from '../components/TarjetaFormacion.astro';
-import { ELECCION, candidaturasBoe, formaciones, hallazgosBoe, ruta } from '../lib/datos';
+import Termino from '../components/Termino.astro';
+import { getCollection } from 'astro:content';
+import { ELECCION, candidaturasBoe, circunscripciones, fecha, formaciones, hallazgosBoe, ruta } from '../lib/datos';
+import { describir, estado, hoyMadrid, type Hito } from '../lib/calendario';
 
 const dias = Math.max(0, Math.ceil((new Date(`${ELECCION}T00:00:00+01:00`).getTime() - Date.now()) / 864e5));
-const boe = (await hallazgosBoe()).slice(0, 6);
+const novedades = await hallazgosBoe();
+const boe = novedades.slice(0, 6);
+const ultima = novedades[0];
 const fichas = await formaciones();
 const cand = await candidaturasBoe();
+const provincias = await circunscripciones();
+const diputados = provincias.reduce((n, c) => n + c.data.diputados, 0);
+const senadores = provincias.reduce((n, c) => n + c.data.senadores, 0);
+
+// Recuadro «Hoy»: se calcula aquí con la fecha de la build y el navegador lo recalcula con la de hoy.
+const dia = (d: Date) => d.toISOString().slice(0, 10);
+const hitos: Hito[] = (await getCollection('calendario')).map(({ data: e }) => ({
+  fecha: dia(e.fecha), hasta: dia(e.hasta ?? e.fecha), texto: e.texto, aproximada: e.aproximada, fuente: e.fuente,
+}));
+const hoy = describir(estado(hitos, hoyMadrid()));
 ---
 
 <Base>
   <section class="hero">
     <div>
-      <p class="label">Elecciones a Cortes Generales</p>
+      <p class="label">Elecciones generales</p>
       <h1><span class="num" data-dias={ELECCION}>{dias}</span> días<small>hasta el domingo 29 de noviembre</small></h1>
       <p class="lede">
-        Todo lo oficial sobre las elecciones generales en un solo sitio: qué se vota en tu provincia, quién se presenta y qué
-        publica el BOE cada día. Sin opiniones, siempre con la fuente.
+        Aquí tienes lo oficial sobre las elecciones: cuándo y cómo se vota, qué se elige en tu provincia y quién se presenta. Sin opiniones y siempre con la fuente.
       </p>
     </div>
     <div class="ballots" aria-hidden="true">
-      <div class="ballot congreso"><span class="label">Congreso · papeleta blanca</span><strong class="num">350</strong><p>diputados en 52 circunscripciones</p><div class="lines"><i></i><i></i><i></i></div></div>
-      <div class="ballot senado"><span class="label">Senado · papeleta sepia</span><strong class="num">208</strong><p>senadores por elección directa</p><div class="lines"><i></i><i></i><i></i></div></div>
+      <div class="ballot congreso"><span class="label">Congreso · papeleta blanca</span><strong class="num">{diputados}</strong><p>diputados en {provincias.length} circunscripciones</p><div class="lines"><i></i><i></i><i></i></div></div>
+      <div class="ballot senado"><span class="label">Senado · papeleta sepia</span><strong class="num">{senadores}</strong><p>senadores elegidos en las urnas</p><div class="lines"><i></i><i></i><i></i></div></div>
     </div>
   </section>
 
-  <section>
+  <nav class="atajos" aria-label="Lo más buscado">
+    <a href="#calendario"><strong>Cuándo se vota</strong><span>Fechas y plazos hasta el 29 de noviembre</span></a>
+    <a href="#mi-provincia"><strong>Qué se vota en mi provincia</strong><span>Escaños, candidaturas y tu papeleta</span></a>
+    <a href={ruta('como-votar')}><strong>Cómo voto</strong><span>En persona, por correo o desde el extranjero</span></a>
+  </nav>
+
+  <section class="hoy" aria-labelledby="hoy-titulo">
+    <h2 id="hoy-titulo">Hoy en las elecciones</h2>
+    <div class="hoy-grid">
+      <div class="hoy-caja" data-hoy data-hitos={JSON.stringify(hitos)}>
+        <p class="label" data-hoy-etiqueta>{hoy.etiqueta}</p>
+        <p class="hoy-frase" data-hoy-frase>{hoy.frase}</p>
+        <a href="#calendario">Ver el calendario completo</a>
+      </div>
+      {
+        ultima && (
+          <div class="hoy-caja">
+            <p class="label">Última novedad oficial · {fecha(ultima.fecha, { day: 'numeric', month: 'long' })}</p>
+            <p class="hoy-frase recortada"><a href={ultima.url_html}>{ultima.titulo}</a></p>
+            <a href={ruta('boe')}>Ver todas las novedades</a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <section id="mi-provincia" class="mi-provincia">
+    <form class="elige" action={ruta('provincias')} data-elige data-base={ruta('provincia/')}>
+      <h2 id="elige-titulo">Elige tu provincia</h2>
+      <p id="elige-ayuda">Verás cuántos diputados y senadores elige, quién se presenta y cómo vota.</p>
+      <div class="fila">
+        <select id="elige-provincia" name="p" required aria-labelledby="elige-titulo" aria-describedby="elige-ayuda">
+          <option value="" disabled selected>Selecciona tu provincia…</option>
+          {provincias.map((c) => <option value={c.id}>{c.data.nombre}</option>)}
+        </select>
+        <button type="submit">Ver mi provincia</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="calendario">
     <div class="sec-head">
       <h2>Calendario electoral</h2>
-      <p>Fechas del Real Decreto 806/2026 y de la LOREG. Las marcadas «aprox.» dependen de la publicación en el BOE.</p>
+      <p>Fechas del Real Decreto 806/2026 y de la LOREG. Las marcadas «aprox.» dependen de la publicación en el <Termino id="boe" />.</p>
     </div>
     <Calendario />
   </section>
@@ -39,14 +93,14 @@ const cand = await candidaturasBoe();
   <section>
     <div class="sec-head">
       <h2>Qué se vota en cada provincia</h2>
-      <p>Cada casilla es una circunscripción. Cuanto más intensa, más diputados elige. Tócala para ver su página.</p>
+      <p>Cada casilla es una <Termino id="circunscripcion">circunscripción</Termino>. Cuanto más intensa, más diputados elige. Tócala para ver su página, o mira <a href={ruta('como-se-reparten')}>cómo se reparten los escaños</a>.</p>
     </div>
     <MapaEscanos />
   </section>
 
   <section>
     <div class="sec-head">
-      <h2>Últimas novedades del BOE</h2>
+      <h2>Novedades oficiales</h2>
       <a class="mas" href={ruta('boe')}>Ver todas →</a>
     </div>
     {boe.length ? <div class="cards">{boe.map((h) => <TarjetaBoe h={h} />)}</div> : <div class="empty">Todavía no hay novedades.</div>}
@@ -69,20 +123,39 @@ const cand = await candidaturasBoe();
 </Base>
 
 <script>
-  function cuentaAtras() {
+  import { navigate } from 'astro:transitions/client';
+  import { describir, estado, hoyMadrid } from '../lib/calendario';
+
+  function iniciar() {
+    // Cuenta atrás
     const el = document.querySelector<HTMLElement>('[data-dias]');
-    if (!el) return;
-    const fin = new Date(`${el.dataset.dias}T00:00:00+01:00`).getTime();
-    el.textContent = String(Math.max(0, Math.ceil((fin - Date.now()) / 864e5)));
+    if (el) el.textContent = String(Math.max(0, Math.ceil((new Date(`${el.dataset.dias}T00:00:00+01:00`).getTime() - Date.now()) / 864e5)));
+
+    // «Hoy en las elecciones», con la fecha de hoy y no la de la última build
+    const caja = document.querySelector<HTMLElement>('[data-hoy]');
+    if (caja) {
+      const { etiqueta, frase } = describir(estado(JSON.parse(caja.dataset.hitos!), hoyMadrid()));
+      caja.querySelector('[data-hoy-etiqueta]')!.textContent = etiqueta;
+      caja.querySelector('[data-hoy-frase]')!.textContent = frase;
+    }
+
+    // «Elige tu provincia»: sin JavaScript, el formulario lleva a la lista de provincias
+    const form = document.querySelector<HTMLFormElement>('[data-elige]');
+    form?.addEventListener('submit', (e) => {
+      const id = form.querySelector('select')!.value;
+      if (!id) return;
+      e.preventDefault();
+      navigate(`${form.dataset.base}${id}/`);
+    });
   }
-  document.addEventListener('astro:page-load', cuentaAtras);
+  document.addEventListener('astro:page-load', iniciar);
 </script>
 
 <style>
   .hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px; align-items: center; }
   h1 { font-size: clamp(3.2rem, 9vw, 6.5rem); font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; }
   h1 small { display: block; font-size: 0.3em; letter-spacing: -0.01em; font-weight: 700; color: var(--muted); margin-top: 10px; }
-  .lede { font-size: 1.1rem; max-width: 46ch; margin-top: 18px; }
+  .lede { font-size: 1.15rem; max-width: 46ch; margin-top: 18px; }
   .ballots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .ballot { border: 1px solid var(--line); border-radius: 6px; padding: 16px 16px 20px; display: grid; gap: 10px; min-height: 180px; align-content: start; box-shadow: 0 1px 0 var(--line), 0 12px 24px -18px rgba(0, 0, 0, 0.35); }
   .congreso { background: var(--surface); transform: rotate(-1.5deg); }
@@ -94,8 +167,38 @@ const cand = await candidaturasBoe();
   .lines i { display: block; height: 6px; border-radius: 3px; background: currentColor; opacity: 0.12; }
   .lines i:nth-child(2) { width: 80%; }
   .lines i:nth-child(3) { width: 60%; }
+
+  /* Tres atajos grandes: lo que se pregunta quien va a votar */
+  .atajos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: -24px; }
+  .atajos a { display: grid; gap: 6px; padding: 20px 22px; border: 2px solid var(--ink); border-radius: var(--r); text-decoration: none; background: var(--surface); }
+  .atajos a:hover { background: var(--ink); color: var(--paper); }
+  .atajos a:hover span { color: inherit; }
+  .atajos strong { font: 700 1.25rem/1.2 var(--f-display); }
+  .atajos strong::after { content: " →"; }
+  .atajos span { font-size: 0.92rem; color: var(--muted); }
+
+  .hoy { gap: 14px; }
+  .hoy-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .hoy-caja { display: grid; gap: 8px; align-content: start; padding: 18px 20px; background: var(--accent-soft); border-radius: var(--r); }
+  .hoy-caja .label { color: var(--ink); }
+  .hoy-frase { font-size: 1.1rem; line-height: 1.45; }
+  .hoy-caja > a { font-size: 0.92rem; font-weight: 600; }
+  .recortada { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .elige { display: grid; gap: 10px; padding: 24px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+  .elige p { color: var(--muted); }
+  .fila { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fila select { flex: 1 1 260px; min-width: 0; font: 500 1.05rem var(--f-body); color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; }
+  .fila button { font: 700 1.05rem var(--f-body); color: var(--paper); background: var(--ink); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 20px; cursor: pointer; }
+  .fila button:hover { background: var(--accent); border-color: var(--accent); }
+
   .parties { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 12px; }
   .nuevas { border-top: 2px dashed var(--muted); padding-top: 12px; display: grid; gap: 6px; align-content: start; text-decoration: none; font-size: 0.88rem; color: var(--muted); }
   .nuevas span { font: 800 1.35rem/1 var(--f-display); }
-  @media (max-width: 820px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+  #calendario, #mi-provincia { scroll-margin-top: 90px; }
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    .atajos, .hoy-grid { grid-template-columns: minmax(0, 1fr); }
+    .atajos { margin-top: 0; }
+  }
 </style>

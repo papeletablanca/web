@@ -18,6 +18,13 @@ export function fecha(d: Date | string, opciones: Intl.DateTimeFormatOptions = {
   return new Date(d).toLocaleDateString('es-ES', { timeZone: 'UTC', ...opciones }).replace('.', '');
 }
 
+/**
+ * Cuántos nombres se pueden marcar en la papeleta del Senado según los senadores que elige la circunscripción
+ * (LOREG art. 166.1.a): 3 en las provincias (4 senadores), 2 en Gran Canaria, Mallorca y Tenerife (3) y en Ceuta y
+ * Melilla (2), y 1 en el resto de las islas (1). Marcar más anula el voto (art. 96.3).
+ */
+export const marcasSenado = (senadores: number) => (senadores >= 4 ? 3 : senadores >= 2 ? 2 : 1);
+
 export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
 
 // Siglas comparables: sin tildes, espacios ni signos (el BOE escribe a veces «B.N.G.» y otras «BNG»)

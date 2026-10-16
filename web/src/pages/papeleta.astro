@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Termino from '../components/Termino.astro';
+import { circunscripciones, ruta } from '../lib/datos';
+
+const provincias = await circunscripciones();
+---
+
+<Base titulo="Así es tu papeleta" descripcion="Practica cómo se vota el 29 de noviembre: las papeletas del Congreso y del Senado de tu provincia, con sus nombres reales en cuanto el BOE los publique." buscable>
+  <div class="page-head">
+    <p class="label">Practica antes de votar</p>
+    <h1>Así es tu papeleta</h1>
+    <p>
+      Cada votante recibe dos papeletas: la blanca del Congreso, con <Termino id="lista-cerrada">listas cerradas</Termino>, y la sepia del Senado, donde se marcan personas.
+      Elige tu provincia para ver las tuyas y practicar.
+    </p>
+  </div>
+
+  <form class="elige" action={ruta('provincias')} data-elige data-base={ruta('provincia/')}>
+    <label for="papeleta-provincia">Tu provincia</label>
+    <div class="fila">
+      <select id="papeleta-provincia" name="p" required>
+        <option value="" disabled selected>Selecciona tu provincia…</option>
+        {provincias.map((c) => <option value={c.id}>{c.data.nombre}</option>)}
+      </select>
+      <button type="submit">Ver mi papeleta</button>
+    </div>
+  </form>
+</Base>
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+  document.addEventListener('astro:page-load', () => {
+    const form = document.querySelector<HTMLFormElement>('[data-elige]');
+    form?.addEventListener('submit', (e) => {
+      const id = form.querySelector('select')!.value;
+      if (!id) return;
+      e.preventDefault();
+      navigate(`${form.dataset.base}${id}/#papeleta`);
+    });
+  });
+</script>
+
+<style>
+  .elige { display: grid; gap: 10px; padding: 24px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); max-width: 640px; }
+  .elige label { font: 700 1.15rem var(--f-display); }
+  .fila { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fila select { flex: 1 1 260px; min-width: 0; font: 500 1.05rem var(--f-body); color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; }
+  .fila button { font: 700 1.05rem var(--f-body); color: var(--paper); background: var(--ink); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 20px; cursor: pointer; }
+  .fila button:hover { background: var(--accent); border-color: var(--accent); }
+</style>

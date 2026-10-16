@@ -1,0 +1,65 @@
+---
+// Palabra técnica con su explicación al vuelo (patrón «toggletip»): un botón dentro del texto que despliega la
+// definición del glosario. Funciona con teclado; Escape o un clic fuera la cierran. Uso: <Termino id="boe" />
+// o <Termino id="dhondt">reparto D'Hondt</Termino> para cambiar el texto visible.
+import { getEntry } from 'astro:content';
+import { ruta } from '../lib/datos';
+
+interface Props { id: string }
+const { id } = Astro.props;
+const t = await getEntry('glosario', id);
+if (!t) throw new Error(`Término desconocido en datos/glosario.yaml: «${id}»`);
+const propio = Astro.slots.has('default') ? await Astro.slots.render('default') : null;
+const uid = `def-${id}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span class="termino" data-termino><button type="button" class="t-boton" aria-expanded="false" aria-controls={uid} data-termino-boton>{propio ? <Fragment set:html={propio} /> : t.data.termino}</button><span class="t-def" id={uid} hidden data-termino-def><strong>{t.data.termino}.</strong> {t.data.definicion} <a href={ruta(`glosario#${id}`)}>Glosario</a> · <a href={t.data.fuente}>Fuente</a></span></span>
+
+<script>
+  let escuchas: AbortController | undefined;
+
+  function iniciar() {
+    escuchas?.abort();
+    escuchas = new AbortController();
+    const { signal } = escuchas;
+    const terminos = [...document.querySelectorAll<HTMLElement>('[data-termino]')];
+
+    const cerrar = (t: HTMLElement) => {
+      t.querySelector('[data-termino-boton]')!.setAttribute('aria-expanded', 'false');
+      t.querySelector<HTMLElement>('[data-termino-def]')!.hidden = true;
+    };
+    const abrir = (t: HTMLElement) => {
+      terminos.forEach((otro) => otro !== t && cerrar(otro));
+      const def = t.querySelector<HTMLElement>('[data-termino-def]')!;
+      t.querySelector('[data-termino-boton]')!.setAttribute('aria-expanded', 'true');
+      def.hidden = false;
+      // Que no se salga por la derecha de la pantalla
+      def.style.left = '0px';
+      const sobra = def.getBoundingClientRect().right - (document.documentElement.clientWidth - 16);
+      if (sobra > 0) def.style.left = `${-sobra}px`;
+    };
+
+    terminos.forEach((t) => {
+      const boton = t.querySelector<HTMLButtonElement>('[data-termino-boton]')!;
+      boton.addEventListener('click', () => (boton.getAttribute('aria-expanded') === 'true' ? cerrar(t) : abrir(t)), { signal });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const abierto = terminos.find((t) => !t.querySelector<HTMLElement>('[data-termino-def]')!.hidden);
+      if (abierto) { cerrar(abierto); abierto.querySelector<HTMLElement>('[data-termino-boton]')!.focus(); }
+    }, { signal });
+    document.addEventListener('click', (e) => {
+      terminos.forEach((t) => !t.contains(e.target as Node) && cerrar(t));
+    }, { signal });
+  }
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .termino { position: relative; }
+  .t-boton { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: help; text-decoration: underline dotted; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  .t-boton[aria-expanded="true"] { text-decoration-style: solid; }
+  .t-def { position: absolute; left: 0; top: calc(100% + 6px); z-index: 6; width: min(320px, calc(100vw - 32px)); display: block; padding: 12px 14px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 12px 28px rgb(0 0 0 / 0.18); font: 400 0.88rem/1.5 var(--f-body); text-align: left; letter-spacing: normal; text-transform: none; white-space: normal; }
+  .t-def[hidden] { display: none; }
+  .t-def a { color: inherit; }
+</style>

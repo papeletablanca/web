@@ -1,0 +1,76 @@
+# Glosario: las palabras técnicas de las elecciones, en lenguaje llano.
+# Campos: id (para enlazar: /glosario#id y <Termino id="..."/>), termino, definicion (una o dos frases, sin opinar),
+# fuente (enlace al artículo de la ley o a la web oficial que lo respalda).
+# LOREG = Ley Orgánica del Régimen Electoral General. Sus artículos se enlazan con el número en letra (#acientosesentaytres).
+- id: boe
+  termino: BOE
+  definicion: El Boletín Oficial del Estado, el diario oficial de España. Lo que se publica en él tiene valor legal, como la convocatoria, las candidaturas y los resultados de las elecciones.
+  fuente: https://www.boe.es
+- id: circunscripcion
+  termino: Circunscripción
+  definicion: El territorio en el que se eligen los diputados y senadores. Cada provincia es una, y también Ceuta y Melilla. Para el Senado, en Baleares y Canarias vota cada isla por separado.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentayuno
+- id: candidatura
+  termino: Candidatura
+  definicion: La lista de personas que presenta un partido, una federación, una coalición o una agrupación de electores en una circunscripción.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaycuatro
+- id: presentada
+  termino: Candidatura presentada
+  definicion: La que se entrega a la Junta Electoral Provincial. En estas elecciones, del 21 al 26 de octubre. Todavía puede ser rechazada o corregida.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaycinco
+- id: proclamada
+  termino: Candidatura proclamada
+  definicion: La que la Junta Electoral acepta después de comprobar que cumple los requisitos de la ley. Son las que aparecen en las papeletas.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaysiete
+- id: lista-cerrada
+  termino: Lista cerrada
+  definicion: En el Congreso se vota una lista entera. No se pueden tachar, añadir ni cambiar de orden los nombres; si se hace, el voto es nulo.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#anoventayseis
+- id: voto-senado
+  termino: Voto al Senado
+  definicion: En la papeleta del Senado se marcan personas, no listas. Hasta 3 en las provincias, hasta 2 en Gran Canaria, Mallorca, Tenerife, Ceuta y Melilla, y 1 en el resto de las islas. Si se marcan más, el voto es nulo.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentayseis
+- id: dhondt
+  termino: Regla D'Hondt
+  definicion: El método para repartir los diputados de cada provincia. Los votos de cada lista se dividen entre 1, 2, 3… y los escaños van a los resultados más altos.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentaytres
+- id: barrera
+  termino: Barrera del 3 %
+  definicion: Para entrar en el reparto de diputados, una lista necesita al menos el 3 % de los votos válidos de su provincia.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentaytres
+- id: voto-blanco
+  termino: Voto en blanco
+  definicion: Un sobre sin papeleta o, en el Senado, una papeleta sin ninguna marca. Es un voto válido, aunque no va a ninguna candidatura; por eso cuenta para calcular la barrera del 3 %.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#anoventayseis
+- id: voto-nulo
+  termino: Voto nulo
+  definicion: Un voto que no cuenta. Por ejemplo, un sobre con papeletas de candidaturas distintas o una papeleta con nombres tachados o añadidos.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#anoventayseis
+- id: junta-electoral
+  termino: Junta Electoral
+  definicion: Los órganos que vigilan que las elecciones sean transparentes e iguales para todos. Hay una Central, una en cada provincia y otras de zona; resuelven quejas y proclaman candidaturas y resultados.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#aoctavo
+- id: mesa-electoral
+  termino: Mesa electoral
+  definicion: Un presidente y dos vocales, elegidos por sorteo entre los electores de la zona, que se encargan de la votación y cuentan los votos al cerrar.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#aveinticinco
+- id: censo
+  termino: Censo electoral
+  definicion: La lista de personas que pueden votar. Tras la convocatoria se puede consultar y pedir que se corrija; en estas elecciones, del 12 al 19 de octubre.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#atreintaynueve
+- id: cera
+  termino: CERA
+  definicion: El censo de los españoles que viven en el extranjero. Reciben en casa la documentación para votar, sin tener que pedirla.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#asetentaycinco
+- id: erta
+  termino: ERTA
+  definicion: Así llama la Administración a quienes viven en España pero estarán fuera durante las elecciones. Para votar desde el extranjero tienen que pedirlo.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#asetentaycuatro
+- id: jornada-reflexion
+  termino: Jornada de reflexión
+  definicion: El día antes de la votación. La campaña ya ha terminado y no se puede hacer propaganda ni pedir el voto.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acincuentaytres
+- id: escrutinio
+  termino: Escrutinio
+  definicion: El recuento de los votos. Cada mesa cuenta los suyos al cerrar, y el escrutinio general oficial lo hacen las Juntas Electorales el quinto día después de la votación.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientotres

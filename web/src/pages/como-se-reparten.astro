@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import Termino from '../components/Termino.astro';
+import { circunscripciones } from '../lib/datos';
+import { dhondt, EJEMPLO_LEY } from '../lib/dhondt';
+
+const provincias = await circunscripciones();
+const letras = ['A', 'B', 'C', 'D', 'E', 'F'];
+const inicial = dhondt(EJEMPLO_LEY.votos, EJEMPLO_LEY.blancos, EJEMPLO_LEY.escanos);
+const n = (x: number) => Math.round(x).toLocaleString('es-ES');
+---
+
+<Base titulo="Cómo se reparten los escaños" descripcion="Simulador de la regla D'Hondt con candidaturas y votos inventados: mueve los números y mira cómo cambia el reparto de diputados." buscable>
+  <div class="page-head">
+    <p class="label">Simulador</p>
+    <h1>Cómo se reparten los escaños</h1>
+    <p>
+      En cada provincia, los diputados se reparten con la <Termino id="dhondt">regla D'Hondt</Termino>. Cambia los votos y los escaños y mira qué pasa.
+      Las candidaturas y los votos son <strong>inventados</strong>: no es una encuesta. Al empezar ves el ejemplo que trae la propia ley.
+    </p>
+  </div>
+
+  <div class="sim" data-sim>
+    <form class="controles" data-controles>
+      <fieldset>
+        <legend>Escaños en juego</legend>
+        <div class="fila">
+          <label class="campo"><span>Número de escaños</span><input type="number" name="escanos" min="1" max="40" value={EJEMPLO_LEY.escanos} inputmode="numeric" /></label>
+          <label class="campo"><span>O los de una provincia</span>
+            <select name="provincia">
+              <option value="">Elige una provincia…</option>
+              {provincias.map((c) => <option value={String(c.data.diputados)}>{c.data.nombre} ({c.data.diputados})</option>)}
+            </select>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Votos</legend>
+        {
+          EJEMPLO_LEY.votos.map((v, i) => (
+            <div class="voto">
+              <label for={`votos-${i}`}>Candidatura {letras[i]}</label>
+              <input type="range" min="0" max="300000" step="1000" value={v} data-rango={String(i)} aria-label={`Votos de la candidatura ${letras[i]} (deslizador)`} />
+              <input type="number" id={`votos-${i}`} min="0" step="1000" value={v} data-numero={String(i)} inputmode="numeric" />
+            </div>
+          ))
+        }
+        <div class="voto">
+          <label for="votos-blanco">Votos en blanco</label>
+          <input type="range" min="0" max="60000" step="500" value="0" data-rango="blanco" aria-label="Votos en blanco (deslizador)" />
+          <input type="number" id="votos-blanco" min="0" step="500" value="0" data-numero="blanco" inputmode="numeric" />
+        </div>
+      </fieldset>
+      <button type="button" class="volver" data-volver>Volver al ejemplo de la ley</button>
+    </form>
+
+    <div class="resultado">
+      <h2>Resultado</h2>
+      <p class="resumen" aria-live="polite" data-resumen>
+        {inicial.filas.map((f, i) => `Candidatura ${letras[i]}: ${f.escanos}`).join(' · ')}
+      </p>
+      <p class="nota">Votos válidos (candidaturas más <Termino id="voto-blanco">votos en blanco</Termino>): <span data-validos>{n(inicial.validos)}</span>. La <Termino id="barrera">barrera del 3 %</Termino> está en <span data-barrera>{n(inicial.validos * 0.03)}</span> votos.</p>
+      <p class="nota" id="tabla-ayuda">Votos divididos entre 1, 2, 3… Los escaños van a los cocientes más altos, marcados con ✓.</p>
+      <div class="tabla-caja" tabindex="0" role="region" aria-label="Tabla de cocientes D'Hondt" aria-describedby="tabla-ayuda">
+        <table data-tabla>
+          <thead><tr><th scope="col">Candidatura</th><th scope="col">Escaños</th>{inicial.filas[0].cocientes.map((_, k) => <th scope="col">÷{k + 1}</th>)}</tr></thead>
+          <tbody>
+            {
+              inicial.filas.map((f, i) => (
+                <tr class:list={{ fuera: f.fuera }}>
+                  <th scope="row">{letras[i]}{f.fuera && <span class="motivo"> · no llega al 3 %</span>}</th>
+                  <td class="esc">{f.escanos}</td>
+                  {f.cocientes.map((c) => <td class:list={{ gana: c.gana && !f.fuera }}>{c.gana && !f.fuera ? `✓ ${n(c.valor)}` : f.fuera ? '—' : n(c.valor)}</td>)}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <section class="prose">
+    <h2>Paso a paso</h2>
+    <ol>
+      <li>Se quitan las candidaturas que no llegan al 3 % de los votos válidos de la provincia. Los votos en blanco también son válidos, así que suben esa barrera.</li>
+      <li>Los votos de cada candidatura se dividen entre 1, 2, 3… hasta el número de escaños.</li>
+      <li>Los escaños van, uno a uno, a los resultados más altos de toda la tabla. Si hay empate, gana la candidatura con más votos en total.</li>
+    </ol>
+    <p>Por eso un voto no pesa lo mismo en todas las provincias: donde se reparten pocos escaños, hace falta un porcentaje mayor para conseguir uno. Prueba a elegir una provincia pequeña y luego una grande.</p>
+    <p class="muted">Fuente: <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentaytres">LOREG, artículo 163</a>, que incluye este mismo ejemplo de 8 escaños.</p>
+  </section>
+</Base>
+
+<script>
+  import { dhondt, EJEMPLO_LEY } from '../lib/dhondt';
+
+  const letras = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const n = (x: number) => Math.round(x).toLocaleString('es-ES');
+  const entero = (v: string, max: number) => Math.min(max, Math.max(0, Math.round(Number(v) || 0)));
+
+  function iniciar() {
+    const sim = document.querySelector<HTMLElement>('[data-sim]');
+    if (!sim) return;
+    const form = sim.querySelector<HTMLFormElement>('[data-controles]')!;
+    const escanos = form.querySelector<HTMLInputElement>('[name=escanos]')!;
+    const provincia = form.querySelector<HTMLSelectElement>('[name=provincia]')!;
+    const campo = (tipo: 'rango' | 'numero', clave: string) => form.querySelector<HTMLInputElement>(`[data-${tipo}="${clave}"]`)!;
+
+    function pintar() {
+      const votos = letras.map((_, i) => entero(campo('numero', String(i)).value, 10_000_000));
+      const blancos = entero(campo('numero', 'blanco').value, 10_000_000);
+      const r = dhondt(votos, blancos, entero(escanos.value, 40) || 1);
+      sim!.querySelector('[data-resumen]')!.textContent = r.filas.map((f, i) => `Candidatura ${letras[i]}: ${f.escanos}`).join(' · ');
+      sim!.querySelector('[data-validos]')!.textContent = n(r.validos);
+      sim!.querySelector('[data-barrera]')!.textContent = n(r.validos * 0.03);
+      const cabeza = `<tr><th scope="col">Candidatura</th><th scope="col">Escaños</th>${r.filas[0].cocientes.map((_, k) => `<th scope="col">÷${k + 1}</th>`).join('')}</tr>`;
+      const filas = r.filas.map((f, i) => `<tr class="${f.fuera ? 'fuera' : ''}"><th scope="row">${letras[i]}${f.fuera ? '<span class="motivo"> · no llega al 3 %</span>' : ''}</th><td class="esc">${f.escanos}</td>${f.cocientes
+        .map((c) => (f.fuera ? '<td>—</td>' : c.gana ? `<td class="gana">✓ ${n(c.valor)}</td>` : `<td>${n(c.valor)}</td>`))
+        .join('')}</tr>`).join('');
+      const tabla = sim!.querySelector<HTMLTableElement>('[data-tabla]')!;
+      tabla.tHead!.innerHTML = cabeza;
+      tabla.tBodies[0].innerHTML = filas;
+    }
+
+    // Deslizador y número van a la par
+    form.addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.dataset.rango) campo('numero', el.dataset.rango).value = el.value;
+      if (el.dataset.numero) campo('rango', el.dataset.numero).value = el.value;
+      if (el === escanos) provincia.value = '';
+      pintar();
+    });
+    provincia.addEventListener('change', () => {
+      if (provincia.value) { escanos.value = provincia.value; pintar(); }
+    });
+    form.querySelector('[data-volver]')!.addEventListener('click', () => {
+      escanos.value = String(EJEMPLO_LEY.escanos);
+      provincia.value = '';
+      EJEMPLO_LEY.votos.forEach((v, i) => { campo('numero', String(i)).value = campo('rango', String(i)).value = String(v); });
+      campo('numero', 'blanco').value = campo('rango', 'blanco').value = String(EJEMPLO_LEY.blancos);
+      pintar();
+    });
+  }
+  document.addEventListener('astro:page-load', iniciar);
+</script>
+
+<style>
+  .sim { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 32px; align-items: start; }
+  .controles { display: grid; gap: 20px; }
+  fieldset { border: 1px solid var(--line); border-radius: var(--r); padding: 16px; margin: 0; display: grid; gap: 12px; min-width: 0; }
+  legend { font: 700 1.05rem var(--f-display); padding: 0 6px; }
+  .fila { display: flex; gap: 12px; flex-wrap: wrap; }
+  .campo { display: grid; gap: 4px; font-size: 0.88rem; color: var(--muted); flex: 1 1 160px; }
+  .voto { display: grid; grid-template-columns: 8.5em minmax(0, 1fr) 7.5em; gap: 10px; align-items: center; }
+  .voto label { font-weight: 600; }
+  input[type="number"], select { font: 500 1rem var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--muted); border-radius: 6px; padding: 8px 10px; min-width: 0; width: 100%; }
+  input[type="range"] { width: 100%; accent-color: var(--ink); }
+  .volver { justify-self: start; font: 600 0.95rem var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 8px; padding: 10px 16px; cursor: pointer; }
+  .volver:hover { background: var(--ink); color: var(--paper); }
+  .resultado { display: grid; gap: 12px; position: sticky; top: 90px; }
+  .resumen { font: 700 1.15rem/1.4 var(--f-display); }
+  .nota { color: var(--muted); font-size: 0.92rem; }
+  .tabla-caja { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); }
+  table { border-collapse: collapse; font-size: 0.85rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th, td { padding: 8px 10px; border-top: 1px solid var(--line); text-align: right; }
+  th[scope="row"], thead th:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+  thead th { font-weight: 600; color: var(--muted); }
+  .esc, thead th:nth-child(2) { font-weight: 700; text-align: center; padding-inline: 14px; }
+  td.gana { font-weight: 700; background: var(--accent-soft); color: var(--ink); }
+  tr.fuera th, tr.fuera td { color: var(--muted); }
+  .motivo { font-weight: 400; font-size: 0.8rem; }
+  @media (max-width: 900px) { .sim { grid-template-columns: minmax(0, 1fr); } .resultado { position: static; } }
+  @media (max-width: 480px) { .voto { grid-template-columns: minmax(0, 1fr) 7em; } .voto input[type="range"] { grid-column: 1 / -1; grid-row: 2; } }
+</style>

@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { ruta } from '../lib/datos';
+
+const terminos = (await getCollection('glosario')).sort((a, b) => a.data.termino.localeCompare(b.data.termino, 'es', { sensitivity: 'base' }));
+---
+
+<Base titulo="Glosario" descripcion="Las palabras de las elecciones explicadas en lenguaje llano, cada una con el artículo de la ley que la respalda." buscable>
+  <div class="page-head">
+    <p class="label">Glosario</p>
+    <h1>Las palabras de las elecciones</h1>
+    <p>Explicadas en lenguaje llano y por orden alfabético. Cada una enlaza al artículo de la ley o a la web oficial que la respalda.</p>
+  </div>
+
+  <dl class="glosario">
+    {
+      terminos.map((t) => (
+        <div class="entrada" id={t.id}>
+          <dt>{t.data.termino}</dt>
+          <dd>{t.data.definicion} <a href={t.data.fuente}>Fuente</a>{t.id === 'dhondt' && <> · <a href={ruta('como-se-reparten')}>Pruébalo en el simulador</a></>}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</Base>
+
+<style>
+  .glosario { display: grid; gap: 0; margin: 0; max-width: 70ch; }
+  .entrada { display: grid; gap: 4px; padding-block: 16px; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+  .entrada:target { background: var(--accent-soft); padding-inline: 12px; border-radius: var(--r); }
+  dt { font: 700 1.1rem/1.2 var(--f-display); }
+  dd { margin: 0; color: var(--muted); }
+  dd a { color: var(--ink); }
+</style>
