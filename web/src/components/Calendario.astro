@@ -3,14 +3,18 @@ import { getCollection } from 'astro:content';
 import { fecha } from '../lib/datos';
 
 const eventos = (await getCollection('calendario')).sort((a, b) => a.data.fecha.getTime() - b.data.fecha.getTime());
+const dia = (d: Date) => d.toISOString().slice(0, 10);
+// "12–19 oct" si el plazo cae en un mes; "31 oct–4 nov" si cambia de mes
+const plazo = (desde: Date, hasta: Date) =>
+  desde.getUTCMonth() === hasta.getUTCMonth() ? `${fecha(desde, { day: 'numeric' })}–${fecha(hasta)}` : `${fecha(desde)}–${fecha(hasta)}`;
 ---
 
 <div class="tl-scroll">
   <ol class="timeline" data-calendario>
     {
       eventos.map(({ data: e }) => (
-        <li class:list={{ key: e.destacada }} data-fecha={e.fecha.toISOString().slice(0, 10)}>
-          <span class="date num">{fecha(e.fecha)}</span>
+        <li class:list={{ key: e.destacada }} data-fecha={dia(e.fecha)} data-hasta={dia(e.hasta ?? e.fecha)}>
+          <span class="date num">{e.hasta ? plazo(e.fecha, e.hasta) : fecha(e.fecha)}</span>
           <span class="what">{e.fuente ? <a href={e.fuente}>{e.texto}</a> : e.texto}</span>
           {e.aproximada && <span class="approx">aprox.</span>}
         </li>
@@ -21,28 +25,35 @@ const eventos = (await getCollection('calendario')).sort((a, b) => a.data.fecha.
 
 <script>
   // Marca lo ya pasado y coloca "hoy" en la línea, entre el último evento pasado y el siguiente (hora peninsular).
+  // Un plazo (data-hasta) sigue abierto hasta su último día: si hoy cae dentro, "hoy" se pone sobre él.
   const dia = (f: string) => Date.parse(`${f}T00:00:00Z`) / 864e5;
   function marcar() {
     const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
     const items = [...document.querySelectorAll<HTMLElement>('[data-calendario] li')];
     items.forEach((li) => { li.classList.remove('past', 'today-mark'); li.style.removeProperty('--hoy'); });
-    items.forEach((li) => li.dataset.fecha! < hoy && li.classList.add('past'));
-    const sig = items.findIndex((li) => li.dataset.fecha! >= hoy);
+    items.forEach((li) => li.dataset.hasta! < hoy && li.classList.add('past'));
+    const sig = items.findIndex((li) => li.dataset.hasta! >= hoy);
     if (sig === -1) return; // ya pasó todo
-    if (sig === 0 || items[sig].dataset.fecha === hoy) { items[sig].classList.add('today-mark'); return; }
-    // Las columnas miden lo mismo: "hoy" se desplaza dentro de la del evento anterior según los días transcurridos.
-    const ant = items[sig - 1];
-    const parte = (dia(hoy) - dia(ant.dataset.fecha!)) / (dia(items[sig].dataset.fecha!) - dia(ant.dataset.fecha!));
-    ant.classList.add('today-mark');
-    ant.style.setProperty('--hoy', `${(parte * 100).toFixed(1)}%`);
+    let marca = items[sig];
+    if (sig > 0 && items[sig].dataset.fecha! > hoy) {
+      // Las columnas miden lo mismo: "hoy" se desplaza dentro de la del evento anterior según los días transcurridos.
+      marca = items[sig - 1];
+      const parte = (dia(hoy) - dia(marca.dataset.fecha!)) / (dia(items[sig].dataset.fecha!) - dia(marca.dataset.fecha!));
+      marca.style.setProperty('--hoy', `${(Math.min(Math.max(parte, 0), 1) * 100).toFixed(1)}%`);
+    }
+    marca.classList.add('today-mark');
+    // Si el calendario no cabe y se desliza, se abre con "hoy" a la vista.
+    const caja = marca.closest<HTMLElement>('.tl-scroll');
+    if (caja && caja.scrollWidth > caja.clientWidth) caja.scrollLeft += marca.getBoundingClientRect().left - caja.getBoundingClientRect().left - 24;
   }
   document.addEventListener('astro:page-load', marcar);
 </script>
 
 <style>
   .tl-scroll { overflow-x: auto; padding-top: 30px; }
-  .timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(7em, 1fr); border-top: 2px solid var(--ink); }
-  li { position: relative; padding: 14px 10px 4px 0; display: grid; gap: 4px; align-content: start; }
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(7em, 1fr); }
+  /* La línea va en cada fecha (no en la lista) para que siga hasta el final cuando el calendario se desliza */
+  li { position: relative; padding: 14px 10px 4px 0; display: grid; gap: 4px; align-content: start; border-top: 2px solid var(--ink); }
   li::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); }
   li.past::before { background: var(--ink); }
   li.today-mark::after { content: "hoy"; position: absolute; top: -30px; left: calc(var(--hoy, 0%) + 6px); transform: translateX(-50%); font: 600 0.7rem var(--f-mono); background: var(--accent); color: var(--paper); padding: 2px 6px; border-radius: 4px; }

@@ -3,7 +3,7 @@ nombre: "Junts per Catalunya"
 corto: "Junts"
 siglas: ["JxCAT-JUNTS", "J x CAT-JUNTS", "JUNTS"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
 inclusion:
-  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  motivo: Obtuvo diputado en el Congreso en las elecciones del 23 de julio de 2023
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
 
 escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)

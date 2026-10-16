@@ -8,7 +8,7 @@ No opina, no resume programas y no publica encuestas. Cada dato enlaza a su fuen
 
 ## Reglas de neutralidad
 
-- **Quién aparece.** Hasta la proclamación de candidaturas, las formaciones con escaño en la legislatura saliente y las que anuncien públicamente que se presentan. Después, todas las candidaturas que proclame el BOE, sin excepción.
+- **Quién aparece.** Hasta la proclamación de candidaturas, las formaciones que obtuvieron diputado en el Congreso el 23 de julio de 2023 y las que anuncien públicamente que se presentan. Después, todas las candidaturas que proclame el BOE, sin excepción.
 - **En qué orden.** Alfabético en las listas generales; en cada provincia, el orden en que las publica el BOE. Nunca por votos ni por encuestas.
 - **Con qué aspecto.** El mismo para todas: sin logos ni colores de partido.
 - **Sin fuente no hay dato.** Cada dato de una ficha lleva su enlace. Ninguno lo redacta una inteligencia artificial.

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documento fecha_actualizacion="20241020190725">
+  <metadatos>
+    <identificador>BOE-A-2023-15548</identificador>
+    <origen_legislativo codigo="1">Estatal</origen_legislativo>
+    <departamento codigo="1330">Juntas Electorales Provinciales</departamento>
+    <rango codigo="1590">Corrección (errores o erratas)</rango>
+    <fecha_disposicion/>
+    <numero_oficial/>
+    <titulo>Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.</titulo>
+    <diario codigo="BOE">Boletín Oficial del Estado</diario>
+    <fecha_publicacion>20230704</fecha_publicacion>
+    <diario_numero>158</diario_numero>
+    <seccion>3</seccion>
+    <subseccion/>
+    <pagina_inicial>93283</pagina_inicial>
+    <pagina_final>93284</pagina_final>
+    <suplemento_pagina_inicial/>
+    <suplemento_pagina_final/>
+    <url_pdf>https://www.boe.es/boe/dias/2023/07/04/pdfs/BOE-A-2023-15548.pdf</url_pdf>
+    <url_epub/>
+    <url_pdf_catalan/>
+    <url_pdf_euskera/>
+    <url_pdf_gallego/>
+    <url_pdf_valenciano/>
+    <estatus_legislativo/>
+    <fecha_vigencia/>
+    <estatus_derogacion>N</estatus_derogacion>
+    <fecha_derogacion/>
+    <judicialmente_anulada>N</judicialmente_anulada>
+    <fecha_anulacion/>
+    <vigencia_agotada>N</vigencia_agotada>
+    <estado_consolidacion codigo="0"/>
+    <letra_imagen>A</letra_imagen>
+    <suplemento_letra_imagen/>
+  </metadatos>
+  <analisis>
+    <materias/>
+    <notas/>
+    <referencias>
+      <anteriores>
+        <anterior referencia="BOE-A-2023-15066" orden="2120">
+          <palabra codigo="201">CORRECCIÓN de errores</palabra>
+          <texto>de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo</texto>
+        </anterior>
+      </anteriores>
+      <posteriores/>
+    </referencias>
+    <alertas/>
+  </analisis>
+  <texto>
+    <p class="parrafo">Advertidos errores en las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo, publicadas en el «Boletín Oficial del Estado» número 152, de 27 de junio, se procede a su corrección:</p>
+    <p class="centro_negrita">JUNTA ELECTORAL DE BALEARES</p>
+    <p class="centro_cursiva">CONGRESO DE LOS DIPUTADOS</p>
+    <p class="parrafo_2">En la página 90024, donde dice:</p>
+    <p class="centro_redonda">«6. SUMAR MÉS (MÉS PER MALLORCA-SUMAR)»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="centro_redonda">«6. SUMAR MÉS (MÉS PER MALLORCA-MÉS PER MENORCA-SUMAR)»</p>
+    <p class="parrafo_2">En la página 90025,</p>
+    <p class="centro_redonda">8. PARTIDO ANIMALISTA CON EL MEDIO AMBIENTE (PACMA)</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="parrafo_2">«8. María Juana Fernández López “Alcorocho”.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="parrafo_2">«8. María Juana Fernández López-Alcorocho.»</p>
+    <p class="centro_cursiva">SENADO</p>
+    <p class="centro_negrita">Circunscripción electoral: Menorca</p>
+    <p class="parrafo_2">En la página 90027,</p>
+    <p class="centro_redonda">1. PARTIDO POPULAR (PP)</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="parrafo_2">«1. Cristóbal Marqúes Palliser.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="parrafo_2">«1. Cristóbal Marqués Palliser.»</p>
+    <p class="centro_negrita">JUNTA ELECTORAL DE BIZKAIA</p>
+    <p class="centro_cursiva">CONGRESO DE LOS DIPUTADOS</p>
+    <p class="parrafo_2">En la página 90041, donde dice:</p>
+    <p class="centro_redonda">«3. PARTIDO SOCIALISTA DE EUSKADI-EUSKADIKO EZKERRA (PSOE) <span class="no_partir">(PSE-EE</span> (PSOE))»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="centro_redonda">«3. PARTIDO SOCIALISTA DE EUSKADI-EUSKADIKO EZKERRA (PSOE) <span class="no_partir">PSE-EE</span> (PSOE)»</p>
+    <p class="parrafo_2">En la página 90042,</p>
+    <p class="centro_redonda">7. VOX (VOX)</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="parrafo_2">«3. Maria de la O Cordero Garcia.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="parrafo_2">«3. María De La O Cordero García.»</p>
+    <p class="centro_cursiva">SENADO</p>
+    <p class="parrafo_2">En la página 90044, donde dice:</p>
+    <p class="centro_redonda">«3. PARTIDO SOCIALISTA DE EUSKADI-EUSKADIKO EZKERRA (PSOE) <span class="no_partir">(PSE-EE</span> (PSOE))»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="centro_redonda">3. PARTIDO SOCIALISTA DE EUSKADI-EUSKADIKO EZKERRA (PSOE) <span class="no_partir">PSE-EE</span> (PSOE)»</p>
+    <p class="centro_negrita">JUNTA ELECTORAL DE CUENCA</p>
+    <p class="centro_cursiva">SENADO</p>
+    <p class="parrafo_2">En la página 90081,</p>
+    <p class="centro_redonda">9. PARTIDO COMUNISTA DE LOS TRABAJADORES DE ESPAÑA (PCTE)</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="parrafo_2">«2. Esther Ordónez Fernández.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="parrafo_2">«1. Esther Ordóñez Fernández.»</p>
+  </texto>
+</documento>

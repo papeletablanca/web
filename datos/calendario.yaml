@@ -1,10 +1,19 @@
 # Calendario electoral del 29N. Fuente principal: Real Decreto 806/2026 (BOE-A-2026-20742) y LOREG.
-# Campos: fecha (AAAA-MM-DD), texto, aproximada (true si depende de que el BOE lo publique ese día),
-# destacada (true para las fechas grandes), fuente (enlace).
+# Campos: fecha (AAAA-MM-DD), hasta (último día, si es un plazo), texto, aproximada (true si depende de que
+# el BOE lo publique ese día), destacada (true para las fechas grandes), fuente (enlace).
+# Los plazos de la LOREG se cuentan desde el día de la convocatoria (6 de octubre, día 0).
 - fecha: 2026-10-06
   texto: Convocatoria publicada en el BOE
   destacada: false
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-10-12
+  hasta: 2026-10-19
+  texto: Consulta y reclamaciones del censo electoral
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#atreintaynueve
+- fecha: 2026-10-21
+  hasta: 2026-10-26
+  texto: Presentación de candidaturas
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaycinco
 - fecha: 2026-10-28
   texto: El BOE publica las candidaturas presentadas
   aproximada: true
@@ -13,6 +22,10 @@
   texto: El BOE publica las candidaturas proclamadas
   aproximada: true
   fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaysiete
+- fecha: 2026-10-31
+  hasta: 2026-11-04
+  texto: Sorteo de los miembros de las mesas
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#aveintiseis
 - fecha: 2026-11-13
   texto: Empieza la campaña electoral
   destacada: true
@@ -23,6 +36,10 @@
 - fecha: 2026-11-24
   texto: Ya no se pueden publicar encuestas
   fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#asesentaynueve
+# LOREG 73.3: "antes del tercer día previo" a la votación. Correos confirma el 25 de noviembre.
+- fecha: 2026-11-25
+  texto: Último día para entregar el voto por correo
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#asetentaytres
 - fecha: 2026-11-28
   texto: Jornada de reflexión
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
@@ -30,6 +47,9 @@
   texto: Votación, de 9:00 a 20:00
   destacada: true
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742
+- fecha: 2026-12-04
+  texto: Escrutinio general
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientotres
 - fecha: 2026-12-23
   texto: Se constituyen las nuevas Cortes
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742

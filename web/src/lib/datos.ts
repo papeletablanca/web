@@ -20,7 +20,8 @@ export function fecha(d: Date | string, opciones: Intl.DateTimeFormatOptions = {
 
 export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
 
-const clave = (s: string) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\s+/g, '');
+// Siglas comparables: sin tildes, espacios ni signos (el BOE escribe a veces «B.N.G.» y otras «BNG»)
+const clave = (s: string) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 const es = (a: string, b: string) => a.localeCompare(b, 'es', { sensitivity: 'base' });
 
 export const corto = (f: Formacion) => f.data.corto ?? f.data.siglas[0];
@@ -39,6 +40,14 @@ export const candidaturasBoe = () => (candidaturasCache ??= leerCandidaturas());
 async function leerCandidaturas() {
   const todas = await getCollection('candidaturas');
   return todas.find((c) => c.data.fase === 'proclamadas')?.data ?? todas.find((c) => c.data.fase === 'presentadas')?.data ?? null;
+}
+
+/** Correcciones de errores del BOE que afectan a las listas mostradas en una provincia. */
+export async function correccionesDe(provincia: string, fase: string) {
+  return (await getCollection('correcciones'))
+    .map((c) => c.data)
+    .filter((c) => c.fase === fase && c.provincias.includes(provincia))
+    .sort((a, b) => a.fuente.fecha_publicacion.localeCompare(b.fuente.fecha_publicacion));
 }
 
 /** Ficha que corresponde a una candidatura del BOE, por sus siglas (también las de marcas territoriales). */

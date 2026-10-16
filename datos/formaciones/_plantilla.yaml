@@ -12,7 +12,7 @@ corto: SIGLAS              # cómo se muestra en grande; si lo quitas, se usa la
 siglas: [SIGLAS]           # todas las siglas con las que aparece en el BOE, para enlazar sus listas
 tipo: partido              # partido | coalición | federación | agrupación
 inclusion:                 # por qué tiene ficha (ver "Cómo funciona" en la web)
-  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  motivo: Obtuvo diputado en el Congreso en las elecciones del 23 de julio de 2023
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
 
 escanos_23j:               # escaños obtenidos el 23J de 2023, del BOE-A-2023-18907 (quítalo si no tuvo)

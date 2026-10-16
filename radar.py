@@ -2,7 +2,7 @@
 """Radar del BOE (Papeleta Blanca): lee el sumario diario del BOE y extrae lo relacionado con elecciones.
 
 Uso:
-    python radar.py                    # sumario de hoy (hora de Madrid)
+    python radar.py                    # sumario de hoy (hora de Madrid) y de los últimos días que falten
     python radar.py --fecha 2026-10-06 # un dia concreto
     python radar.py --desde 2026-10-06 --hasta 2026-10-16   # un rango
     python radar.py --fichero sumario.json --fecha 2026-10-06  # sin red, desde un fichero
@@ -16,8 +16,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
+import time
 import unicodedata
 import urllib.error
 import urllib.request
@@ -26,6 +28,8 @@ from pathlib import Path
 
 API_SUMARIO = "https://www.boe.es/datosabiertos/api/boe/sumario/{aaaammdd}"
 USER_AGENT = "papeletablanca/0.2 (proyecto ciudadano de datos abiertos; https://papeletablanca.es)"
+REINTENTOS = (10, 60)  # segundos de espera antes de cada reintento si el BOE falla o no responde
+DIAS_RECIENTES = 7  # sin fechas, se revisa hoy y los días de esta semana que no tengan fichero
 
 # Cada regla: etiqueta legible -> patrones (sobre texto sin tildes y en minusculas).
 # Usa \b (limite de palabra) en los patrones cortos: "cera" sin \b tambien encaja en "tercera" o "acera".
@@ -103,10 +107,25 @@ def recorrer(nodo, contexto: dict | None = None):
             yield from recorrer(elem, contexto)
 
 
+def aviso(mensaje: str) -> None:
+    """Avisa sin detener el proceso. En GitHub Actions sale como aviso en el resumen de la ejecución."""
+    print(f"::warning::{mensaje}" if os.environ.get("GITHUB_ACTIONS") else f"AVISO: {mensaje}", flush=True)
+
+
 def descargar(url: str, accept: str = "application/json") -> bytes:
     peticion = urllib.request.Request(url, headers={"Accept": accept, "User-Agent": USER_AGENT})
-    with urllib.request.urlopen(peticion, timeout=60) as respuesta:
-        return respuesta.read()
+    for espera in (*REINTENTOS, None):
+        try:
+            with urllib.request.urlopen(peticion, timeout=60) as respuesta:
+                return respuesta.read()
+        except urllib.error.HTTPError as error:
+            if error.code < 500 or espera is None:  # un 404 no se arregla reintentando
+                raise
+        except (urllib.error.URLError, TimeoutError):
+            if espera is None:
+                raise
+        time.sleep(espera)
+    raise AssertionError("inalcanzable")
 
 
 def descargar_sumario(dia: date) -> dict | None:
@@ -157,6 +176,13 @@ def dias_pedidos(args) -> list[date]:
     return [args.fecha or hoy_madrid()]
 
 
+def dias_recientes(carpeta: Path, hoy: date | None = None) -> list[date]:
+    """Hoy y los días anteriores de esta semana sin fichero: así una ejecución fallida se recupera sola."""
+    hoy = hoy or hoy_madrid()
+    anteriores = [hoy - timedelta(n) for n in range(DIAS_RECIENTES - 1, 0, -1)]
+    return [d for d in anteriores if not (carpeta / f"{d.isoformat()}.json").exists()] + [hoy]
+
+
 def main(argv: list[str] | None = None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -168,11 +194,16 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     args.salida.mkdir(parents=True, exist_ok=True)
-    for dia in dias_pedidos(args):
-        if args.fichero:
-            sumario = json.loads(args.fichero.read_text(encoding="utf-8"))
-        else:
-            sumario = descargar_sumario(dia)
+    dias = dias_pedidos(args) if (args.desde or args.fecha or args.fichero) else dias_recientes(args.salida)
+    for dia in dias:
+        try:
+            if args.fichero:
+                sumario = json.loads(args.fichero.read_text(encoding="utf-8"))
+            else:
+                sumario = descargar_sumario(dia)
+        except Exception as error:  # un día que falla no impide revisar los demás ni publicar la web
+            aviso(f"BOE del {dia}: no se pudo leer ({error}). Se volverá a intentar en la próxima ejecución.")
+            continue
         if sumario is None:
             print(f"{dia}: no hay BOE ese día")
             continue

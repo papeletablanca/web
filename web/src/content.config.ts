@@ -11,6 +11,7 @@ const DATOS = '../datos';
 // Para probar las páginas con las listas de 2023: CANDIDATURAS_PRUEBA=/ruta/a/carpeta npm run dev
 const prueba = process.env.CANDIDATURAS_PRUEBA;
 const CANDIDATURAS = prueba ? (isAbsolute(prueba) ? pathToFileURL(prueba + '/') : prueba) : `${DATOS}/candidaturas`;
+const CORRECCIONES = prueba ? (isAbsolute(prueba) ? pathToFileURL(prueba + '/correcciones/') : `${prueba}/correcciones`) : `${DATOS}/candidaturas/correcciones`;
 
 const enlace = z.url({ error: 'tiene que ser un enlace completo, que empiece por https://' });
 const fecha = z.coerce.date({ error: 'tiene que ser una fecha AAAA-MM-DD' });
@@ -89,6 +90,16 @@ const candidaturas = defineCollection({
   }),
 });
 
+// Correcciones de errores de las candidaturas: no se aplican solas, se enlazan en cada provincia afectada.
+const correcciones = defineCollection({
+  loader: glob({ pattern: '*.json', base: CORRECCIONES }),
+  schema: z.object({
+    fase: z.enum(['presentadas', 'proclamadas']),
+    fuente: z.object({ id: z.string(), titulo: z.string(), fecha_publicacion: z.string(), url: z.string() }),
+    provincias: z.array(z.string()),
+  }),
+});
+
 const circunscripciones = defineCollection({
   loader: file(`${DATOS}/circunscripciones.json`, { parser: (t) => JSON.parse(t).circunscripciones }),
   schema: z.object({
@@ -109,6 +120,7 @@ const calendario = defineCollection({
   loader: file(`${DATOS}/calendario.yaml`, { parser: lista }),
   schema: z.object({
     fecha,
+    hasta: fecha.optional(),
     texto: z.string(),
     aproximada: z.boolean().default(false),
     destacada: z.boolean().default(false),
@@ -128,4 +140,4 @@ const debates = defineCollection({
   }),
 });
 
-export const collections = { formaciones, boe, candidaturas, circunscripciones, calendario, debates };
+export const collections = { formaciones, boe, candidaturas, correcciones, circunscripciones, calendario, debates };

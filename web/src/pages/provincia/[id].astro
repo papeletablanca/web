@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import ListaCandidatura from '../../components/ListaCandidatura.astro';
 import Puntos from '../../components/Puntos.astro';
 import { getCollection } from 'astro:content';
-import { candidaturasBoe, fecha, fichaDe, plural, type Candidatura, type Circunscripcion } from '../../lib/datos';
+import { candidaturasBoe, correccionesDe, fecha, fichaDe, plural, type Candidatura, type Circunscripcion } from '../../lib/datos';
 
 export async function getStaticPaths() {
   return (await getCollection('circunscripciones')).map((p) => ({ params: { id: p.id }, props: { p } }));
@@ -17,6 +17,7 @@ const aqui = (cand?.candidaturas ?? []).filter((c) => c.provincia === p.id);
 const congreso = aqui.filter((c) => c.camara === 'congreso');
 const senado = aqui.filter((c) => c.camara === 'senado');
 const islas = [...new Set(senado.map((c) => c.isla))];
+const correcciones = cand ? await correccionesDe(p.id, cand.fase) : [];
 const proclamadas = (l: Candidatura[]) => l.filter((c) => c.proclamada);
 const fuera = (l: Candidatura[]) => l.filter((c) => !c.proclamada);
 
@@ -61,6 +62,14 @@ const senadoTexto = d.senado_islas.length
         {cand.fase === 'presentadas' && (
           <p class="aviso">
             Son las candidaturas <strong>presentadas</strong>: todavía pueden cambiar. La proclamación definitiva se publica hacia el 3 de noviembre.
+          </p>
+        )}
+        {correcciones.length > 0 && (
+          <p class="aviso">
+            El BOE ha publicado {correcciones.length === 1 ? 'una corrección de errores' : `${correcciones.length} correcciones de errores`} de estas listas que {correcciones.length === 1 ? 'afecta' : 'afectan'} a {d.nombre}:{' '}
+            {correcciones.map((c, i) => (
+              <>{i > 0 && ', '}<a href={c.fuente.url}>{c.fuente.id}</a> ({fecha(c.fuente.fecha_publicacion, { day: 'numeric', month: 'long' })})</>
+            ))}. {correcciones.length === 1 ? 'Consúltala' : 'Consúltalas'} para ver qué cambia.
           </p>
         )}
         <section>

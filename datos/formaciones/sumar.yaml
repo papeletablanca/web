@@ -3,14 +3,18 @@ nombre: "Sumar"
 corto: "Sumar"
 siglas: ["SUMAR"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
 inclusion:
-  motivo: Obtuvo escaño en las elecciones del 23 de julio de 2023
+  motivo: Obtuvo diputado en el Congreso en las elecciones del 23 de julio de 2023
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907
 
 escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907)
   valor: 31
 
 integrantes: []
-marcas_territoriales: []
+marcas_territoriales:  # en 2023 concurrieron con estos nombres (BOE-A-2023-15066 y su corrección BOE-A-2023-15548); revisar para 2026
+  - { nombre: "Sumar-En Comú Podem", ambito: "Cataluña", siglas: ["SUMAR-ECP"] }
+  - { nombre: "Compromís-Sumar: Sumem per Guanyar", ambito: "Comunitat Valenciana", siglas: ["SUMAR-COMPROMÍS"] }
+  - { nombre: "Sumar Aragón", ambito: "Aragón", siglas: ["SUMAR ARAGÓN"] }
+  - { nombre: "Sumar Més", ambito: "Illes Balears", siglas: ["MÉS PER MALLORCA-SUMAR", "MÉS PER MALLORCA-MÉS PER MENORCA-SUMAR"] }
 
 candidatura_presidencia:
   valor: ""

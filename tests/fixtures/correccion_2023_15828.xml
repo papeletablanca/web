@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documento fecha_actualizacion="20241020190811">
+  <metadatos>
+    <identificador>BOE-A-2023-15828</identificador>
+    <origen_legislativo codigo="1">Estatal</origen_legislativo>
+    <departamento codigo="1330">Juntas Electorales Provinciales</departamento>
+    <rango codigo="1590">Corrección (errores o erratas)</rango>
+    <fecha_disposicion/>
+    <numero_oficial/>
+    <titulo>Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.</titulo>
+    <diario codigo="BOE">Boletín Oficial del Estado</diario>
+    <fecha_publicacion>20230707</fecha_publicacion>
+    <diario_numero>161</diario_numero>
+    <seccion>3</seccion>
+    <subseccion/>
+    <pagina_inicial>96685</pagina_inicial>
+    <pagina_final>96685</pagina_final>
+    <suplemento_pagina_inicial/>
+    <suplemento_pagina_final/>
+    <url_pdf>https://www.boe.es/boe/dias/2023/07/07/pdfs/BOE-A-2023-15828.pdf</url_pdf>
+    <url_epub/>
+    <url_pdf_catalan/>
+    <url_pdf_euskera/>
+    <url_pdf_gallego/>
+    <url_pdf_valenciano/>
+    <estatus_legislativo/>
+    <fecha_vigencia/>
+    <estatus_derogacion>N</estatus_derogacion>
+    <fecha_derogacion/>
+    <judicialmente_anulada>N</judicialmente_anulada>
+    <fecha_anulacion/>
+    <vigencia_agotada>N</vigencia_agotada>
+    <estado_consolidacion codigo="0"/>
+    <letra_imagen>A</letra_imagen>
+    <suplemento_letra_imagen/>
+  </metadatos>
+  <analisis>
+    <materias/>
+    <notas/>
+    <referencias>
+      <anteriores>
+        <anterior referencia="BOE-A-2023-15066" orden="2120">
+          <palabra codigo="201">CORRECCIÓN de errores</palabra>
+          <texto>de las Candidaturas proclamadas para la elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo.</texto>
+        </anterior>
+      </anteriores>
+      <posteriores/>
+    </referencias>
+    <alertas/>
+  </analisis>
+  <texto>
+    <p class="parrafo">Advertidos errores en las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 400/2023, de 29 de mayo, publicadas en el «Boletín Oficial del Estado» número 152, de 27 de junio, se procede a su corrección:</p>
+    <p class="centro_negrita">JUNTA ELECTORAL DE TERUEL</p>
+    <p class="centro_cursiva">CONGRESO DE LOS DIPUTADOS</p>
+    <p class="parrafo_2">En la página 90214:</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="centro_redonda">«Candidatura núm.: 13. PARTIDO ANIMALISTA CON EL MEDIO AMBIENTE (PACMA)</p>
+    <p class="parrafo_2">No proclamada.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="centro_redonda">«Candidatura núm.: 13. PARTIDO ANIMALISTA CON EL MEDIO AMBIENTE (PACMA)</p>
+    <p class="parrafo_2">1. Elena Campón de Miguel.</p>
+    <p class="parrafo">2. Ignacio Barreras Bernad.</p>
+    <p class="parrafo">3. Selena Tomasa Sánchez Galindo.</p>
+    <p class="parrafo_2">Suplentes:</p>
+    <p class="parrafo_2">1. Javier Baldoví Jachán.»</p>
+    <p class="centro_negrita">JUNTA ELECTORAL DE TERUEL</p>
+    <p class="centro_cursiva">SENADO</p>
+    <p class="parrafo_2">En la página 90216:</p>
+    <p class="parrafo_2">Donde dice:</p>
+    <p class="centro_redonda">«Candidatura núm.: 12. PARTIDO ANIMALISTA CON EL MEDIO AMBIENTE (PACMA)</p>
+    <p class="parrafo_2">No proclamada.»</p>
+    <p class="parrafo_2">Debe decir:</p>
+    <p class="centro_redonda">«Candidatura núm.: 12. PARTIDO ANIMALISTA CON EL MEDIO AMBIENTE (PACMA)</p>
+    <p class="parrafo_2">1. Tasio Peña Jiménez.</p>
+    <p class="parrafo">  Suplente 1: Montserrat Vicenta Carreras Cacho.</p>
+    <p class="parrafo">  Suplente 2: José Vicente Camacho Montesinos.»</p>
+  </texto>
+</documento>

@@ -5,12 +5,15 @@ Las Juntas Electorales Provinciales publican en el BOE, en una sola disposicion,
 candidaturas al Congreso y al Senado: primero las presentadas y unos dias despues las proclamadas.
 
 Uso:
-    python candidaturas.py                         # busca en el BOE de hoy
+    python candidaturas.py                         # busca en el BOE de esta semana (lo ya guardado no se repite)
     python candidaturas.py --desde 2026-10-26      # busca en un rango de dias
     python candidaturas.py --id BOE-A-2023-15066   # procesa una disposicion concreta
     python candidaturas.py --fichero lista.xml     # sin red, desde un XML ya descargado
 
-Escribe datos/candidaturas/{presentadas,proclamadas}.json. Solo biblioteca estandar.
+Escribe datos/candidaturas/{presentadas,proclamadas}.json. Las correcciones de errores no se aplican solas
+(son texto libre: "donde dice... debe decir..."): se guardan en datos/candidaturas/correcciones/ con las
+provincias afectadas, la web las enlaza en cada provincia y el workflow avisa para revisarlas a mano.
+Solo biblioteca estandar.
 """
 
 from __future__ import annotations
@@ -20,13 +23,14 @@ import json
 import re
 import sys
 import xml.etree.ElementTree as ET
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import radar
 
 URL_XML = "https://www.boe.es/diario_boe/xml.php?id={id}"
 TITULO = re.compile(r"^candidaturas (presentadas|proclamadas) para las? elecciones al congreso")
+TITULO_CORRECCION = re.compile(r"^correccion de errores de las candidaturas (presentadas|proclamadas) para las? elecciones al congreso")
 
 # Nombre con el que cada junta aparece en el BOE (sin tildes, minusculas) -> id de circunscripcion.
 # Los ids son los de datos/circunscripciones.json.
@@ -80,11 +84,32 @@ def separar_siglas(rotulo: str) -> tuple[str, str]:
     return rotulo, ""
 
 
-def id_junta(nombre: str) -> str:
-    clave = radar.normalizar(nombre).strip(" .")
-    if clave not in JUNTAS:
-        raise ValueError(f"Junta electoral desconocida en el BOE: {nombre!r}. Añádela a JUNTAS en candidaturas.py")
-    return JUNTAS[clave]
+def id_junta(nombre: str) -> str | None:
+    """Id de circunscripción de una junta, o None si el BOE la escribe de una forma que no está en JUNTAS."""
+    return JUNTAS.get(radar.normalizar(nombre).strip(" ."))
+
+
+def leer_juntas(raiz: ET.Element) -> tuple[list[str], list[str]]:
+    """Provincias que nombra una disposición (en orden y sin repetir) y nombres de junta no reconocidos."""
+    provincias, desconocidas = [], []
+    for p in raiz.find("texto").iter("p"):
+        if p.get("class") == "centro_negrita" and (m := RE_JUNTA.match(radar.normalizar(texto(p)))):
+            if (prov := id_junta(m.group(1))) is None:
+                desconocidas.append(texto(p))
+            elif prov not in provincias:
+                provincias.append(prov)
+    return provincias, desconocidas
+
+
+def fuente(meta: ET.Element) -> dict:
+    publicada, identificador = meta.findtext("fecha_publicacion", ""), meta.findtext("identificador", "")
+    return {
+        "id": identificador,
+        "titulo": meta.findtext("titulo", "").strip(),
+        "fecha_publicacion": f"{publicada[:4]}-{publicada[4:6]}-{publicada[6:8]}" if len(publicada) == 8 else publicada,
+        "url": f"https://www.boe.es/diario_boe/txt.php?id={identificador}",
+        "url_pdf": meta.findtext("url_pdf", ""),
+    }
 
 
 def analizar_xml(contenido: bytes | str) -> dict:
@@ -95,8 +120,9 @@ def analizar_xml(contenido: bytes | str) -> dict:
     fase = TITULO.search(radar.normalizar(titulo))
     if not fase:
         raise ValueError(f"La disposición no parece de candidaturas: {titulo!r}")
-    publicada = meta.findtext("fecha_publicacion", "")
-    identificador = meta.findtext("identificador", "")
+    _, desconocidas = leer_juntas(raiz)
+    for junta in desconocidas:
+        radar.aviso(f"{titulo[:60]}: «{junta}» no está en JUNTAS de candidaturas.py; sus listas no se cargan hasta añadirla.")
 
     candidaturas: list[dict] = []
     provincia = camara = isla = None
@@ -109,7 +135,7 @@ def analizar_xml(contenido: bytes | str) -> dict:
             continue
         tn = radar.normalizar(t)
         if clase == "centro_negrita":
-            if m := RE_JUNTA.match(tn):
+            if m := RE_JUNTA.match(tn):  # una junta desconocida deja provincia en None y sus listas se saltan
                 provincia, camara, isla, actual = id_junta(m.group(1)), None, None, None
             elif RE_ISLA.match(tn):
                 isla, actual = t.split(":", 1)[1].strip(), None
@@ -152,28 +178,59 @@ def analizar_xml(contenido: bytes | str) -> dict:
             else:
                 actual["candidatos"].append({"nombre": persona})
 
-    return {
-        "fase": fase.group(1),
-        "fuente": {
-            "id": identificador,
-            "titulo": titulo,
-            "fecha_publicacion": f"{publicada[:4]}-{publicada[4:6]}-{publicada[6:8]}" if len(publicada) == 8 else publicada,
-            "url": f"https://www.boe.es/diario_boe/txt.php?id={identificador}",
-            "url_pdf": meta.findtext("url_pdf", ""),
-        },
-        "candidaturas": candidaturas,
-    }
+    return {"fase": fase.group(1), "fuente": fuente(meta), "juntas_desconocidas": desconocidas, "candidaturas": candidaturas}
+
+
+def analizar_correccion(contenido: bytes | str) -> dict:
+    """Corrección de errores de unas candidaturas: qué fase corrige y a qué provincias afecta."""
+    raiz = ET.fromstring(contenido)
+    meta = raiz.find("metadatos")
+    fase = TITULO_CORRECCION.search(radar.normalizar(meta.findtext("titulo", "")))
+    if not fase:
+        raise ValueError(f"La disposición no es una corrección de candidaturas: {meta.findtext('titulo', '')!r}")
+    provincias, desconocidas = leer_juntas(raiz)
+    return {"fase": fase.group(1), "fuente": fuente(meta), "provincias": provincias, "juntas_desconocidas": desconocidas}
+
+
+def es_correccion(titulo: str) -> bool:
+    return bool(TITULO_CORRECCION.search(radar.normalizar(titulo)))
 
 
 def buscar_en_sumario(sumario: dict) -> list[str]:
-    return [d["id"] for d in radar.recorrer(sumario) if TITULO.search(radar.normalizar(d["titulo"]))]
+    return [d["id"] for d in radar.recorrer(sumario)
+            if TITULO.search(t := radar.normalizar(d["titulo"])) or TITULO_CORRECCION.search(t)]
 
 
 def guardar(datos: dict, carpeta: Path) -> Path:
-    carpeta.mkdir(parents=True, exist_ok=True)
-    destino = carpeta / f"{datos['fase']}.json"
+    destino = carpeta / "correcciones" / f"{datos['fuente']['id']}.json" if "provincias" in datos else carpeta / f"{datos['fase']}.json"
+    destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
     return destino
+
+
+def ya_guardada(identificador: str, carpeta: Path) -> bool:
+    if (carpeta / "correcciones" / f"{identificador}.json").exists():
+        return True
+    for f in carpeta.glob("*.json"):
+        try:
+            if json.loads(f.read_text(encoding="utf-8"))["fuente"]["id"] == identificador:
+                return True
+        except (ValueError, KeyError):
+            pass
+    return False
+
+
+def procesar(contenido: bytes, carpeta: Path) -> None:
+    raiz = ET.fromstring(contenido)
+    if es_correccion(raiz.find("metadatos").findtext("titulo", "")):
+        datos = analizar_correccion(contenido)
+        provincias = ", ".join(datos["provincias"]) or "ninguna reconocida"
+        print(f"{datos['fuente']['id']} (corrección de las {datos['fase']}): {provincias} → {guardar(datos, carpeta)}")
+        radar.aviso(f"El BOE corrige las candidaturas {datos['fase']} ({datos['fuente']['id']}, provincias: {provincias}). "
+                    "La web enlaza la corrección; revísala por si hay que cambiar algo a mano.")
+    else:
+        datos = analizar_xml(contenido)
+        print(f"{resumen(datos)} → {guardar(datos, carpeta)}")
 
 
 def resumen(datos: dict) -> str:
@@ -196,23 +253,29 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     if args.fichero:
-        contenidos = [args.fichero.read_bytes()]
-    elif args.id:
-        contenidos = [radar.descargar(URL_XML.format(id=args.id), accept="application/xml")]
-    else:
-        ids = []
-        for dia in radar.dias_pedidos(args):
-            sumario = radar.descargar_sumario(dia)
-            if sumario:
-                ids += buscar_en_sumario(sumario)
-        if not ids:
-            print("Sin candidaturas en el BOE de los días revisados.")
-            return 0
-        contenidos = [radar.descargar(URL_XML.format(id=i), accept="application/xml") for i in ids]
+        procesar(args.fichero.read_bytes(), args.salida)
+        return 0
+    if args.id:
+        procesar(radar.descargar(URL_XML.format(id=args.id), accept="application/xml"), args.salida)
+        return 0
 
-    for contenido in contenidos:
-        datos = analizar_xml(contenido)
-        print(f"{resumen(datos)} → {guardar(datos, args.salida)}")
+    # Sin fechas se mira toda la semana: si un día falló la ejecución, las listas se recogen al siguiente.
+    hoy = radar.hoy_madrid()
+    dias = radar.dias_pedidos(args) if (args.desde or args.fecha) else [hoy - timedelta(n) for n in range(radar.DIAS_RECIENTES - 1, -1, -1)]
+    ids = []
+    for dia in dias:
+        try:
+            ids += buscar_en_sumario(radar.descargar_sumario(dia) or {})
+        except Exception as error:
+            radar.aviso(f"BOE del {dia}: no se pudo leer ({error}). Se volverá a intentar en la próxima ejecución.")
+    nuevos = [i for i in dict.fromkeys(ids) if not ya_guardada(i, args.salida)]
+    if not nuevos:
+        print("Sin candidaturas nuevas en el BOE de los días revisados.")
+    for identificador in nuevos:
+        try:
+            procesar(radar.descargar(URL_XML.format(id=identificador), accept="application/xml"), args.salida)
+        except Exception as error:  # una disposición que falla no impide procesar las demás ni publicar la web
+            radar.aviso(f"{identificador}: no se pudo procesar ({error}). Se volverá a intentar en la próxima ejecución.")
     return 0
 
 
