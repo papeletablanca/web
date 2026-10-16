@@ -370,7 +370,7 @@
    "nombre": "Illes Balears",
    "abreviatura": "BAL",
    "diputados": 8,
-   "senadores": 5,
+   "senadores": 6,
    "senado_islas": [
     {
      "isla": "Mallorca",
@@ -381,7 +381,11 @@
      "senadores": 1
     },
     {
-     "isla": "Ibiza-Formentera",
+     "isla": "Ibiza",
+     "senadores": 1
+    },
+    {
+     "isla": "Formentera",
      "senadores": 1
     }
    ],
