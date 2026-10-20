@@ -81,7 +81,7 @@ No incluye un «filtro para daltónicos». Esos filtros recolorean la página, p
 - **Lectores de pantalla.** La web aún no se ha probado con NVDA, JAWS, VoiceOver o TalkBack. Está previsto antes del lanzamiento.
 - **Documentos del BOE.** Las disposiciones y los PDF que se enlazan son del BOE, y su accesibilidad depende del BOE.
 - **Nombres de las listas.** Los nombres de candidaturas y candidatos se copian tal y como los publica el BOE, sin corregirlos.
-- **Calendario.** En el móvil, y en el ordenador con el texto ampliado, el calendario se desliza en horizontal para que las fechas no se monten unas sobre otras. Hay que desplazarlo para ver las últimas.
+- **Calendario.** En el móvil, y en el ordenador con el texto ampliado, el calendario se desliza en horizontal para que las fechas no se monten unas sobre otras. Hay que desplazarlo para ver las últimas. No tiene barra de desplazamiento: se mueve con el dedo, arrastrando con el ratón, acercando el cursor a un borde, con las flechas de los bordes (que solo aparecen si hay más fechas) o con las flechas del teclado, porque la caja recibe el foco. Con «Reducir las animaciones», el cursor en el borde no lo mueve.
 
 ### Si algo no te funciona
 

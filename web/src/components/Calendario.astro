@@ -9,7 +9,9 @@ const plazo = (desde: Date, hasta: Date) =>
   desde.getUTCMonth() === hasta.getUTCMonth() ? `${fecha(desde, { day: 'numeric' })}–${fecha(hasta)}` : `${fecha(desde)}–${fecha(hasta)}`;
 ---
 
-<div class="tl-scroll">
+<div class="tl" data-tl>
+<button class="tl-flecha izq" type="button" tabindex="-1" aria-hidden="true" data-dir="-1"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+<div class="tl-scroll" tabindex="0" role="region" aria-label="Calendario electoral. Se desplaza en horizontal con las flechas del teclado.">
   <ol class="timeline" data-calendario>
     {
       eventos.map(({ data: e }) => (
@@ -21,6 +23,8 @@ const plazo = (desde: Date, hasta: Date) =>
       ))
     }
   </ol>
+</div>
+<button class="tl-flecha der" type="button" tabindex="-1" aria-hidden="true" data-dir="1"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
 </div>
 
 <script>
@@ -46,11 +50,111 @@ const plazo = (desde: Date, hasta: Date) =>
     const caja = marca.closest<HTMLElement>('.tl-scroll');
     if (caja && caja.scrollWidth > caja.clientWidth) caja.scrollLeft += marca.getBoundingClientRect().left - caja.getBoundingClientRect().left - 24;
   }
-  document.addEventListener('astro:page-load', marcar);
+
+  // Desplazamiento sin barra: con el dedo (nativo), arrastrando con el ratón, acercando el cursor a un extremo,
+  // con las flechas de los bordes o con el teclado (la caja recibe el foco). Las flechas solo salen si hay más fechas.
+  const ZONA = 80;      // px desde cada borde en los que el cursor desplaza el calendario
+  const VELOCIDAD = 9;  // px por fotograma en el mismo borde
+  const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.hasAttribute('data-movimiento');
+
+  function desplazable(tl: HTMLElement) {
+    const caja = tl.querySelector<HTMLElement>('.tl-scroll')!;
+    const estado = () => {
+      tl.classList.toggle('puede-izq', caja.scrollLeft > 2);
+      tl.classList.toggle('puede-der', caja.scrollLeft + caja.clientWidth < caja.scrollWidth - 2);
+    };
+    caja.addEventListener('scroll', estado, { passive: true });
+    new ResizeObserver(estado).observe(caja);
+    estado();
+
+    // Cursor cerca de un extremo: avanza más rápido cuanto más cerca del borde. Con «reducir animaciones», no.
+    // Tras pulsar una flecha (que está en el borde), el borde no actúa hasta que el cursor sale de él.
+    let paso = 0;
+    let bucle = 0;
+    let enPausa = false;
+    const avanzar = () => {
+      caja.scrollLeft += paso;
+      bucle = paso ? requestAnimationFrame(avanzar) : 0;
+    };
+    tl.querySelectorAll<HTMLButtonElement>('.tl-flecha').forEach((b) =>
+      b.addEventListener('click', () => {
+        paso = 0;
+        cancelAnimationFrame(bucle);  // tocar scrollLeft, aunque sea +0, cortaría el desplazamiento suave
+        bucle = 0;
+        enPausa = true;
+        caja.scrollBy({ left: Number(b.dataset.dir) * caja.clientWidth * 0.8, behavior: quieto() ? 'auto' : 'smooth' });
+      }),
+    );
+    tl.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || arrastre || quieto()) return;
+      const r = tl.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const enBorde = x < ZONA || x > r.width - ZONA;
+      if (enPausa) { enPausa = enBorde; return; }
+      paso = x < ZONA && tl.classList.contains('puede-izq') ? -VELOCIDAD * (1 - x / ZONA)
+        : x > r.width - ZONA && tl.classList.contains('puede-der') ? VELOCIDAD * (1 - (r.width - x) / ZONA) : 0;
+      if (paso && !bucle) bucle = requestAnimationFrame(avanzar);
+    });
+    tl.addEventListener('pointerleave', () => { paso = 0; enPausa = false; });
+
+    // Arrastrar con el ratón. Un arrastre no cuenta como clic en el enlace sobre el que empezó.
+    let arrastre: { x: number; inicio: number; movido: boolean } | null = null;
+    let anularClic = false;
+    caja.addEventListener('dragstart', (e) => e.preventDefault());
+    caja.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button === 0) arrastre = { x: e.clientX, inicio: caja.scrollLeft, movido: false };
+    });
+    caja.addEventListener('pointermove', (e) => {
+      if (!arrastre) return;
+      const dx = e.clientX - arrastre.x;
+      if (!arrastre.movido && Math.abs(dx) > 5) {
+        arrastre.movido = true;
+        paso = 0;
+        caja.setPointerCapture(e.pointerId);
+        tl.classList.add('arrastrando');
+      }
+      if (arrastre.movido) caja.scrollLeft = arrastre.inicio - dx;
+    });
+    const soltar = () => {
+      anularClic = !!arrastre?.movido;
+      arrastre = null;
+      tl.classList.remove('arrastrando');
+    };
+    caja.addEventListener('pointerup', soltar);
+    caja.addEventListener('pointercancel', soltar);
+    caja.addEventListener('click', (e) => {
+      if (anularClic) { e.preventDefault(); e.stopPropagation(); }
+      anularClic = false;
+    }, true);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    marcar();
+    document.querySelectorAll<HTMLElement>('[data-tl]').forEach(desplazable);
+  });
 </script>
 
 <style>
-  .tl-scroll { overflow-x: auto; padding-top: 30px; }
+  .tl { position: relative; min-width: 0; }  /* min-width: sin él, la rejilla de la sección lo estira al ancho de todas las fechas */
+  /* Sin barra de desplazamiento: se mueve con el dedo, arrastrando, con el cursor en los bordes o con el teclado */
+  .tl-scroll { overflow-x: auto; padding-top: 30px; scrollbar-width: none; scroll-padding-inline: 48px; }
+  .tl-scroll::-webkit-scrollbar { display: none; }
+  .tl-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .tl:is(.puede-izq, .puede-der) .tl-scroll { cursor: grab; }
+  .tl.arrastrando .tl-scroll { cursor: grabbing; user-select: none; }
+  .tl.arrastrando a { pointer-events: none; }
+  /* Flechas con degradado: avisan de que hay más fechas y, al pulsarlas, avanzan casi una pantalla */
+  /* El círculo se apoya sobre la línea (a 30 px del borde superior) para no tapar el texto de las fechas */
+  .tl-flecha { position: absolute; top: 14px; bottom: 0; z-index: 1; width: 56px; display: none; align-items: start; padding: 0; border: 0; color: var(--ink); cursor: pointer; }
+  @media (pointer: coarse) {
+    .tl-flecha { top: 18px; width: 40px; }
+    .tl-flecha svg { width: 16px; height: 16px; padding: 4px; }
+  }
+  .tl-flecha svg { box-sizing: content-box; padding: 6px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); }
+  .tl-flecha:hover svg { background: var(--ink); color: var(--paper); }
+  .izq { left: 0; justify-content: start; background: linear-gradient(to right, var(--paper) 35%, transparent); }
+  .der { right: 0; justify-content: end; background: linear-gradient(to left, var(--paper) 35%, transparent); }
+  .tl.puede-izq .izq, .tl.puede-der .der { display: flex; }
   .timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(7em, 1fr); }
   /* La línea va en cada fecha (no en la lista) para que siga hasta el final cuando el calendario se desliza */
   li { position: relative; padding: 14px 10px 4px 0; display: grid; gap: 4px; align-content: start; border-top: 2px solid var(--ink); }
