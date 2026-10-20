@@ -134,12 +134,14 @@ Las fichas están en `datos/formaciones/`. La plantilla, con instrucciones, es `
 Todo dato que no esté `pendiente` necesita `fuente` y `fecha`. Por ejemplo:
 
 ```yaml
-candidatura_presidencia:
-  valor: Nombre Apellido
+programa:
+  valor: https://enlace-al-programa.pdf
   estado: confirmado
   fuente: https://enlace-a-la-nota-oficial
   fecha: 2026-10-20
 ```
+
+Quién encabeza cada lista no se escribe a mano: sale del BOE cuando publica las candidaturas, igual para todas las formaciones.
 
 Si una ficha está mal escrita (por ejemplo, falta la fuente), `npm run dev` y `npm run build` indican qué fichero y qué campo hay que corregir. Al subir el cambio a `main`, la web se regenera sola en unos minutos.
 

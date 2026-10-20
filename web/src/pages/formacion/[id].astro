@@ -16,11 +16,13 @@ const cand = await candidaturasBoe();
 const provincias = await circunscripciones();
 const suyas = (cand?.candidaturas ?? []).filter((c) => c.camara === 'congreso' && c.proclamada && fichaDe(c, todas)?.id === f.id);
 const donde = provincias.filter((p) => suyas.some((c) => c.provincia === p.id));
+// Quién encabeza la lista al Congreso en cada provincia: el primer candidato, tal como lo publica el BOE.
+const cabezas = donde.map((p) => ({ p, nombre: suyas.find((c) => c.provincia === p.id)?.candidatos[0]?.nombre }));
 const RESULTADOS_23J = 'https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907';
 const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formación política';
 ---
 
-<Base titulo={d.nombre} descripcion={`Ficha de ${d.nombre} (${corto(f)}) para las elecciones generales del 29N: candidatura, programa y dónde se presenta, con fuentes.`} buscable>
+<Base titulo={d.nombre} descripcion={`Ficha de ${d.nombre} (${corto(f)}) para las elecciones generales del 29N: dónde se presenta, quién encabeza cada lista y su programa, con fuentes.`} buscable>
   <div class="page-head">
     <p class="label">Ficha de formación</p>
     <h1>{d.nombre}</h1>
@@ -33,7 +35,6 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
   <section>
     <div class="sec-head"><h2>Datos</h2><p>Cada dato lleva su estado y su fuente. Si no hay fuente, el dato no aparece.</p></div>
     <div class="facts">
-      <Dato etiqueta="Encabeza la candidatura" d={d.candidatura_presidencia} />
       <Dato etiqueta="Programa electoral" d={d.programa} enlace vacio="Sin publicar" />
       <Dato etiqueta="Web oficial" d={d.web} enlace />
       {d.escanos_23j && (
@@ -62,16 +63,26 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
   }
 
   <section>
-    <div class="sec-head"><h2>Dónde se presenta</h2></div>
+    <div class="sec-head">
+      <h2>Dónde se presenta y quién encabeza la lista</h2>
+      <p>En las generales no se vota a un presidente. En cada provincia se vota una <Termino id="lista-cerrada">lista cerrada</Termino> de candidatos al Congreso, y después el Congreso elige a quien preside el Gobierno.</p>
+    </div>
     {
       cand ? (
         donde.length ? (
-          <div class="provlist">{donde.map((p) => <a href={ruta(`provincia/${p.id}`)}>{p.data.nombre}</a>)}</div>
+          <>
+            <ul class="cabezas">
+              {cabezas.map(({ p, nombre }) => (
+                <li><a href={ruta(`provincia/${p.id}`)}>{p.data.nombre}</a><span>{nombre ?? 'Sin nombre en el BOE'}</span></li>
+              ))}
+            </ul>
+            <p class="muted fuente">Listas al Congreso, primer nombre de cada una. Fuente: candidaturas {cand.fase}, <a href={cand.fuente.url}>{cand.fuente.id}</a>.</p>
+          </>
         ) : (
           <div class="empty">No aparece con estas siglas ({d.siglas.join(', ')}) en las candidaturas {cand.fase} del <Termino id="boe" />.</div>
         )
       ) : (
-        <div class="empty"><strong>Todavía no hay candidaturas oficiales.</strong><span>Llegarán del BOE con la publicación de las candidaturas (hacia el 28 de octubre).</span></div>
+        <div class="empty"><strong>Todavía no hay listas oficiales.</strong><span>Cuando el BOE publique las candidaturas (hacia el 28 de octubre), aquí aparecerá en qué provincias se presenta y quién encabeza cada lista.</span></div>
       )
     }
   </section>
@@ -92,6 +103,10 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
 
 <style>
   .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 0 32px; }
+  .cabezas { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 0 32px; }
+  .cabezas li { display: flex; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .cabezas a { font-weight: 600; }
+  .fuente { font-size: 0.85rem; }
   .provlist { display: flex; flex-wrap: wrap; gap: 6px; }
   .provlist a { font-size: 0.85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; background: var(--surface); }
   .provlist a:hover { border-color: var(--accent); }

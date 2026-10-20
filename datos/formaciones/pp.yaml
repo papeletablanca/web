@@ -12,12 +12,6 @@ escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe
 integrantes: []
 marcas_territoriales: []
 
-candidatura_presidencia:
-  valor: "Alberto Núñez Feijóo"
-  estado: anunciado
-  fuente: https://www.infobae.com/espana/2026/10/10/el-pp-arranca-en-madrid-la-precampana-para-las-elecciones-generales-del-29-de-noviembre-con-la-promesa-de-feijoo-de-ser-el-presidente-que-espana-esta-esperando/
-  fecha: 2026-10-10
-
 web:
   valor: https://www.pp.es
   estado: confirmado

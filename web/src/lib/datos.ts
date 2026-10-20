@@ -101,10 +101,3 @@ export function departamento(d: string | null): string {
     .map((p, i) => (i > 0 && menores.has(p) ? p : p.charAt(0).toUpperCase() + p.slice(1)))
     .join(' ');
 }
-
-/** Estado global de una ficha, para la rejilla. */
-export function progreso(f: Formacion) {
-  const datos = [f.data.candidatura_presidencia, f.data.web, f.data.programa];
-  const conFuente = datos.filter((d) => d.estado !== 'pendiente').length;
-  return { conFuente, total: datos.length };
-}

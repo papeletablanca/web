@@ -12,12 +12,6 @@ escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe
 integrantes: []
 marcas_territoriales: []
 
-candidatura_presidencia:
-  valor: "Gabriel Rufián"
-  estado: anunciado
-  fuente: https://www.infobae.com/espana/agencias/2026/10/10/alamany-erc-asegura-que-rufian-sera-el-cabeza-de-lista-de-erc-el-29n/
-  fecha: 2026-10-10
-
 web:
   valor: https://www.esquerra.cat
   estado: confirmado

@@ -18,12 +18,6 @@ marcas_territoriales:  # en 2023 concurrieron con estos nombres; revisar para 20
   - { nombre: "Partido Socialista de Navarra", ambito: "Navarra", siglas: ["PSN-PSOE"] }
   - { nombre: "Partido Socialista de las Illes Balears", ambito: "Illes Balears", siglas: ["PSIB-PSOE"] }
 
-candidatura_presidencia:
-  valor: "Pedro Sánchez (Madrid)"
-  estado: anunciado
-  fuente: https://www.infobae.com/espana/agencias/2026/10/14/sanchez-situa-a-robles-numero-2-del-psoe-por-madrid-y-a-sus-ministros-en-puestos-de-salida/
-  fecha: 2026-10-14
-
 web:
   valor: https://psoe.es
   estado: confirmado

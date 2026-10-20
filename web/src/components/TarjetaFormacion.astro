@@ -1,26 +1,20 @@
 ---
-import { corto, progreso, ruta, type Formacion } from '../lib/datos';
+import { corto, ruta, type Formacion } from '../lib/datos';
 
 interface Props { f: Formacion }
 const { f } = Astro.props;
-const { conFuente, total } = progreso(f);
 ---
 
 <a class="party" href={ruta(`formacion/${f.id}`)}>
   <span class="sig">{corto(f)}</span>
-  <span class="name">{f.data.nombre}</span>
-  {
-    conFuente === 0 ? (
-      <span class="chip pendiente">ficha en preparación</span>
-    ) : (
-      <span class="chip anunciado">{conFuente} de {total} datos con fuente</span>
-    )
-  }
+  {f.data.nombre !== corto(f) && <span class="name">{f.data.nombre}</span>}
+  <span class="ver">Ver ficha →</span>
 </a>
 
 <style>
   .party { border-top: 2px solid var(--ink); padding: 12px 0 0; display: grid; gap: 6px; text-decoration: none; align-content: start; }
   .party:hover .sig { color: var(--accent); }
   .sig { font: 800 1.35rem/1 var(--f-display); letter-spacing: -0.01em; transition: color 0.15s; }
-  .name { font-size: 0.88rem; color: var(--muted); min-height: 2.6em; }
+  .name { font-size: 0.88rem; color: var(--muted); }
+  .ver { font-size: 0.85rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 </style>

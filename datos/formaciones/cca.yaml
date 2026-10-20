@@ -12,12 +12,6 @@ escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe
 integrantes: []
 marcas_territoriales: []
 
-candidatura_presidencia:
-  valor: "Cristina Valido (Santa Cruz de Tenerife), propuesta pendiente de ratificar"
-  estado: anunciado
-  fuente: https://www.infobae.com/espana/agencias/2026/10/05/coalicion-canaria-cc-propone-a-cristina-valido-como-candidata-al-congreso/
-  fecha: 2026-10-05
-
 web:
   valor: https://coalicioncanaria.org
   estado: confirmado

@@ -12,10 +12,6 @@ escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe
 integrantes: []
 marcas_territoriales: []
 
-candidatura_presidencia:
-  valor: ""
-  estado: pendiente
-
 web:
   valor: https://www.upn.org
   estado: confirmado

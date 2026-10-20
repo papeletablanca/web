@@ -46,7 +46,6 @@ const formaciones = defineCollection({
     marcas_territoriales: z
       .array(z.object({ nombre: z.string(), ambito: z.string(), siglas: z.array(z.string()).default([]) }))
       .default([]),
-    candidatura_presidencia: dato,
     web: dato,
     programa: dato,
     redes: z.array(z.object({ red: z.string(), url: enlace })).default([]),

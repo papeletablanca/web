@@ -12,12 +12,6 @@ escanos_23j:  # resultado oficial del 23J (fuente: https://www.boe.es/diario_boe
 integrantes: []
 marcas_territoriales: []
 
-candidatura_presidencia:
-  valor: "Oskar Matute (Bizkaia), Oihana Etxebarrieta (Gipuzkoa), Mikel Otero (Araba) y Eneka Maiz (Navarra), pendientes de ratificar por la militancia"
-  estado: anunciado
-  fuente: https://www.infobae.com/espana/agencias/2026/10/16/oskar-matute-como-portavoz-y-etxebarrieta-otero-y-maiz-candidatos-de-eh-bildu-el-29n/
-  fecha: 2026-10-16
-
 web:
   valor: https://ehbildu.eus
   estado: confirmado

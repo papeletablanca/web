@@ -16,10 +16,6 @@ marcas_territoriales:  # en 2023 concurrieron con estos nombres (BOE-A-2023-1506
   - { nombre: "Sumar Aragón", ambito: "Aragón", siglas: ["SUMAR ARAGÓN"] }
   - { nombre: "Sumar Més", ambito: "Illes Balears", siglas: ["MÉS PER MALLORCA-SUMAR", "MÉS PER MALLORCA-MÉS PER MENORCA-SUMAR"] }
 
-candidatura_presidencia:
-  valor: ""
-  estado: pendiente
-
 web:
   valor: https://movimientosumar.es
   estado: confirmado

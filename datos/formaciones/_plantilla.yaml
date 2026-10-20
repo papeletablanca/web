@@ -22,12 +22,6 @@ escanos_23j:               # escaños obtenidos el 23J de 2023, del BOE-A-2023-1
 integrantes: []            # solo coaliciones: partidos que la forman
 marcas_territoriales: []   # p. ej. - { nombre: Partit dels Socialistes de Catalunya, ambito: Cataluña, siglas: [PSC] }
 
-candidatura_presidencia:   # quién encabeza la candidatura (y su provincia). Fuentes: la propia formación o agencias (EFE, Europa Press)
-  valor: ""
-  estado: pendiente
-  # fuente: https://...
-  # fecha: 2026-10-16
-
 web:
   valor: ""                # la dirección de su web oficial
   estado: pendiente
