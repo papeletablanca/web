@@ -50,6 +50,10 @@
   termino: Voto accesible
   definicion: El kit en braille con el que una persona ciega o con discapacidad visual puede votar sola y en secreto. Se pide por teléfono al Ministerio del Interior (900 150 000) y se recoge en la mesa el día de la votación.
   fuente: https://www.boe.es/eli/es/rd/2007/12/07/1612/con
+- id: disolucion
+  termino: Disolución de las Cortes
+  definicion: Al convocar las elecciones se disuelven el Congreso y el Senado. Todo lo que el Congreso tenía pendiente, como las leyes en trámite, caduca. Para aprobarlo, habría que volver a presentarlo en la nueva legislatura. Solo sigue lo que corresponde a la Diputación Permanente.
+  fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1982-5196#art207
 - id: junta-electoral
   termino: Junta Electoral
   definicion: Los órganos que vigilan que las elecciones sean transparentes e iguales para todos. Hay una Central, una en cada provincia y otras de zona; resuelven quejas y proclaman candidaturas y resultados.
