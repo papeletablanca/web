@@ -45,6 +45,10 @@ jobs:
             python radar.py
             python candidaturas.py
           fi
+      - name: Revisar los acuerdos de la Junta Electoral Central
+        timeout-minutes: 5    # si la web de la Junta no responde, el BOE y la web se publican igual
+        continue-on-error: true
+        run: python jec.py
       - name: Guardar datos nuevos
         run: |
           git config user.name "Papeleta Blanca"

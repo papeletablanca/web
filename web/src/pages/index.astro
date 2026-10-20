@@ -6,13 +6,14 @@ import TarjetaBoe from '../components/TarjetaBoe.astro';
 import TarjetaFormacion from '../components/TarjetaFormacion.astro';
 import Termino from '../components/Termino.astro';
 import { getCollection } from 'astro:content';
-import { ELECCION, candidaturasBoe, circunscripciones, fecha, formaciones, hallazgosBoe, ruta } from '../lib/datos';
+import { ELECCION, candidaturasBoe, circunscripciones, fecha, formaciones, hallazgosBoe, polemicasJec, ruta } from '../lib/datos';
 import { describir, estado, hoyMadrid, type Hito } from '../lib/calendario';
 
 const dias = Math.max(0, Math.ceil((new Date(`${ELECCION}T00:00:00+01:00`).getTime() - Date.now()) / 864e5));
 const novedades = await hallazgosBoe();
 const boe = novedades.slice(0, 6);
 const ultima = novedades[0];
+const polemicas = await polemicasJec();
 const fichas = await formaciones();
 const cand = await candidaturasBoe();
 const provincias = await circunscripciones();
@@ -106,6 +107,28 @@ const hoy = describir(estado(hitos, hoyMadrid()));
     {boe.length ? <div class="cards">{boe.map((h) => <TarjetaBoe h={h} />)}</div> : <div class="empty">Todavía no hay novedades.</div>}
   </section>
 
+  {
+    polemicas.length > 0 && (
+      <section>
+        <div class="sec-head">
+          <h2>Polémicas en curso</h2>
+          <a class="mas" href={ruta('polemicas')}>Ver todas →</a>
+        </div>
+        <p class="muted">Denuncias, quejas y recursos ante la Junta Electoral Central, con lo que decidió. Una denuncia no es una condena.</p>
+        <ul class="polemicas">
+          {polemicas.slice(0, 3).map((p) => (
+            <li>
+              <a href={`${ruta('polemicas/')}#acuerdo-${p.numero.replace('/', '-')}`}>
+                <span class="label num">{fecha(p.fecha, { day: 'numeric', month: 'long' })} · Acuerdo {p.numero}</span>
+                <span class="recortada">{p.objeto}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
   <section>
     <div class="sec-head">
       <h2>Formaciones</h2>
@@ -191,6 +214,10 @@ const hoy = describir(estado(hitos, hoyMadrid()));
   .fila select { flex: 1 1 260px; min-width: 0; font: 500 1.05rem var(--f-body); color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; }
   .fila button { font: 700 1.05rem var(--f-body); color: var(--paper); background: var(--ink); border: 2px solid var(--ink); border-radius: 8px; padding: 12px 20px; cursor: pointer; }
   .fila button:hover { background: var(--accent); border-color: var(--accent); }
+
+  .polemicas { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+  .polemicas a { height: 100%; display: grid; gap: 10px; align-content: start; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); text-decoration: none; font-size: 0.93rem; line-height: 1.45; }
+  .polemicas a:hover { border-color: var(--accent); color: inherit; }
 
   .parties { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 12px; }
   .nuevas { border-top: 2px dashed var(--muted); padding-top: 12px; display: grid; gap: 6px; align-content: start; text-decoration: none; font-size: 0.88rem; color: var(--muted); }

@@ -68,6 +68,27 @@ const boe = defineCollection({
   schema: z.object({ fecha: z.string(), disposiciones_revisadas: z.number(), hallazgos: z.array(hallazgo) }),
 });
 
+// Polémicas ante la Junta Electoral Central (jec.py): un fichero por sesión con los acuerdos que cumplen la regla.
+const jec = defineCollection({
+  loader: glob({ pattern: '*.json', base: `${DATOS}/jec` }),
+  schema: z.object({
+    fecha: z.string(),
+    sesion: z.string(),
+    acuerdos_revisados: z.number(),
+    acuerdos: z.array(
+      z.object({
+        numero: z.string(),
+        expediente: z.string(),
+        autor: z.string(),
+        objeto: z.string(),
+        acuerdo: z.array(z.string()),
+        materias: z.array(z.string()),
+        url: z.string(),
+      }),
+    ),
+  }),
+});
+
 const persona = z.object({ nombre: z.string(), suplentes: z.array(z.string()).optional() });
 const candidaturas = defineCollection({
   loader: glob({ pattern: '*.json', base: CANDIDATURAS }),
@@ -146,4 +167,4 @@ const glosario = defineCollection({
   schema: z.object({ termino: z.string().min(1), definicion: z.string().min(1), fuente: enlace }),
 });
 
-export const collections = { formaciones, boe, candidaturas, correcciones, circunscripciones, calendario, debates, glosario };
+export const collections = { formaciones, boe, jec, candidaturas, correcciones, circunscripciones, calendario, debates, glosario };

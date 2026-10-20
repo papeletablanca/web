@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import TarjetaBoe from '../components/TarjetaBoe.astro';
+import Termino from '../components/Termino.astro';
+import { getCollection } from 'astro:content';
+import { enTribunales, fecha, hallazgosBoe, plural, polemicasJec } from '../lib/datos';
+
+const polemicas = await polemicasJec();
+const dias = [...new Set(polemicas.map((p) => p.fecha))];
+const revisados = (await getCollection('jec')).reduce((n, s) => n + s.data.acuerdos_revisados, 0);
+const tribunales = enTribunales(await hallazgosBoe());
+const repo = import.meta.env.PUBLIC_REPO_URL as string | undefined;
+const ancla = (numero: string) => `acuerdo-${numero.replace('/', '-')}`;
+---
+
+<Base titulo="Polémicas en curso" descripcion="Denuncias, quejas y recursos sobre las elecciones del 29 de noviembre ante la Junta Electoral Central y los tribunales, con lo que se pidió y lo que se decidió." buscable>
+  <div class="page-head">
+    <p class="label">Polémicas en curso</p>
+    <h1>Polémicas en curso</h1>
+    <p>
+      Lo que alguien ha llevado ante la <Termino id="junta-electoral">Junta Electoral Central</Termino> o los tribunales sobre estas elecciones: denuncias, quejas, recursos y reclamaciones. De cada una, qué se pidió y qué se decidió, copiado de la fuente oficial.
+    </p>
+  </div>
+
+  <p class="aviso"><strong>Una denuncia no es una condena.</strong> Aquí aparece lo que alguien ha planteado y lo que ha respondido el organismo, tal y como lo publica. Papeleta Blanca no opina sobre quién tiene razón.</p>
+
+  <section class="regla" aria-labelledby="regla-titulo">
+    <h2 id="regla-titulo">Qué entra</h2>
+    <p>
+      Todo acuerdo de la Junta Electoral Central que cumpla dos condiciones: que la propia Junta lo asocie a las «Elecciones Generales 2026» y que trate de una denuncia, queja, recurso, reclamación o impugnación, o de la resolución de un tribunal. Nadie elige caso a caso. La regla está escrita en {repo ? <a href={`${repo}/blob/main/jec.py`}>jec.py</a> : 'jec.py'} y se revisa cada mañana y cada tarde.
+    </p>
+    <p class="muted">Llevamos {plural(revisados, 'acuerdo revisado', 'acuerdos revisados')} desde la convocatoria y {plural(polemicas.length, 'polémica', 'polémicas')}. Si la Junta no asocia un acuerdo a estas elecciones, no aparece aquí aunque hable de ellas: está en su web.</p>
+  </section>
+
+  <section aria-labelledby="jec-titulo">
+    <div class="sec-head">
+      <h2 id="jec-titulo">Ante la Junta Electoral Central</h2>
+      <p>Por sesión de la Junta, de la más reciente a la más antigua.</p>
+    </div>
+    {
+      dias.length ? (
+        dias.map((d) => (
+          <div class="sesion">
+            <h3 class="dia">Sesión del {fecha(d, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
+            <ol class="lista">
+              {polemicas
+                .filter((p) => p.fecha === d)
+                .map((p) => (
+                  <li id={ancla(p.numero)} class="polemica">
+                    <p class="label num">Acuerdo {p.numero} · expediente {p.expediente}</p>
+                    <p class="objeto">{p.objeto}</p>
+                    <p class="autor"><span class="muted">Lo plantea:</span> {p.autor || 'no consta'}</p>
+                    <details>
+                      <summary>Qué acordó la Junta</summary>
+                      <div class="texto">{p.acuerdo.map((t) => <p>{t}</p>)}</div>
+                    </details>
+                    <a href={p.url} rel="noopener">Ver el acuerdo en la web de la Junta Electoral Central</a>
+                  </li>
+                ))}
+            </ol>
+          </div>
+        ))
+      ) : (
+        <div class="empty">Todavía no hay acuerdos que cumplan la regla.</div>
+      )
+    }
+  </section>
+
+  <section aria-labelledby="tribunales-titulo">
+    <div class="sec-head">
+      <h2 id="tribunales-titulo">En los tribunales</h2>
+      <p>Resoluciones de tribunales sobre estas elecciones publicadas en el <Termino id="boe" />: las novedades oficiales cuyo título menciona un auto, una sentencia, un recurso, el Tribunal Supremo o el Constitucional.</p>
+    </div>
+    {tribunales.length ? <div class="cards">{tribunales.map((h) => <TarjetaBoe h={h} completo />)}</div> : <div class="empty">Todavía no hay ninguna.</div>}
+  </section>
+</Base>
+
+<style>
+  .regla { display: grid; gap: 8px; max-width: 65ch; }
+  .regla h2 { font-size: 1.2rem; }
+  .sesion { display: grid; gap: 10px; }
+  .sesion + .sesion { margin-top: 18px; }
+  .dia { font-size: 1.1rem; }
+  .dia::first-letter { text-transform: uppercase; }
+  .lista { list-style: none; padding: 0; display: grid; gap: 12px; }
+  .polemica { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; display: grid; gap: 10px; scroll-margin-top: 90px; }
+  .objeto { font-size: 1.02rem; line-height: 1.5; max-width: 75ch; }
+  .autor { font-size: 0.92rem; }
+  details { border-top: 1px solid var(--line); padding-top: 10px; }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+  .texto { display: grid; gap: 10px; margin-top: 10px; font-size: 0.93rem; line-height: 1.55; max-width: 75ch; color: var(--muted); }
+  .polemica > a { font-size: 0.9rem; font-weight: 600; justify-self: start; }
+</style>

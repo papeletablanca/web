@@ -75,6 +75,21 @@ export async function hallazgosBoe(): Promise<Hallazgo[]> {
     .sort((a, b) => b.fecha.localeCompare(a.fecha) || b.id.localeCompare(a.id));
 }
 
+/** Novedades del BOE que publican una resolución de un tribunal (la regla de «En los tribunales», en Polémicas). */
+const TRIBUNAL = /\b(autos?|sentencias?|recursos?)\b|tribunal (supremo|constitucional)/i;
+export const enTribunales = (hallazgos: Hallazgo[]) => hallazgos.filter((h) => TRIBUNAL.test(h.titulo));
+
+export type Polemica = CollectionEntry<'jec'>['data']['acuerdos'][number] & { fecha: string };
+
+/** Acuerdos de la Junta Electoral Central que cumplen la regla de jec.py, del más reciente al más antiguo. */
+export async function polemicasJec(): Promise<Polemica[]> {
+  const sesiones = await getCollection('jec');
+  const numero = (p: Polemica) => Number(p.numero.split('/')[0]);
+  return sesiones
+    .flatMap((s) => s.data.acuerdos.map((a) => ({ ...a, fecha: s.data.fecha })))
+    .sort((a, b) => b.fecha.localeCompare(a.fecha) || numero(b) - numero(a));
+}
+
 /** Nombre corto del departamento para las tarjetas ("MINISTERIO DE HACIENDA" -> "Hacienda"). */
 export function departamento(d: string | null): string {
   if (!d) return '';

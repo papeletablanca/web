@@ -20,6 +20,7 @@ La versión completa está en la página [Cómo funciona](https://papeletablanca
 | Dato | Origen | Cómo se actualiza |
 |---|---|---|
 | Novedades del BOE | [API de datos abiertos del BOE](https://www.boe.es/datosabiertos/) | Automático, dos veces al día |
+| Polémicas en curso | [Acuerdos de la Junta Electoral Central](https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos) y novedades del BOE sobre tribunales | Automático, dos veces al día |
 | Candidaturas y listas por provincia | Disposiciones del BOE de las Juntas Electorales Provinciales | Automático, en cuanto se publican |
 | Escaños por provincia y calendario | [Real Decreto 806/2026](https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742) y [LOREG](https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672) | A mano |
 | Fichas de las formaciones | Fuentes oficiales de cada formación, el BOE o prensa enlazada | A mano, dato a dato |
@@ -78,6 +79,7 @@ No incluye un «filtro para daltónicos». Esos filtros recolorean la página, p
 ```
 radar.py              Lee el sumario diario del BOE y aparta lo electoral   → datos/boe/
 candidaturas.py       Convierte las listas de candidatos del BOE en datos   → datos/candidaturas/
+jec.py                Aparta las polémicas de los acuerdos de la Junta Electoral Central → datos/jec/
 datos/
   formaciones/        Una ficha por formación (.yaml). Se editan a mano
   calendario.yaml     Fechas clave
@@ -107,6 +109,7 @@ python radar.py                             # BOE de hoy
 python radar.py --desde 2026-10-06          # desde la convocatoria hasta hoy
 python candidaturas.py --desde 2026-10-26   # busca las listas de candidatos en ese rango
 python candidaturas.py --id BOE-A-...       # procesa una disposición concreta
+python jec.py                               # acuerdos de la Junta Electoral Central desde la convocatoria
 python -m unittest discover tests           # pruebas, sin conexión
 ```
 
@@ -145,6 +148,17 @@ Si una ficha está mal escrita (por ejemplo, falta la fuente), `npm run dev` y `
 Las reglas están al principio de [radar.py](radar.py), en `REGLAS` y `EXCLUSIONES`, como expresiones legibles que se aplican igual a todo lo que publica el BOE. [tests/test_radar.py](tests/test_radar.py) incluye títulos reales que deben aparecer y otros que no. Si algo falta o sobra, se corrige ahí y el cambio queda en el historial público.
 
 Limitaciones: el radar solo lee los títulos de las disposiciones y no revisa los boletines autonómicos ni provinciales.
+
+## Cómo decide qué es una «polémica»
+
+[jec.py](jec.py) lee los acuerdos de la Junta Electoral Central desde la convocatoria (5 de octubre de 2026). Entra un acuerdo si cumple las dos condiciones:
+
+1. La propia Junta lo asocia al proceso «Elecciones Generales 2026 (Cortes Generales)» (campo «Proceso electoral asociado» de cada acuerdo).
+2. Su objeto es una denuncia, queja, recurso, reclamación o impugnación, o tiene que ver con la resolución de un tribunal (`CONFLICTO`, al principio de `jec.py`).
+
+Se copian sin resumir el objeto, el autor tal como lo publica la Junta (que no da nombres de particulares) y el texto del acuerdo. La página añade las novedades del BOE cuyo título menciona un auto, una sentencia, un recurso, el Tribunal Supremo o el Constitucional.
+
+Limitación: si la Junta no asocia un acuerdo a estas elecciones, no entra aunque hable de ellas. Por ejemplo, el recurso de Valores (acuerdo 245/2026) no tiene proceso asociado. [tests/test_jec.py](tests/test_jec.py) lo comprueba con páginas reales de la Junta.
 
 ## Calendario
 
