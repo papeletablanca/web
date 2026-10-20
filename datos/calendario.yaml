@@ -18,6 +18,10 @@
   texto: El BOE publica las candidaturas presentadas
   aproximada: true
   fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acuarentaysiete
+# Real Decreto 1612/2007, art. 3.3: "hasta el vigésimo séptimo día posterior" a la convocatoria. Interior: "ambos inclusive".
+- fecha: 2026-11-02
+  texto: Último día para pedir el kit de voto en braille (900 150 000)
+  fuente: https://infoelectoral.interior.gob.es/es/proceso-electoral/visitas-virtuales/el-voto-accesible/
 - fecha: 2026-11-03
   texto: El BOE publica las candidaturas proclamadas
   aproximada: true

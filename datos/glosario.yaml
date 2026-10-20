@@ -46,6 +46,10 @@
   termino: Voto nulo
   definicion: Un voto que no cuenta. Por ejemplo, un sobre con papeletas de candidaturas distintas o una papeleta con nombres tachados o añadidos.
   fuente: https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#anoventayseis
+- id: voto-accesible
+  termino: Voto accesible
+  definicion: El kit en braille con el que una persona ciega o con discapacidad visual puede votar sola y en secreto. Se pide por teléfono al Ministerio del Interior (900 150 000) y se recoge en la mesa el día de la votación.
+  fuente: https://www.boe.es/eli/es/rd/2007/12/07/1612/con
 - id: junta-electoral
   termino: Junta Electoral
   definicion: Los órganos que vigilan que las elecciones sean transparentes e iguales para todos. Hay una Central, una en cada provincia y otras de zona; resuelven quejas y proclaman candidaturas y resultados.
