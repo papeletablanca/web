@@ -1,7 +1,7 @@
 {
   "fecha": "2026-10-15",
   "sesion": "1116",
-  "acuerdos_revisados": 30,
+  "acuerdos_revisados": 36,
   "acuerdos": [
     {
       "numero": "246/2026",
@@ -176,6 +176,33 @@
         "SENTENCIAS Y AUTOS"
       ],
       "url": "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=154406&idsesion=1116&template=Doctrina/JEC_Detalle"
+    },
+    {
+      "numero": "276/2026",
+      "expediente": "209/376",
+      "autor": "Sr. Representante General del Partido Popular",
+      "objeto": "Ejecución de los Autos del Tribunal Supremo de 10 de septiembre y 12 de octubre de 2026 (recursos 1013/2026 y 1015/2026) sobre el Censo Electoral de Residentes Ausentes (CERA) en las elecciones generales de 29 de noviembre de 2026.",
+      "acuerdo": [
+        "El escrito plantea diferentes cuestiones en relación con la ejecución de los Autos de la Sala Tercera de lo Contencioso-Administrativo (Sección Cuarta) del Tribunal Supremo, de 12 de octubre de 2026. Estando dichas cuestiones sometidas al procedimiento judicial seguido ante la mencionada Sala Tercera del Tribunal Supremo en los recursos núms. 2/1013/2026, 2/1015/2026, 2/1081/2026 y 2/1200/2026, esta Junta debe estar a lo que se decida en el correspondiente pronunciamiento de órgano judicial (art. 118 CE y arts. 17 y 18 LO 6/1985, de 1 de julio, del Poder Judicial). Todo ello sin perjuicio de que pueda comparecer ante la citada Sala para manifestar lo que estime conveniente."
+      ],
+      "materias": [
+        "CENSO ESPECIAL DE RESIDENTES AUSENTES - Datos",
+        "SENTENCIAS Y AUTOS"
+      ],
+      "url": "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=154386&idsesion=1116&template=Doctrina/JEC_Detalle"
+    },
+    {
+      "numero": "277/2026",
+      "expediente": "209/377",
+      "autor": "Sr. Representante General de VOX",
+      "objeto": "Solicitud de información sobre el cumplimiento de lo ordenado en los Autos de la Sala de lo Contencioso-Administrativo del Tribunal Supremo de 10 de septiembre y 12 de octubre de 2026, dictados en el recurso 1015/2026.",
+      "acuerdo": [
+        "El escrito plantea diferentes cuestiones en relación con la ejecución de los Autos de la Sala Tercera de lo Contencioso-Administrativo (Sección Cuarta) del Tribunal Supremo, de 12 de octubre de 2026. Estando dichas cuestiones sometidas al procedimiento judicial seguido ante la mencionada Sala Tercera del Tribunal Supremo en los recursos núms. 2/1013/2026, 2/1015/2026, 2/1081/2026 y 2/1200/2026, esta Junta debe estar a lo que se decida en el correspondiente pronunciamiento de órgano judicial (art. 118 CE y arts. 17 y 18 LO 6/1985, de 1 de julio, del Poder Judicial). Todo ello sin perjuicio de que pueda comparecer ante la citada Sala para manifestar lo que estime conveniente."
+      ],
+      "materias": [
+        "SENTENCIAS Y AUTOS"
+      ],
+      "url": "https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos?anyosesion=2026&idacuerdoinstruccion=154380&idsesion=1116&template=Doctrina/JEC_Detalle"
     }
   ]
 }
