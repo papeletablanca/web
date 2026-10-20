@@ -1,5 +1,15 @@
 # Papeleta Blanca
 
+[![Papeleta Blanca](https://github.com/papeletablanca/web/actions/workflows/radar.yml/badge.svg)](https://github.com/papeletablanca/web/actions/workflows/radar.yml)
+
+[![RSS](https://img.shields.io/badge/rss-%23F88900.svg?style=for-the-badge&logo=rss&logoColor=white)](https://papeletablanca.es/feed.xml)
+![Python](https://img.shields.io/badge/python-%233776AB.svg?style=for-the-badge&logo=python&logoColor=white)
+![Astro](https://img.shields.io/badge/astro-%232C2052.svg?style=for-the-badge&logo=astro&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/github_pages-%23222222.svg?style=for-the-badge&logo=githubpages&logoColor=white&logoSize=auto)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-%23D97757.svg?style=for-the-badge&logo=claudecode&logoColor=white)](#créditos)
+
 **[papeletablanca.es](https://papeletablanca.es)** reúne en un solo sitio la información oficial sobre las elecciones generales del **29 de noviembre de 2026**: el calendario, los escaños que se eligen en cada provincia, las candidaturas que se presentan y lo que publica el BOE cada día.
 
 No opina, no resume programas y no publica encuestas. Cada dato enlaza a su fuente.
