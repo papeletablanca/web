@@ -25,6 +25,8 @@ La versión completa está en la página [Cómo funciona](https://papeletablanca
 | Escaños por provincia y calendario | [Real Decreto 806/2026](https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742) y [LOREG](https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672) | A mano |
 | Fichas de las formaciones | Fuentes oficiales de cada formación, el BOE o prensa enlazada | A mano, dato a dato |
 
+Las candidaturas (completas y por provincia), las novedades, las polémicas y los escaños se pueden descargar en CSV desde [Para medios y datos](https://papeletablanca.es/para-medios/). Se generan en cada publicación con [web/src/pages/datos/](web/src/pages/datos/).
+
 Todo se ejecuta en GitHub Actions y se publica en GitHub Pages, sin servidor ni base de datos. El historial de este repositorio registra cada cambio en los datos.
 
 ## ¿Has visto un error?

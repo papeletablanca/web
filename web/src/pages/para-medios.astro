@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { candidaturasBoe, circunscripciones, fecha, hallazgosBoe, plural, polemicasJec, ruta } from '../lib/datos';
+
+const repo = (import.meta.env.PUBLIC_REPO_URL as string | undefined) ?? 'https://github.com/papeletablanca/web';
+const cand = await candidaturasBoe();
+const provincias = await circunscripciones();
+const novedades = await hallazgosBoe();
+const polemicas = await polemicasJec();
+const revisadas = (await getCollection('boe')).reduce((a, d) => a + d.data.disposiciones_revisadas, 0);
+const actualizado = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+
+const descargas = [
+  {
+    fichero: 'datos/candidaturas.csv',
+    que: 'Candidaturas de las 52 circunscripciones, Congreso y Senado: una fila por persona (titulares y suplentes), en el orden del BOE.',
+    estado: cand
+      ? `Hoy: candidaturas ${cand.fase}, ${cand.fuente.id} (${fecha(cand.fuente.fecha_publicacion, { day: 'numeric', month: 'long' })}).`
+      : 'Vacío hasta que el BOE publique las presentadas (hacia el 28 de octubre). Se rellena solo ese día.',
+  },
+  { fichero: 'datos/novedades.csv', que: 'Novedades electorales del BOE, con su identificador y enlace.', estado: `Hoy: ${plural(novedades.length, 'novedad', 'novedades')}.` },
+  { fichero: 'datos/polemicas.csv', que: 'Denuncias, quejas y recursos ante la Junta Electoral Central sobre estas elecciones, con el texto del acuerdo.', estado: `Hoy: ${plural(polemicas.length, 'acuerdo', 'acuerdos')}.` },
+  { fichero: 'datos/circunscripciones.csv', que: 'Diputados y senadores que elige cada circunscripción (Real Decreto 806/2026).', estado: 'Fijo hasta las elecciones.' },
+];
+---
+
+<Base titulo="Para medios" descripcion="Datos abiertos de Papeleta Blanca sobre las elecciones del 29 de noviembre: candidaturas por provincia en CSV, novedades del BOE y polémicas ante la Junta Electoral Central. Cómo citarlos y a quién escribir.">
+  <div class="page-head">
+    <p class="label">Para medios</p>
+    <h1>Para medios y verificadores</h1>
+    <p>Todo lo que hace falta para usar estos datos en una información sobre las elecciones del 29 de noviembre: qué hay, de dónde sale, cómo citarlo y a quién escribir.</p>
+  </div>
+
+  <section class="prose" aria-labelledby="que-es">
+    <h2 id="que-es">Qué es</h2>
+    <p>
+      Papeleta Blanca es una web ciudadana que reúne la información oficial sobre las elecciones generales del 29 de noviembre de 2026 y la actualiza sola dos veces al día a partir del BOE y de la Junta Electoral Central.
+      No opina, no publica encuestas, no tiene publicidad y no está vinculada a ningún partido. Cada dato enlaza a su fuente.
+    </p>
+    <ul>
+      <li>{revisadas.toLocaleString('es-ES')} disposiciones del BOE revisadas desde la convocatoria, con {plural(novedades.length, 'novedad electoral', 'novedades electorales')}.</li>
+      <li>{provincias.length} páginas de provincia, una por circunscripción, con sus listas en cuanto las publique el BOE.</li>
+      <li>{plural(polemicas.length, 'polémica', 'polémicas')} ante la Junta Electoral Central, recogidas con una regla fija.</li>
+    </ul>
+    <p class="muted">Datos actualizados por última vez el {actualizado} (hora de Madrid).</p>
+  </section>
+
+  <section aria-labelledby="descargas">
+    <div class="sec-head">
+      <h2 id="descargas">Datos para descargar</h2>
+      <p>En CSV, separados por punto y coma: se abren directamente en Excel o en Hojas de cálculo de Google, con las tildes bien.</p>
+    </div>
+    <ul class="descargas">
+      {
+        descargas.map((d) => (
+          <li>
+            <a href={ruta(d.fichero)} download>{d.fichero.replace('datos/', '')}</a>
+            <p>{d.que}</p>
+            <p class="muted">{d.estado}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="nota">
+      Cada provincia tiene también su propio fichero: <code>datos/candidaturas/&lt;provincia&gt;.csv</code> (por ejemplo, <a href={ruta('datos/candidaturas/madrid.csv')} download>madrid.csv</a>), enlazado en su página.
+      Los datos en bruto, en JSON y con todo su historial de cambios, están en la carpeta <a href={`${repo}/tree/main/datos`}>datos/ del repositorio</a>.
+      Las novedades también se pueden seguir por <a href={ruta('feed.xml')}>RSS</a>.
+    </p>
+  </section>
+
+  <section class="prose" aria-labelledby="como-citar">
+    <h2 id="como-citar">Cómo citarlo</h2>
+    <p>La fuente principal es siempre la oficial. Te recomendamos citarla a ella y, si te ha servido, mencionar a Papeleta Blanca como recopilación:</p>
+    <p class="cita">Fuente: BOE (<em>identificador de la disposición</em>), recopilado por Papeleta Blanca (papeletablanca.es).</p>
+    <p>
+      Los textos y fichas propios tienen licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es">CC BY 4.0</a>: se pueden reutilizar citando a Papeleta Blanca. Los datos del BOE están sujetos a sus <a href="https://www.boe.es/datosabiertos/">condiciones de reutilización</a>, y el código tiene licencia <a href={`${repo}/blob/main/LICENSE`}>MIT</a>.
+    </p>
+  </section>
+
+  <section class="prose" aria-labelledby="fiarse">
+    <h2 id="fiarse">Por qué te puedes fiar (y cómo comprobarlo)</h2>
+    <ul>
+      <li><strong>Sin fuente no hay dato.</strong> Cada novedad, lista y acuerdo enlaza al documento oficial del que sale.</li>
+      <li><strong>Nadie elige caso a caso.</strong> Lo que entra lo decide una regla escrita y pública: en <a href={`${repo}/blob/main/radar.py`}>radar.py</a> para el BOE y en <a href={`${repo}/blob/main/jec.py`}>jec.py</a> para la Junta Electoral Central. La explicación en lenguaje llano está en <a href={ruta('metodologia')}>Cómo funciona</a>.</li>
+      <li><strong>Todo cambio queda a la vista.</strong> El <a href={`${repo}/commits/main`}>historial del repositorio</a> registra cada dato que entra y cada corrección.</li>
+      <li><strong>Las listas se copian tal cual las publica el BOE</strong>, incluidos sus errores. Las correcciones de errores del BOE se enlazan en cada provincia afectada.</li>
+      <li><strong>Uso de inteligencia artificial.</strong> El código y los textos generales se han escrito con ayuda de IA (Claude, de Anthropic) y se revisan a mano. Ningún dato lo redacta una IA: sale del documento oficial o de una fuente enlazada.</li>
+    </ul>
+  </section>
+
+  <section class="prose" aria-labelledby="que-no">
+    <h2 id="que-no">Lo que no hace</h2>
+    <ul>
+      <li>No publica ni enlaza encuestas, ni hace estimaciones de voto.</li>
+      <li>No resume ni compara programas.</li>
+      <li>No revisa los boletines autonómicos ni provinciales: solo el BOE y la Junta Electoral Central.</li>
+      <li>No juzga las polémicas: muestra lo que se planteó y lo que respondió el organismo. Una denuncia no es una condena.</li>
+    </ul>
+  </section>
+
+  <section class="prose" aria-labelledby="contacto">
+    <h2 id="contacto">Contacto</h2>
+    <p>
+      Papeleta Blanca es un proyecto ciudadano hecho a título particular y sin financiación externa. No está vinculado a ningún partido ni organización política, ni afiliado al BOE ni a ningún organismo público.
+      Para cualquier duda, una corrección o una petición de datos en otro formato, escribe a <a href="mailto:hola@papeletablanca.es">hola@papeletablanca.es</a>.
+      Si has visto un error, también puedes <a href={`${repo}/issues`}>abrir una incidencia pública</a> con el enlace a la fuente correcta.
+    </p>
+    <p>Imagen para acompañar una información: <a href={ruta('og.png')}>og.png</a> (1200 × 630 píxeles).</p>
+  </section>
+</Base>
+
+<style>
+  .descargas { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+  .descargas li { display: grid; gap: 8px; align-content: start; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+  .descargas a { font: 700 1.05rem var(--f-mono); justify-self: start; }
+  .descargas p { font-size: 0.93rem; line-height: 1.45; }
+  .nota { color: var(--muted); max-width: 75ch; font-size: 0.93rem; }
+  .cita { padding: 14px 16px; border-left: 3px solid var(--ink); background: var(--surface); font-size: 0.95rem; }
+  code { font: 0.88em var(--f-mono); }
+</style>
