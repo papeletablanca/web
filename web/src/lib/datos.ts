@@ -75,6 +75,13 @@ export async function hallazgosBoe(): Promise<Hallazgo[]> {
     .sort((a, b) => b.fecha.localeCompare(a.fecha) || b.id.localeCompare(a.id));
 }
 
+/**
+ * Novedades que afectan a quien vota (recuadro «Hoy» de la portada): por etiqueta del radar, nunca correcciones de
+ * errores. Los nombramientos, la financiación y el resto de trámites siguen en «Novedades», completos.
+ */
+const PARA_VOTANTES = new Set(['Convocatoria', 'Candidaturas', 'Censo y voto', 'Ley electoral', 'Resultados']);
+export const afectaAlVotante = (h: Hallazgo) => h.etiquetas.some((e) => PARA_VOTANTES.has(e)) && !/^correcci[oó]n de errores/i.test(h.titulo);
+
 /** Novedades del BOE que publican una resolución de un tribunal (la regla de «En los tribunales», en Polémicas). */
 const TRIBUNAL = /\b(autos?|sentencias?|recursos?)\b|tribunal (supremo|constitucional)/i;
 export const enTribunales = (hallazgos: Hallazgo[]) => hallazgos.filter((h) => TRIBUNAL.test(h.titulo));

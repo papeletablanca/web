@@ -6,14 +6,15 @@ import TarjetaBoe from '../components/TarjetaBoe.astro';
 import TarjetaFormacion from '../components/TarjetaFormacion.astro';
 import Termino from '../components/Termino.astro';
 import { getCollection } from 'astro:content';
-import { ELECCION, candidaturasBoe, circunscripciones, fecha, formaciones, hallazgosBoe, polemicasJec, ruta } from '../lib/datos';
+import { ELECCION, afectaAlVotante, candidaturasBoe, circunscripciones, fecha, formaciones, hallazgosBoe, polemicasJec, ruta } from '../lib/datos';
 import { describir, estado, hoyMadrid, type Hito } from '../lib/calendario';
 
 const dias = Math.max(0, Math.ceil((new Date(`${ELECCION}T00:00:00+01:00`).getTime() - Date.now()) / 864e5));
 const novedades = await hallazgosBoe();
 const boe = novedades.slice(0, 6);
-const ultima = novedades[0];
+const ultima = novedades.find(afectaAlVotante);
 const polemicas = await polemicasJec();
+const polemica = polemicas[0];
 const fichas = await formaciones();
 const cand = await candidaturasBoe();
 const provincias = await circunscripciones();
@@ -60,9 +61,19 @@ const hoy = describir(estado(hitos, hoyMadrid()));
       {
         ultima && (
           <div class="hoy-caja">
-            <p class="label">Última novedad oficial · {fecha(ultima.fecha, { day: 'numeric', month: 'long' })}</p>
+            <p class="label">Novedad que te afecta · {fecha(ultima.fecha, { day: 'numeric', month: 'long' })}</p>
             <p class="hoy-frase recortada"><a href={ultima.url_html}>{ultima.titulo}</a></p>
             <a href={ruta('boe')}>Ver todas las novedades</a>
+          </div>
+        )
+      }
+      {
+        polemica && (
+          <div class="hoy-caja">
+            <p class="label">Última polémica · {fecha(polemica.fecha, { day: 'numeric', month: 'long' })}</p>
+            <p class="hoy-frase recortada"><a href={`${ruta('polemicas/')}#acuerdo-${polemica.numero.replace('/', '-')}`}>{polemica.objeto}</a></p>
+            <p class="hoy-nota">Una denuncia no es una condena: aquí está también lo que decidió la Junta Electoral Central.</p>
+            <a href={ruta('polemicas')}>Ver todas las polémicas</a>
           </div>
         )
       }
@@ -201,7 +212,8 @@ const hoy = describir(estado(hitos, hoyMadrid()));
   .atajos span { font-size: 0.92rem; color: var(--muted); }
 
   .hoy { gap: 14px; }
-  .hoy-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .hoy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+  .hoy-nota { font-size: 0.85rem; }  /* en tinta: el gris de --muted no se ha medido sobre --accent-soft */
   .hoy-caja { display: grid; gap: 8px; align-content: start; padding: 18px 20px; background: var(--accent-soft); border-radius: var(--r); }
   .hoy-caja .label { color: var(--ink); }
   .hoy-frase { font-size: 1.1rem; line-height: 1.45; }
