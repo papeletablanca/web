@@ -106,3 +106,34 @@ class TestRegla(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCoaliciones(unittest.TestCase):
+    """Relación oficial de coaliciones de la JEC (páginas reales del 21-oct-2026 y de 2023)."""
+
+    def test_2026(self):
+        lista = jec.coaliciones((FIXTURES / "coaliciones_2026-10-21.html").read_text(encoding="utf-8"))
+        self.assertEqual([c["codigo"] for c in lista], ["C1", "C2", "C3", "C4", "C5", "C6", "C8"])
+        erc = lista[2]
+        self.assertEqual(erc["nombre"], "ESQUERRA REPUBLICANA DE CATALUNYA-EUSKAL HERRIA BILDU")
+        self.assertEqual(erc["siglas"], "ERC-EH BILDU")
+        self.assertEqual(erc["ambito"], "Senado: Cataluña, País Vasco y Navarra")
+        self.assertIn("codigoCoalicion=76996", erc["pacto"])
+
+    def test_sin_pacto_no_hereda_el_de_otra(self):
+        sdp = jec.coaliciones((FIXTURES / "coaliciones_2026-10-21.html").read_text(encoding="utf-8"))[-1]
+        self.assertEqual(sdp["siglas"], "SDP (PSOE, IU, MS, MM, COMPROMIS, CHA, BATZARRE)")
+        self.assertIsNone(sdp["pacto"])
+
+    def test_2023(self):
+        lista = jec.coaliciones((FIXTURES / "coaliciones_2023.html").read_text(encoding="utf-8"))
+        self.assertEqual(len(lista), 12)
+        self.assertEqual((lista[10]["codigo"], lista[10]["siglas"]), ("C11", "SUMAR"))
+
+    def test_no_pisa_datos_si_cambia_el_formato(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            destino = Path(tmp) / "coaliciones.json"
+            destino.write_text("{}", encoding="utf-8")
+            pagina = (FIXTURES / "coaliciones_2026-10-21.html").read_text(encoding="utf-8").replace("Siglas:", "Acrónimo:")
+            jec.guardar_coaliciones(pagina, destino)
+            self.assertEqual(destino.read_text(encoding="utf-8"), "{}")

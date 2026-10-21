@@ -5,7 +5,7 @@ import Puntos from '../../components/Puntos.astro';
 import Papeleta from '../../components/Papeleta.astro';
 import Termino from '../../components/Termino.astro';
 import { getCollection } from 'astro:content';
-import { candidaturasBoe, correccionesDe, fecha, fichaDe, marcasSenado, plural, ruta, type Candidatura, type Circunscripcion } from '../../lib/datos';
+import { candidaturasBoe, coaliciones, correccionesDe, fecha, fichasDe, marcasSenado, plural, ruta, type Candidatura, type Circunscripcion } from '../../lib/datos';
 
 export async function getStaticPaths() {
   return (await getCollection('circunscripciones')).map((p) => ({ params: { id: p.id }, props: { p } }));
@@ -14,6 +14,7 @@ const { p } = Astro.props as { p: Circunscripcion };
 const d = p.data;
 
 const fichas = await getCollection('formaciones');
+const coals = await coaliciones();
 const cand = await candidaturasBoe();
 const aqui = (cand?.candidaturas ?? []).filter((c) => c.provincia === p.id);
 const congreso = aqui.filter((c) => c.camara === 'congreso');
@@ -79,11 +80,11 @@ const senadoTexto = d.senado_islas.length
             <h2>Candidaturas al Congreso</h2>
             <p>En el orden del BOE ({plural(proclamadas(congreso).length, 'candidatura', 'candidaturas')}). Fuente: <a href={cand.fuente.url}>{cand.fuente.id}</a>, {fecha(cand.fuente.fecha_publicacion, { day: 'numeric', month: 'long', year: 'numeric' })}. <a href={ruta(`datos/candidaturas/${p.id}.csv`)} download>Descargar las listas de {d.nombre} en CSV</a>.</p>
           </div>
-          <div>{proclamadas(congreso).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+          <div>{proclamadas(congreso).map((c) => <ListaCandidatura c={c} fichas={fichasDe(c, fichas, coals)} />)}</div>
           {fuera(congreso).length > 0 && (
             <details class="fuera-lista">
               <summary class="label">No proclamadas ({fuera(congreso).length})</summary>
-              <div>{fuera(congreso).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+              <div>{fuera(congreso).map((c) => <ListaCandidatura c={c} fichas={fichasDe(c, fichas, coals)} />)}</div>
             </details>
           )}
         </section>
@@ -92,7 +93,7 @@ const senadoTexto = d.senado_islas.length
           {islas.map((isla) => (
             <div class="isla">
               {isla && <h3>{isla}</h3>}
-              <div>{proclamadas(senado.filter((c) => c.isla === isla)).map((c) => <ListaCandidatura c={c} ficha={fichaDe(c, fichas)} />)}</div>
+              <div>{proclamadas(senado.filter((c) => c.isla === isla)).map((c) => <ListaCandidatura c={c} fichas={fichasDe(c, fichas, coals)} />)}</div>
             </div>
           ))}
         </section>

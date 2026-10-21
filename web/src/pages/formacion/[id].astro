@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Termino from '../../components/Termino.astro';
 import Dato from '../../components/Dato.astro';
 import { getCollection } from 'astro:content';
-import { candidaturasBoe, circunscripciones, corto, fichaDe, ruta, type Formacion } from '../../lib/datos';
+import { candidaturasBoe, circunscripciones, coaliciones, coalicionesDe, corto, fichasDe, ruta, type Formacion } from '../../lib/datos';
 
 export async function getStaticPaths() {
   return (await getCollection('formaciones')).map((f) => ({ params: { id: f.id }, props: { f } }));
@@ -14,7 +14,11 @@ const d = f.data;
 const todas = await getCollection('formaciones');
 const cand = await candidaturasBoe();
 const provincias = await circunscripciones();
-const suyas = (cand?.candidaturas ?? []).filter((c) => c.camara === 'congreso' && c.proclamada && fichaDe(c, todas)?.id === f.id);
+const coals = await coaliciones();
+const enCoalicion = coalicionesDe(f, coals);
+const FUENTE_COALICIONES = 'https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales';
+// Sus listas al Congreso: las que llevan sus siglas y las de las coaliciones de las que forma parte.
+const suyas = (cand?.candidaturas ?? []).filter((c) => c.camara === 'congreso' && c.proclamada && fichasDe(c, todas, coals).some((x) => x.id === f.id));
 const donde = provincias.filter((p) => suyas.some((c) => c.provincia === p.id));
 // Quién encabeza la lista al Congreso en cada provincia: el primer candidato, tal como lo publica el BOE.
 const cabezas = donde.map((p) => ({ p, nombre: suyas.find((c) => c.provincia === p.id)?.candidatos[0]?.nombre }));
@@ -58,6 +62,27 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
             ))}
           </ul>
         )}
+      </section>
+    )
+  }
+
+  {
+    enCoalicion.length > 0 && (
+      <section>
+        <div class="sec-head">
+          <h2>En coalición</h2>
+          <p>Coaliciones inscritas ante la Junta Electoral Central cuyo nombre o siglas oficiales incluyen las de {corto(f)}. Donde concurre en coalición, sus listas llevan el nombre de la coalición.</p>
+        </div>
+        <ul class="coaliciones">
+          {enCoalicion.map((c) => (
+            <li>
+              <strong>{c.nombre}</strong> <span class="muted">Siglas: {c.siglas}</span>
+              <span>{c.ambito}</span>
+              {c.pacto && <a href={c.pacto} rel="noopener">Pacto de coalición (PDF)</a>}
+            </li>
+          ))}
+        </ul>
+        <p class="muted fuente">Fuente: <a href={FUENTE_COALICIONES}>Junta Electoral Central, coaliciones válidamente constituidas</a>.</p>
       </section>
     )
   }
@@ -111,5 +136,8 @@ const tipo = d.tipo ? d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1) : 'Formac
   .provlist a { font-size: 0.85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; background: var(--surface); }
   .provlist a:hover { border-color: var(--accent); }
   .marcas { padding-left: 1.2em; display: grid; gap: 6px; }
+  .coaliciones { list-style: none; padding: 0; display: grid; gap: 0; }
+  .coaliciones li { display: grid; gap: 4px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+  .coaliciones a { justify-self: start; font-size: 0.88rem; font-weight: 600; }
   .por-que { font-size: 0.88rem; }
 </style>

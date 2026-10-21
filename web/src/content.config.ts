@@ -88,6 +88,12 @@ const jec = defineCollection({
   }),
 });
 
+// Relación oficial de coaliciones válidamente constituidas ante la JEC (jec.py), tal cual la publica la Junta.
+const coaliciones = defineCollection({
+  loader: file(`${DATOS}/coaliciones.json`, { parser: (t) => JSON.parse(t).coaliciones.map((c: { codigo: string }) => ({ id: c.codigo, ...c })) }),
+  schema: z.object({ codigo: z.string(), nombre: z.string(), siglas: z.string(), ambito: z.string(), pacto: z.string().nullable() }),
+});
+
 const persona = z.object({ nombre: z.string(), suplentes: z.array(z.string()).optional() });
 const candidaturas = defineCollection({
   loader: glob({ pattern: '*.json', base: CANDIDATURAS }),
@@ -166,4 +172,4 @@ const glosario = defineCollection({
   schema: z.object({ termino: z.string().min(1), definicion: z.string().min(1), fuente: enlace }),
 });
 
-export const collections = { formaciones, boe, jec, candidaturas, correcciones, circunscripciones, calendario, debates, glosario };
+export const collections = { formaciones, boe, jec, coaliciones, candidaturas, correcciones, circunscripciones, calendario, debates, glosario };

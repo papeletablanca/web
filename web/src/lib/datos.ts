@@ -66,6 +66,47 @@ export function fichaDe(c: Candidatura, fichas: Formacion[]): Formacion | undefi
   );
 }
 
+export type Coalicion = CollectionEntry<'coaliciones'>['data'];
+
+export const coaliciones = async (): Promise<Coalicion[]> => (await getCollection('coaliciones')).map((c) => c.data);
+
+// Piezas del nombre y las siglas oficiales de una coalición: lo que va entre guiones, comas, dos puntos o paréntesis.
+// «ERC-EH BILDU» → ERC, EH BILDU; «SDP (PSOE, IU, MS…)» → SDP, PSOE, IU, MS…
+const piezas = (c: Coalicion) => new Set([c.nombre, c.siglas].flatMap((t) => t.split(/[-–,:;()]+/)).map(clave).filter(Boolean));
+
+/**
+ * Coaliciones de las que forma parte una ficha. Regla: alguna de sus siglas, o su nombre, aparece tal cual como pieza
+ * del nombre o de las siglas que publica la Junta Electoral Central. No se lee el pacto (es un PDF escaneado).
+ */
+export function coalicionesDe(f: Formacion, todas: Coalicion[]): Coalicion[] {
+  const suyas = [f.data.nombre, ...f.data.siglas].map(clave);
+  return todas.filter((c) => {
+    const p = piezas(c);
+    return suyas.some((s) => p.has(s));
+  });
+}
+
+/** Coalición a la que corresponde una candidatura del BOE: por siglas completas, por la primera pieza o por nombre. */
+function coalicionDe(c: Candidatura, todas: Coalicion[]): Coalicion | undefined {
+  const s = clave(c.siglas);
+  const n = clave(c.nombre);
+  return todas.find((x) => {
+    const primera = clave(x.siglas.split(/[-–,:;()]+/)[0] ?? '');
+    return (s && (clave(x.siglas) === s || primera === s)) || (n && clave(x.nombre) === n);
+  });
+}
+
+/**
+ * Fichas de una candidatura: la suya si las siglas coinciden; si no, las de las formaciones de la coalición que la
+ * presenta (por ejemplo, las fichas de ERC y de EH Bildu para la lista «ERC-EH BILDU» del Senado).
+ */
+export function fichasDe(c: Candidatura, fichas: Formacion[], todas: Coalicion[]): Formacion[] {
+  const propia = fichaDe(c, fichas);
+  if (propia) return [propia];
+  const coal = coalicionDe(c, todas);
+  return coal ? fichas.filter((f) => coalicionesDe(f, [coal]).length > 0) : [];
+}
+
 export type Hallazgo = CollectionEntry<'boe'>['data']['hallazgos'][number] & { fecha: string };
 
 export async function hallazgosBoe(): Promise<Hallazgo[]> {

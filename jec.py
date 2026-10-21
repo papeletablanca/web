@@ -14,6 +14,10 @@ Uso:
 
 Escribe un JSON por sesión en datos/jec/. La web (carpeta web/) los lee.
 Fuente: https://www.juntaelectoralcentral.es/cs/jec/doctrina/acuerdos
+
+También guarda en datos/coaliciones.json la relación oficial de coaliciones válidamente constituidas ante la JEC
+(nombre, siglas, ámbito y enlace al pacto), tal cual la publica. La web la usa para enlazar cada ficha con las listas
+de las coaliciones de las que forma parte.
 """
 
 from __future__ import annotations
@@ -38,6 +42,15 @@ CONFLICTO = [
     r"\bdenuncia", r"\bqueja", r"\brecurso", r"\breclamacion", r"\bimpugnacion",
     r"tribunal (supremo|constitucional)", r"\bautos?\b", r"\bsentencia",
 ]
+
+COALICIONES = WEB + "/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales"
+RE_COALICION = re.compile(
+    r'<p>\s*(C\d+)\.\s*COALICI[ÓO]N ELECTORAL\s*"(.*?)"\s*</p>\s*'
+    r'<p[^>]*>\s*Siglas:\s*(.*?)</p>\s*'
+    r'(?:<p[^>]*>\s*(?:&Aacute;|Á)mbito:\s*(.*?)</p>)?'
+    r'(?:.*?href=\'([^\']*descargarFichero[^\']*)\')?',
+    re.S,
+)
 
 RE_SESION = re.compile(r'<option value="(\d+)"[^>]*>(\d\d)/(\d\d)/(\d{4})</option>')
 RE_ACUERDO = re.compile(
@@ -106,6 +119,34 @@ def analizar(listado: str, fecha: date, sesion: str, leer_detalle) -> dict:
     return {"fecha": fecha.isoformat(), "sesion": sesion, "acuerdos_revisados": len(acuerdos), "acuerdos": elegidos}
 
 
+def coaliciones(pagina: str) -> list[dict]:
+    """Coaliciones de la página oficial de la JEC, en su orden de presentación. Cada bloque se lee por separado
+    para que el enlace al pacto de una coalición no se atribuya a la siguiente."""
+    bloques = re.split(r'<div class="nueva_fila">\s*(?=<p>\s*C\d+\.)', pagina)
+    salida = []
+    for b in bloques:
+        m = RE_COALICION.search(b)
+        if not m:
+            continue
+        codigo, nombre, siglas, ambito, pacto = m.groups()
+        salida.append({
+            "codigo": codigo, "nombre": texto(nombre), "siglas": texto(siglas),
+            "ambito": texto(ambito or ""), "pacto": html.unescape(pacto) if pacto else None,
+        })
+    return salida
+
+
+def guardar_coaliciones(pagina: str, destino: Path) -> list[dict]:
+    lista = coaliciones(pagina)
+    hay = len(re.findall(r"<p>\s*C\d+\.\s*COALICI", pagina))
+    if "constituidas ante la Junta Electoral Central" not in pagina or len(lista) != hay:
+        radar.aviso(f"JEC: la relación de coaliciones no se ha podido leer bien ({len(lista)} de {hay}). ¿Ha cambiado su formato? No se ha tocado datos/coaliciones.json.")
+        return lista
+    datos = {"fuente": COALICIONES, "coaliciones": lista}
+    destino.write_text(json.dumps(datos, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return lista
+
+
 def ipv4_primero() -> None:
     """La JEC anuncia direcciones IPv6 que no responden: sin esto, cada petición espera ~40 s antes de usar IPv4."""
     original = socket.getaddrinfo
@@ -134,6 +175,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--fecha", type=date.fromisoformat, help="fecha de la sesión del --fichero (AAAA-MM-DD)")
     p.add_argument("--detalles", type=Path, help="carpeta con las fichas guardadas como <idacuerdoinstruccion>.html")
     p.add_argument("--salida", type=Path, default=Path("datos/jec"), help="carpeta de resultados (por defecto datos/jec)")
+    p.add_argument("--coaliciones", type=Path, default=Path("datos/coaliciones.json"), help="relación de coaliciones (por defecto datos/coaliciones.json)")
     args = p.parse_args(argv)
     args.salida.mkdir(parents=True, exist_ok=True)
 
@@ -168,6 +210,12 @@ def main(argv: list[str] | None = None) -> int:
             continue
         destino.write_text(json.dumps(informe, ensure_ascii=False, indent=2), encoding="utf-8")
         print(resumen_texto(informe))
+
+    try:
+        lista = guardar_coaliciones(leer(COALICIONES), args.coaliciones)
+        print(f"JEC, coaliciones: {len(lista)} ({', '.join(c['siglas'] for c in lista)})")
+    except Exception as error:
+        radar.aviso(f"JEC: no se pudo leer la relación de coaliciones ({error}). Se volverá a intentar en la próxima ejecución.")
     return 0
 
 

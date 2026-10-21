@@ -173,6 +173,8 @@ Limitaciones: el radar solo lee los títulos de las disposiciones y no revisa lo
 
 Se copian sin resumir el objeto, el autor tal como lo publica la Junta (que no da nombres de particulares) y el texto del acuerdo. La página añade las novedades del BOE cuyo título menciona un auto, una sentencia, un recurso, el Tribunal Supremo o el Constitucional.
 
+`jec.py` también guarda en `datos/coaliciones.json` la [relación oficial de coaliciones](https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales) válidamente constituidas ante la Junta (nombre, siglas, ámbito y enlace al pacto). La web la usa para enlazar las listas de una coalición con las fichas de sus integrantes. Una ficha forma parte de una coalición si sus siglas o su nombre aparecen tal cual en el nombre o las siglas oficiales, separados por guiones, comas o paréntesis (`coalicionesDe` en [web/src/lib/datos.ts](web/src/lib/datos.ts)). Las coaliciones que solo concurren en una provincia se inscriben en su Junta Provincial y no están en esa relación.
+
 Limitación: si la Junta no asocia un acuerdo a estas elecciones, no entra aunque hable de ellas. Por ejemplo, el recurso de Valores (acuerdo 245/2026) no tiene proceso asociado. [tests/test_jec.py](tests/test_jec.py) lo comprueba con páginas reales de la Junta.
 
 ## Calendario

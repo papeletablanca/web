@@ -1,10 +1,12 @@
 ---
 // Una candidatura del BOE, desplegable, con sus candidatos y suplentes.
-import { corto, ruta, type Candidatura, type Formacion } from '../lib/datos';
+import { corto, fichaDe, ruta, type Candidatura, type Formacion } from '../lib/datos';
 
-interface Props { c: Candidatura; ficha?: Formacion; abierta?: boolean }
-const { c, ficha, abierta = false } = Astro.props;
+// fichas: la de la formación, o las de las formaciones de la coalición que presenta la lista (fichasDe en lib/datos.ts)
+interface Props { c: Candidatura; fichas: Formacion[]; abierta?: boolean }
+const { c, fichas, abierta = false } = Astro.props;
 const senado = c.camara === 'senado';
+const fichaPropia = fichaDe(c, fichas);  // la lista lleva las siglas de la propia ficha, sin coalición de por medio
 ---
 
 <details open={abierta || undefined} class:list={{ fuera: !c.proclamada }}>
@@ -14,8 +16,12 @@ const senado = c.camara === 'senado';
     <span class="c num">{c.proclamada ? `${c.candidatos.length} ${senado ? 'candidatos' : 'titulares'}` : 'no proclamada'}</span>
   </summary>
   <div class="cuerpo">
-    {ficha ? (
-      <a class="ficha" href={ruta(`formacion/${ficha.id}`)}>Ficha de {corto(ficha)} →</a>
+    {fichas.length === 1 && !fichaPropia ? (
+      <p class="ficha">En coalición: <a href={ruta(`formacion/${fichas[0].id}`)}>ficha de {corto(fichas[0])} →</a></p>
+    ) : fichas.length === 1 ? (
+      <a class="ficha" href={ruta(`formacion/${fichas[0].id}`)}>Ficha de {corto(fichas[0])} →</a>
+    ) : fichas.length > 1 ? (
+      <p class="ficha">En coalición: {fichas.map((f, i) => <>{i > 0 && ' · '}<a href={ruta(`formacion/${f.id}`)}>ficha de {corto(f)} →</a></>)}</p>
     ) : (
       <span class="ficha muted">Sin ficha todavía</span>
     )}

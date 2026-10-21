@@ -1,0 +1,54 @@
+{
+  "fuente": "https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales",
+  "coaliciones": [
+    {
+      "codigo": "C1",
+      "nombre": "DEMOCRACIA para el siglo 21",
+      "siglas": "D21",
+      "ambito": "Congreso y Senado: Madrid y Barcelona",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76967"
+    },
+    {
+      "codigo": "C2",
+      "nombre": "COALICIÓN CANARIA-MUNICIPALISTAS PRIMERO CANARIAS",
+      "siglas": "CCa-1ºCAN",
+      "ambito": "Congreso: Canarias Senado: Tenerife, Gran Canaria, Fuerteventura, Lanzarote, La Palma y La Gomera",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76990"
+    },
+    {
+      "codigo": "C3",
+      "nombre": "ESQUERRA REPUBLICANA DE CATALUNYA-EUSKAL HERRIA BILDU",
+      "siglas": "ERC-EH BILDU",
+      "ambito": "Senado: Cataluña, País Vasco y Navarra",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76996"
+    },
+    {
+      "codigo": "C4",
+      "nombre": "COALICIÓN *EXISTE*",
+      "siglas": "EXISTE",
+      "ambito": "Congreso y Senado: Aragón",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76998"
+    },
+    {
+      "codigo": "C5",
+      "nombre": "COMPROMÍS: FRONT VALENCIÀ",
+      "siglas": "COMPROMIS-EUPV-PODEM-ERPV",
+      "ambito": "Congreso: Comunitat Valenciana",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76997"
+    },
+    {
+      "codigo": "C6",
+      "nombre": "Comuns-Front Ampli per la democràcia",
+      "siglas": "C-DEM",
+      "ambito": "Senado: Cataluña",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76999"
+    },
+    {
+      "codigo": "C8",
+      "nombre": "SENADO DE PROGRESO",
+      "siglas": "SDP (PSOE, IU, MS, MM, COMPROMIS, CHA, BATZARRE)",
+      "ambito": "Senado: Andalucía, Aragón, Asturias, Cantabria, Castilla-La Mancha, Castilla y León, Extremadura, Galicia, Madrid, Navarra, País Vasco, Murcia, La Rioja, C. Valenciana, Ceuta y Melilla",
+      "pacto": null
+    }
+  ]
+}

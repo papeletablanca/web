@@ -1,14 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import TarjetaFormacion from '../components/TarjetaFormacion.astro';
-import { candidaturasBoe, fichaDe, formaciones, ruta } from '../lib/datos';
+import { candidaturasBoe, coaliciones, fichasDe, formaciones, ruta } from '../lib/datos';
 
 const fichas = await formaciones();
 const cand = await candidaturasBoe();
+const coals = await coaliciones();
 // Candidaturas del BOE que todavía no tienen ficha (por siglas), para que nadie quede fuera.
 const sinFicha = new Map<string, string>();
 for (const c of cand?.candidaturas ?? []) {
-  if (c.camara === 'congreso' && c.proclamada && !fichaDe(c, fichas)) sinFicha.set(c.siglas || c.nombre, c.nombre);
+  if (c.camara === 'congreso' && c.proclamada && !fichasDe(c, fichas, coals).length) sinFicha.set(c.siglas || c.nombre, c.nombre);
 }
 const sinFichaOrden = [...sinFicha.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es', { sensitivity: 'base' }));
 ---
