@@ -44,11 +44,25 @@
       "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76999"
     },
     {
+      "codigo": "C7",
+      "nombre": "UNIDAD DEL PUEBLO CANARIO UPC",
+      "siglas": "NC-BC, PODEMOS, IU, SUMAR",
+      "ambito": "Congreso y Senado: Canarias",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=77000"
+    },
+    {
       "codigo": "C8",
       "nombre": "SENADO DE PROGRESO",
       "siglas": "SDP (PSOE, IU, MS, MM, COMPROMIS, CHA, BATZARRE)",
       "ambito": "Senado: Andalucía, Aragón, Asturias, Cantabria, Castilla-La Mancha, Castilla y León, Extremadura, Galicia, Madrid, Navarra, País Vasco, Murcia, La Rioja, C. Valenciana, Ceuta y Melilla",
-      "pacto": null
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=77001"
+    },
+    {
+      "codigo": "C9",
+      "nombre": "Frente Amplio",
+      "siglas": "FA",
+      "ambito": "Congreso: excepto Canarias, Illes Balears y C. Valenciana",
+      "pacto": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=77002"
     }
   ]
 }
