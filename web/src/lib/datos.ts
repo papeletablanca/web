@@ -70,20 +70,18 @@ export type Coalicion = CollectionEntry<'coaliciones'>['data'];
 
 export const coaliciones = async (): Promise<Coalicion[]> => (await getCollection('coaliciones')).map((c) => c.data);
 
-// Piezas del nombre y las siglas oficiales de una coalición: lo que va entre guiones, comas, dos puntos o paréntesis.
+// Piezas de un nombre y unas siglas oficiales: lo que va entre guiones, comas, dos puntos o paréntesis.
 // «ERC-EH BILDU» → ERC, EH BILDU; «SDP (PSOE, IU, MS…)» → SDP, PSOE, IU, MS…
-const piezas = (c: Coalicion) => new Set([c.nombre, c.siglas].flatMap((t) => t.split(/[-–,:;()]+/)).map(clave).filter(Boolean));
+const piezas = (c: { nombre: string; siglas: string }) =>
+  new Set([c.nombre, c.siglas].flatMap((t) => t.split(/[-–,:;()]+/)).map(clave).filter(Boolean));
+const enPiezas = (f: Formacion, p: Set<string>) => [f.data.nombre, ...f.data.siglas].map(clave).some((s) => p.has(s));
 
 /**
  * Coaliciones de las que forma parte una ficha. Regla: alguna de sus siglas, o su nombre, aparece tal cual como pieza
  * del nombre o de las siglas que publica la Junta Electoral Central. No se lee el pacto (es un PDF escaneado).
  */
 export function coalicionesDe(f: Formacion, todas: Coalicion[]): Coalicion[] {
-  const suyas = [f.data.nombre, ...f.data.siglas].map(clave);
-  return todas.filter((c) => {
-    const p = piezas(c);
-    return suyas.some((s) => p.has(s));
-  });
+  return todas.filter((c) => enPiezas(f, piezas(c)));
 }
 
 /** Coalición a la que corresponde una candidatura del BOE: por siglas completas, por la primera pieza o por nombre. */
@@ -97,14 +95,18 @@ function coalicionDe(c: Candidatura, todas: Coalicion[]): Coalicion | undefined 
 }
 
 /**
- * Fichas de una candidatura: la suya si las siglas coinciden; si no, las de las formaciones de la coalición que la
- * presenta (por ejemplo, las fichas de ERC y de EH Bildu para la lista «ERC-EH BILDU» del Senado).
+ * Fichas de una candidatura, por este orden:
+ * 1. la suya, si las siglas coinciden;
+ * 2. las de las formaciones de la coalición de la JEC que la presenta (la lista «SDP» del Senado → ficha del PSOE);
+ * 3. las que aparecen como pieza del nombre o las siglas que publica el BOE para esa lista. Así entran las
+ *    coaliciones inscritas solo en una Junta Provincial, que no están en la relación de la JEC («UPN-PP» → UPN y PP).
  */
 export function fichasDe(c: Candidatura, fichas: Formacion[], todas: Coalicion[]): Formacion[] {
   const propia = fichaDe(c, fichas);
   if (propia) return [propia];
   const coal = coalicionDe(c, todas);
-  return coal ? fichas.filter((f) => coalicionesDe(f, [coal]).length > 0) : [];
+  const p = coal ? piezas(coal) : piezas(c);
+  return fichas.filter((f) => enPiezas(f, p));
 }
 
 export type Hallazgo = CollectionEntry<'boe'>['data']['hallazgos'][number] & { fecha: string };

@@ -48,7 +48,8 @@ const plazo = (desde: Date, hasta: Date) =>
     marca.classList.add('today-mark');
     // Si el calendario no cabe y se desliza, se abre con "hoy" a la vista.
     const caja = marca.closest<HTMLElement>('.tl-scroll');
-    if (caja && caja.scrollWidth > caja.clientWidth) caja.scrollLeft += marca.getBoundingClientRect().left - caja.getBoundingClientRect().left - 24;
+    // 72 px de margen: deja "hoy" a la vista, fuera de la flecha y el degradado del borde izquierdo.
+    if (caja && caja.scrollWidth > caja.clientWidth) caja.scrollLeft += marca.getBoundingClientRect().left - caja.getBoundingClientRect().left - 72;
   }
 
   // Desplazamiento sin barra: con el dedo (nativo), arrastrando con el ratón, acercando el cursor a un extremo,
