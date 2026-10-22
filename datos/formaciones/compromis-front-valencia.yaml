@@ -1,0 +1,21 @@
+# Ficha de Compromís: Front Valencià. Instrucciones en _plantilla.yaml.
+nombre: "Compromís: Front Valencià"
+corto: "Compromís"
+siglas: ["COMPROMIS-EUPV-PODEM-ERPV"]  # siglas oficiales de la JEC; revisar con las del BOE del 28-oct
+tipo: coalición
+inclusion:
+  motivo: Coalición inscrita ante la Junta Electoral Central para el Congreso (Comunitat Valenciana)
+  fuente: https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: ""
+  estado: pendiente
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

@@ -1,0 +1,21 @@
+# Ficha de Coalición Existe. Instrucciones en _plantilla.yaml.
+nombre: "Coalición Existe"
+corto: "Existe"
+siglas: ["EXISTE"]  # siglas oficiales de la JEC
+tipo: coalición
+inclusion:
+  motivo: Coalición inscrita ante la Junta Electoral Central para el Congreso (Aragón)
+  fuente: https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: ""
+  estado: pendiente
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

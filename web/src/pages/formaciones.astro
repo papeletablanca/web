@@ -21,7 +21,7 @@ const sinFichaOrden = [...sinFicha.entries()].sort((a, b) => a[0].localeCompare(
     <p>
       Por orden alfabético y con el mismo formato para todas. {cand
         ? `Las listas salen de las candidaturas ${cand.fase} publicadas en el BOE.`
-        : 'Hasta que el BOE publique las candidaturas, aparecen las formaciones que obtuvieron diputado el 23 de julio de 2023 y las que anuncien que se presentan.'}
+        : 'Hasta que el BOE publique las candidaturas, aparecen las formaciones que obtuvieron diputado el 23 de julio de 2023, las coaliciones inscritas por la Junta Electoral Central para el Congreso y las que han anunciado que se presentan al Congreso, cada una con el enlace a su anuncio. Si falta alguna, escríbenos con el enlace.'}
       {' '}<a href={ruta('metodologia')}>Reglas de neutralidad</a>.
     </p>
   </div>

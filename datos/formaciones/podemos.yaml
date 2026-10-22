@@ -1,0 +1,23 @@
+# Ficha de Podemos. Instrucciones en _plantilla.yaml.
+nombre: "Podemos"
+corto: "Podemos"
+siglas: ["PODEMOS", "PODEM"]  # «Podem» en la Comunitat Valenciana (coalición COMPROMIS-EUPV-PODEM-ERPV); revisar con el BOE del 28-oct
+tipo: partido
+inclusion:
+  motivo: Ha anunciado que se presenta al Congreso el 29 de noviembre
+  fuente: https://www.rtve.es/noticias/20261022/elecciones-generales-2026-son-candidatos-partidos-para-29-noviembre/17276498.shtml
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: https://podemos.info
+  estado: confirmado
+  fuente: https://podemos.info
+  fecha: 2026-10-22
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

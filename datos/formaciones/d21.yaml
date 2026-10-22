@@ -1,0 +1,23 @@
+# Ficha de Democracia para el siglo 21. Instrucciones en _plantilla.yaml.
+nombre: "Democracia para el siglo 21"
+corto: "D21"
+siglas: ["D21"]  # siglas oficiales de la JEC
+tipo: coalición
+inclusion:
+  motivo: Coalición inscrita ante la Junta Electoral Central para el Congreso (Madrid y Barcelona)
+  fuente: https://www.juntaelectoralcentral.es/cs/jec/elecciones/coalicionesJEC?fechaeleccion=2026-11-29&tipoeleccion=Elecciones%20Generales
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: https://democracia21.es
+  estado: confirmado
+  fuente: https://democracia21.es
+  fecha: 2026-10-22
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

@@ -1,0 +1,21 @@
+# Ficha de Frente Amplio. Instrucciones en _plantilla.yaml.
+nombre: "Frente Amplio"
+corto: "Frente Amplio"
+siglas: ["FRENTE AMPLIO"]  # siglas anunciadas; revisar con las del BOE del 28 de octubre
+tipo: coalición
+inclusion:
+  motivo: Ha anunciado que se presenta al Congreso el 29 de noviembre
+  fuente: https://www.rtve.es/noticias/20261022/elecciones-generales-2026-son-candidatos-partidos-para-29-noviembre/17276498.shtml
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: ""
+  estado: pendiente
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

@@ -1,0 +1,23 @@
+# Ficha de Se Acabó La Fiesta. Instrucciones en _plantilla.yaml.
+nombre: "Se Acabó La Fiesta"
+corto: "SALF"
+siglas: ["SALF"]  # siglas anunciadas; revisar con las del BOE del 28 de octubre
+tipo: partido
+inclusion:
+  motivo: Ha anunciado que se presenta al Congreso el 29 de noviembre
+  fuente: https://www.infobae.com/espana/agencias/2026/10/05/alvise-confirma-que-se-presentara-a-las-elecciones-como-cabeza-de-lista-de-salf-por-madrid/
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: https://www.seacabolafiesta.com
+  estado: confirmado
+  fuente: https://www.seacabolafiesta.com
+  fecha: 2026-10-22
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []
