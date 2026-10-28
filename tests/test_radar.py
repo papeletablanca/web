@@ -25,6 +25,7 @@ FIXTURES = RAIZ / "tests" / "fixtures"
 SUMARIO = FIXTURES / "sumario_2026-10-06.json"
 CANDIDATURAS_2023 = FIXTURES / "candidaturas_2023_extracto.xml"
 PROCLAMADAS_2023 = FIXTURES / "candidaturas_2023_proclamadas.xml.gz"  # la disposición completa: 52 circunscripciones
+PRESENTADAS_2026 = FIXTURES / "candidaturas_2026_presentadas.xml.gz"  # BOE-A-2026-22607
 CORRECCIONES_2023 = {"BOE-A-2023-15548": FIXTURES / "correccion_2023_15548.xml", "BOE-A-2023-15828": FIXTURES / "correccion_2023_15828.xml"}
 
 
@@ -169,6 +170,44 @@ class TestDisposicionCompleta2023(unittest.TestCase):
         provincias = {c["provincia"] for c in datos["candidaturas"]}
         self.assertNotIn("teruel", provincias)
         self.assertEqual(len(provincias), 51)  # las demás se cargan igual
+
+
+class TestPresentadas2026(unittest.TestCase):
+    """Las listas presentadas del 29N: formas de escribir que no salían en 2023."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.datos = candidaturas.analizar_xml(gzip.decompress(PRESENTADAS_2026.read_bytes()))
+        cls.lista = cls.datos["candidaturas"]
+
+    def buscar(self, provincia, camara, orden):
+        return next(c for c in self.lista if c["provincia"] == provincia and c["camara"] == camara and c["orden"] == orden)
+
+    def test_todas_las_circunscripciones(self):
+        self.assertEqual(self.datos["juntas_desconocidas"], [])
+        self.assertEqual(len({c["provincia"] for c in self.lista}), 52)
+
+    def test_suplente_en_singular(self):
+        pp = self.buscar("ceuta", "congreso", 1)
+        self.assertEqual([c["nombre"] for c in pp["candidatos"]], ["Rafael Martínez Peñalver Mateos"])
+        self.assertEqual(pp["suplentes"], ["Nabila Benzina Pavón"])
+
+    def test_inadmitida_y_sin_candidatos(self):
+        self.assertFalse(self.buscar("burgos", "congreso", 7)["proclamada"])  # «Candidatura inadmitida por acuerdo…»
+        self.assertFalse(self.buscar("burgos", "senado", 3)["proclamada"])  # «La candidatura no tiene candidatos asociados»
+
+    def test_ninguna_lista_proclamada_vacia(self):
+        vacias = [(c["provincia"], c["nombre"]) for c in self.lista if c["proclamada"] and not c["candidatos"]]
+        self.assertEqual(vacias, [])
+
+    def test_sin_cabecera_de_suplentes(self):
+        fa = self.buscar("badajoz", "congreso", 7)  # 9 nombres seguidos; Badajoz elige 5
+        self.assertEqual(len(fa["candidatos"]), 5)
+        self.assertEqual(fa["suplentes"], ["Juan Eugenio Mena Cabezas", "Andrea Macías Rodríguez", "Jesús Merino González",
+                                           "María Arenas Lopera"])
+
+    def test_lista_corta_se_deja_como_esta(self):
+        self.assertEqual(len(self.buscar("madrid", "congreso", 10)["candidatos"]), 37)  # Madrid elige 38
 
 
 class TestCorrecciones(unittest.TestCase):

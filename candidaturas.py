@@ -59,6 +59,10 @@ RE_CANDIDATURA = re.compile(r"^(\d+)\.\s*(.+?)\s*\.?$")
 RE_PERSONA = re.compile(r"^(\d+)\.\s*(.+?)\.?$")
 RE_SUPLENTE_SENADO = re.compile(r"^suplente\s*\d*\s*:\s*(.+?)\.?$", re.IGNORECASE)
 
+# Diputados que elige cada circunscripcion (Real Decreto de convocatoria).
+DIPUTADOS = {c["id"]: c["diputados"] for c in json.loads(
+    (Path(__file__).resolve().parent / "datos" / "circunscripciones.json").read_text(encoding="utf-8"))["circunscripciones"]}
+
 
 def texto(p: ET.Element) -> str:
     return " ".join("".join(p.itertext()).split())
@@ -128,6 +132,7 @@ def analizar_xml(contenido: bytes | str) -> dict:
     provincia = camara = isla = None
     actual: dict | None = None
     en_suplentes = False
+    sin_cabecera: list[dict] = []  # listas en las que el BOE no escribe «Suplentes:»
 
     for p in raiz.find("texto").iter("p"):
         clase, t = p.get("class", ""), texto(p)
@@ -160,13 +165,15 @@ def analizar_xml(contenido: bytes | str) -> dict:
                 "suplentes": [],
             }
             candidaturas.append(actual)
+            sin_cabecera.append(actual)
             en_suplentes = False
             continue
         if actual is None:
             continue
-        if tn.rstrip(":") == "suplentes":
+        if tn.rstrip(":") in ("suplentes", "suplente"):  # «Suplente:» en Ceuta y Melilla, que eligen un diputado
             en_suplentes = True
-        elif tn.rstrip(".") == "no proclamada":
+            sin_cabecera = [c for c in sin_cabecera if c is not actual]
+        elif tn.rstrip(".") == "no proclamada" or tn.startswith("candidatura inadmitida"):
             actual["proclamada"] = False
         elif m := RE_SUPLENTE_SENADO.match(t):
             if actual["candidatos"]:
@@ -177,6 +184,15 @@ def analizar_xml(contenido: bytes | str) -> dict:
                 actual["suplentes"].append(persona)
             else:
                 actual["candidatos"].append({"nombre": persona})
+
+    for c in candidaturas:
+        if not c["candidatos"]:  # «La candidatura no tiene candidatos asociados»: no puede ir en la papeleta
+            c["proclamada"] = False
+    # Algunas juntas no escriben «Suplentes:». LOREG 46.3: tantos titulares como escaños y, después, los suplentes.
+    for c in sin_cabecera:
+        if c["camara"] == "congreso" and len(c["candidatos"]) > (n := DIPUTADOS[c["provincia"]]):
+            c["suplentes"] = [p["nombre"] for p in c["candidatos"][n:]]
+            del c["candidatos"][n:]
 
     return {"fase": fase.group(1), "fuente": fuente(meta), "juntas_desconocidas": desconocidas, "candidaturas": candidaturas}
 

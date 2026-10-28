@@ -3390,18 +3390,13 @@
     },
     {
      "nombre": "Manuel Ángel Mato Antolín"
-    },
-    {
-     "nombre": "Clara María Báez Merino"
-    },
-    {
-     "nombre": "Miguel Ángel Dorado Chamizo"
-    },
-    {
-     "nombre": "Raquel González Carnero"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "Clara María Báez Merino",
+    "Miguel Ángel Dorado Chamizo",
+    "Raquel González Carnero"
+   ]
   },
   {
    "provincia": "badajoz",
@@ -3546,21 +3541,14 @@
     },
     {
      "nombre": "María Dolores Jiménez Hernández"
-    },
-    {
-     "nombre": "Juan Eugenio Mena Cabezas"
-    },
-    {
-     "nombre": "Andrea Macías Rodríguez"
-    },
-    {
-     "nombre": "Jesús Merino González"
-    },
-    {
-     "nombre": "María Arenas Lopera"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "Juan Eugenio Mena Cabezas",
+    "Andrea Macías Rodríguez",
+    "Jesús Merino González",
+    "María Arenas Lopera"
+   ]
   },
   {
    "provincia": "badajoz",
@@ -6966,7 +6954,7 @@
    "orden": 7,
    "nombre": "PARTIDO COMUNISTA DE LOS TRABAJADORES DE ESPAÑA",
    "siglas": "PCTE",
-   "proclamada": true,
+   "proclamada": false,
    "candidatos": [],
    "suplentes": []
   },
@@ -7085,7 +7073,7 @@
    "orden": 3,
    "nombre": "PARTIDO COMUNISTA DE LOS TRABAJADORES DE ESPAÑA",
    "siglas": "PCTE",
-   "proclamada": true,
+   "proclamada": false,
    "candidatos": [],
    "suplentes": []
   },
@@ -30355,12 +30343,11 @@
    "candidatos": [
     {
      "nombre": "Rafael Martínez Peñalver Mateos"
-    },
-    {
-     "nombre": "Nabila Benzina Pavón"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "Nabila Benzina Pavón"
+   ]
   },
   {
    "provincia": "ceuta",
@@ -30373,12 +30360,11 @@
    "candidatos": [
     {
      "nombre": "Luis Manuel Tovar Gálvez"
-    },
-    {
-     "nombre": "Sandra María López Cantero"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "Sandra María López Cantero"
+   ]
   },
   {
    "provincia": "ceuta",
@@ -30391,12 +30377,11 @@
    "candidatos": [
     {
      "nombre": "Ana Belén Cifuentes Cánovas"
-    },
-    {
-     "nombre": "David Romero Díaz"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "David Romero Díaz"
+   ]
   },
   {
    "provincia": "ceuta",
@@ -30409,12 +30394,11 @@
    "candidatos": [
     {
      "nombre": "Ramón Rodríguez Casaubón"
-    },
-    {
-     "nombre": "Olga Moreno Santos"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "Olga Moreno Santos"
+   ]
   },
   {
    "provincia": "ceuta",
@@ -30427,15 +30411,12 @@
    "candidatos": [
     {
      "nombre": "Carlos Pavón Fumado"
-    },
-    {
-     "nombre": "María Luisa Jiménez Aguilar"
-    },
-    {
-     "nombre": "Manuel González Evangelista"
     }
    ],
-   "suplentes": []
+   "suplentes": [
+    "María Luisa Jiménez Aguilar",
+    "Manuel González Evangelista"
+   ]
   },
   {
    "provincia": "ceuta",

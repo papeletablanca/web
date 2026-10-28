@@ -1,0 +1,21 @@
+# Ficha de Teruel Existe. Instrucciones en _plantilla.yaml.
+nombre: "Teruel Existe"
+corto: "Teruel Existe"
+siglas: ["TERUEL EXISTE"]  # siglas del BOE-A-2026-22607 (candidaturas presentadas, solo en Teruel)
+tipo: partido
+inclusion:
+  motivo: Ha anunciado que se presenta al Congreso el 29 de noviembre
+  fuente: https://www.aragondigital.es/articulo/politica/tomas-guitarte-encabeza-candidatura-teruel-existe-29n-congreso-diputados/202610261127171017884.html
+
+integrantes: []
+marcas_territoriales: []
+
+web:
+  valor: ""
+  estado: pendiente
+
+programa:
+  valor: ""
+  estado: pendiente
+
+redes: []

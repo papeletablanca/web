@@ -1,7 +1,7 @@
 # Ficha de Sumar. Instrucciones en _plantilla.yaml.
 nombre: "Sumar"
 corto: "Sumar"
-siglas: ["SUMAR"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+siglas: ["SUMAR"]  # en el BOE-A-2026-22607 no presenta listas propias, solo en coalición
 inclusion:
   motivo: Obtuvo diputado en el Congreso en las elecciones del 23 de julio de 2023
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907

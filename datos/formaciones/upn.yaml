@@ -1,7 +1,7 @@
 # Ficha de Unión del Pueblo Navarro. Instrucciones en _plantilla.yaml.
 nombre: "Unión del Pueblo Navarro"
 corto: "UPN"
-siglas: ["UPN"]  # siglas usadas en el BOE de 2023; revisar con las de 2026
+siglas: ["UPN"]  # en 2026 va en coalición (UPN-PP, BOE-A-2026-22607); sus listas se enlazan por la coalición
 inclusion:
   motivo: Obtuvo diputado en el Congreso en las elecciones del 23 de julio de 2023
   fuente: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907

@@ -1,7 +1,7 @@
 # Ficha de Unidad del Pueblo Canario. Instrucciones en _plantilla.yaml.
 nombre: "Unidad del Pueblo Canario"
 corto: "Unidad del Pueblo Canario"
-siglas: ["UPC"]  # siglas anunciadas; revisar con las del BOE del 28 de octubre
+siglas: ["UNIDAD DEL PUEBLO CANARIO UPC", "UPC"]  # nombre de la coalición en la JEC y en el BOE-A-2026-22607 (siglas: NC-BC, PODEMOS, IU, SUMAR), para que sus listas enlacen también a Podemos y Sumar
 tipo: coalición
 inclusion:
   motivo: Ha anunciado que se presenta al Congreso en Canarias el 29 de noviembre
