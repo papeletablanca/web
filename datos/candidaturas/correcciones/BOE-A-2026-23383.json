@@ -1,0 +1,21 @@
+{
+ "fase": "proclamadas",
+ "fuente": {
+  "id": "BOE-A-2026-23383",
+  "titulo": "Corrección de errores de las candidaturas proclamadas para las elecciones al Congreso de los Diputados y al Senado, convocadas por Real Decreto 806/2026, de 5 de octubre.",
+  "fecha_publicacion": "2026-11-07",
+  "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23383",
+  "url_pdf": "https://www.boe.es/boe/dias/2026/11/07/pdfs/BOE-A-2026-23383.pdf"
+ },
+ "provincias": [
+  "avila",
+  "girona",
+  "huesca",
+  "rioja",
+  "navarra",
+  "tarragona",
+  "teruel",
+  "valencia"
+ ],
+ "juntas_desconocidas": []
+}
